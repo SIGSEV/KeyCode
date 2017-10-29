@@ -1,13 +1,10 @@
 import React, { PureComponent } from 'react'
-import { connect } from 'react-redux'
 import IconNext from 'react-icons/lib/md/keyboard-arrow-right'
 import styled from 'styled-components'
 
 import Button from 'components/Button'
 import Link from 'components/Link'
 import { AutoTypematrix } from 'components/Typematrix'
-
-import { search } from 'actions/github'
 
 const Container = styled.div`
   > * + * {
@@ -77,17 +74,11 @@ const Title = styled.h1`
   font-size: 36px;
 `
 
-@connect(null, {
-  search,
-})
 class Home extends PureComponent {
   render() {
-    const { search } = this.props
-
     return (
       <Container>
         <Hero>
-          <Button onClick={search}>{'test'}</Button>
           <Title>{'Improve your coding speed.'}</Title>
           <AutoTypematrix text="Welcome to KeyCode!" />
           <Button linkTo="/race/abc" accent>
