@@ -1,0 +1,19 @@
+{
+  "apps": [{
+    "name"  : "keycode",
+    "script": "src/prod.js",
+    "env_production": {
+      NODE_ENV: "production",
+    },
+  }],
+  "deploy": {
+    "production": {
+      "user"       : "pm2",
+      "host"       : "sigsev.io",
+      "ref"        : "origin/master",
+      "repo"       : "git@github.com:SIGSEV/KeyCode.git",
+      "path"       : "/var/www/keycode",
+      "post-deploy": "yarn && pm2 startOrRestart ecosystem.json5 --env production --log-date-format 'DD-MM HH:mm:ss.SSS'",
+    }
+  }
+}

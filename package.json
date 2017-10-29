@@ -6,7 +6,9 @@
     "lint": "eslint src webpack bin",
     "prettier": "prettier --write \"{src,webpack}/**/*.?(js|?(s)css|json)\"",
     "build": "rm -rf dist && NODE_ENV=production webpack --progress --hide-modules --config webpack/build.babel.js",
-    "prod": "NODE_ENV=production yarn serve"
+    "prod": "NODE_ENV=production yarn serve",
+    "setup": "pm2 deploy ecosystem.json5 production setup",
+    "deploy": "pm2 deploy ecosystem.json5 production"
   },
   "dependencies": {
     "body-parser": "^1.17.2",
