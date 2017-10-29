@@ -1,0 +1,19 @@
+{
+  "presets": [
+    [
+      "env", {
+        "targets": {
+          "browsers": ["last 2 versions"],
+          "node": "current",
+        },
+      },
+    ],
+    "react",
+    "stage-0",
+  ],
+  "plugins": [
+    "add-module-exports",
+    "transform-decorators-legacy",
+    ["module-resolver", { "root": ["src"] }],
+  ],
+}
