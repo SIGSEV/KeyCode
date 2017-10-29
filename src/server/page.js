@@ -13,7 +13,25 @@ export default ({ styles, state, html, main }) => `<!doctype html>
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
 
     <style>
-      *, *:after, *:before {
+      @font-face {
+        font-family: 'Inter';
+        font-weight: normal;
+        src: url('/assets/fonts/inter/Inter-UI-Regular.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Inter';
+        font-weight: bold;
+        src: url('/assets/fonts/inter/Inter-UI-Bold.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'InterBolder';
+        font-weight: bolder;
+        src: url('/assets/fonts/inter/Inter-UI-Black.woff2') format('woff2');
+      }
+
+      * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
