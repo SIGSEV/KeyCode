@@ -1,13 +1,20 @@
 export default store => next => async action => {
-  if (!action.type.startsWith('API:')) {
+  const isGraphql = action.type.startsWith('G:')
+  const isAPI = action.type.startsWith('API:')
+
+  if (!isAPI && !isGraphql) {
     return next(action)
   }
 
   const { dispatch } = store
   const prefix = action.type.split(':')[1]
 
-  const { method = 'GET' } = action.payload
-  let { url = '', body } = action.payload
+  let { url = '', body, method = 'GET' } = action.payload
+
+  if (isGraphql) {
+    method = 'POST'
+    url = '/graphql'
+  }
 
   url = `${__APIURL__}${url}`
 
