@@ -11,5 +11,6 @@ export function initPlayer() {
     corrections: 0,
     typedWord: '',
     typedChar: null,
+    typedWordsCount: 0,
   })
 }

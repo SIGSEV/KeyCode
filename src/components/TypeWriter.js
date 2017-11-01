@@ -198,8 +198,6 @@ class TypeWriter extends PureComponent {
                 {wordContent}
               </Text>
             )
-          } else {
-            return null
           }
 
           if (wordContent.includes('\n')) {

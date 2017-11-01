@@ -82,6 +82,8 @@ const handlers = {
       chunks = chunks.setIn([wordIndex, 'isWrong'], true)
     }
 
+    p = p.set('typedWordsCount', p.get('typedWordsCount') + 1)
+
     if (nextWordIndex === -1) {
       p = p.set('cursor', word.get('end') + 1)
     } else {

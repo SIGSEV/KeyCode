@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 
-import { getPlayer, startRace, stopRace, resetRace } from 'reducers/race'
+import { getPlayer, getText, startRace, stopRace, resetRace } from 'reducers/race'
 
 import TypeWriter from 'components/TypeWriter'
 import Typematrix from 'components/Typematrix'
@@ -49,7 +49,8 @@ const GameHeaderRight = styled.div`
 
 @connect(
   state => ({
-    typedChar: getPlayer(state).get('typedChar'),
+    player: getPlayer(state),
+    text: getText(state),
     isStarted: state.race.get('isStarted'),
     isFinished: state.race.get('isFinished'),
   }),
@@ -66,13 +67,17 @@ class Race extends PureComponent {
   }
 
   render() {
-    const { typedChar, isStarted, isFinished, startRace, stopRace } = this.props
-    // const typedWords = stats.get('typedWords')
-    // const totalWords = stats.get('words')
+    const { player, text, isStarted, isFinished, startRace, stopRace } = this.props
+
+    const typedChar = player.get('typedChar')
+    const typedWordsCount = player.get('typedWordsCount')
+    const totalWords = text.get('wordsCount')
+
     // const accuracy = typedWords
     //   ? ((1 - stats.get('wrongWords') / typedWords) * 100).toFixed(2)
     //   : '100.00'
-    // const progress = totalWords ? typedWords / totalWords : 0
+
+    const progress = totalWords ? typedWordsCount / totalWords : 0
 
     return (
       <Wrapper>
@@ -90,7 +95,7 @@ class Race extends PureComponent {
               </GameHeaderRight>
             </GameHeader>
 
-            <ProgressBar progress={0.4} />
+            <ProgressBar progress={progress} />
 
             <TypeWriter isDisabled={isFinished} onStart={startRace} />
           </GameLayer>
