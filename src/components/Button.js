@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import { Link as RouterLink } from 'react-router-dom'
+import { findDOMNode } from 'react-dom'
 
 const BtnEl = props => <button {...props} />
 
@@ -56,6 +57,10 @@ const Wrapper = styled.div`
 `
 
 class Button extends PureComponent {
+  focus() {
+    const node = findDOMNode(this) // eslint-disable-line react/no-find-dom-node
+    node.focus()
+  }
   render() {
     const { children, linkTo, ...props } = this.props
     const content = <Wrapper>{children}</Wrapper>

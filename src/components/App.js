@@ -30,6 +30,7 @@ const AppContainer = styled.div`
 const Main = styled.div`
   padding: 40px;
   flex-grow: 1;
+  position: relative;
 `
 
 @connect(

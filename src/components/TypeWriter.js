@@ -13,7 +13,6 @@ const Container = styled.div`
   position: relative;
   font-family: monospace;
   user-select: none;
-  background: white;
 
   &:hover {
     cursor: ${p => (p.isFocused ? 'default' : 'text')};
