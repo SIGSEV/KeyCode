@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 
-import { getPlayer } from 'reducers/race'
+import { getPlayer, startRace, stopRace, resetRace } from 'reducers/race'
 
 import TypeWriter from 'components/TypeWriter'
 import Typematrix from 'components/Typematrix'
@@ -47,21 +47,21 @@ const GameHeaderRight = styled.div`
   margin-left: auto;
 `
 
-@connect(state => ({
-  typedChar: getPlayer(state).get('typedChar'),
-}))
+@connect(
+  state => ({
+    typedChar: getPlayer(state).get('typedChar'),
+    isStarted: state.race.get('isStarted'),
+    isFinished: state.race.get('isFinished'),
+  }),
+  {
+    startRace,
+    stopRace,
+    resetRace,
+  },
+)
 class Race extends PureComponent {
-  state = {
-    isFinished: false,
-    isRunning: false,
-  }
-
-  handleStart = () => this.setState({ isRunning: true })
-  handleFinish = () => this.setState({ isRunning: false, isFinished: true })
-
   render() {
-    const { typedChar } = this.props
-    const { isRunning, isFinished } = this.state
+    const { typedChar, isStarted, isFinished, startRace, stopRace, resetRace } = this.props
     // const typedWords = stats.get('typedWords')
     // const totalWords = stats.get('words')
     // const accuracy = typedWords
@@ -76,16 +76,16 @@ class Race extends PureComponent {
             <GameHeader>
               <Typematrix activeChar={typedChar} />
               <GameHeaderRight>
-                <Chronos seconds={6} isRunning={isRunning} onFinish={this.handleFinish} />
+                <Chronos seconds={6} isRunning={isStarted} onFinish={stopRace} />
               </GameHeaderRight>
             </GameHeader>
 
             <ProgressBar progress={0.4} />
 
-            <TypeWriter isDisabled={isFinished} onStart={this.handleStart} />
+            <TypeWriter isDisabled={isFinished} onStart={startRace} />
           </GameLayer>
 
-          {isFinished && <FinishBoard onRestart={this.handleRestart} />}
+          {isFinished && <FinishBoard onRestart={resetRace} />}
         </Container>
       </Wrapper>
     )

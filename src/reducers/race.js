@@ -5,9 +5,11 @@ import { fromJS, List } from 'immutable'
 import { initPlayer } from 'helpers/race'
 import { computeText, countLinesOffset } from 'helpers/text'
 
-const state = fromJS({
+const initialState = fromJS({
   id: null,
   text: null,
+  isStarted: false,
+  isFinished: false,
   players: [],
 })
 
@@ -15,9 +17,19 @@ const DISPLAYED_LINES = 15
 
 const handlers = {
   RACE_INIT: (state, { payload: rawText }) => {
-    return state
+    return initialState
       .set('id', shortid.generate())
       .set('text', computeText(rawText))
+      .set('players', List([initPlayer()]))
+  },
+  RACE_START: state => state.set('isStarted', true),
+  RACE_STOP: state => state.set('isFinished', true),
+  RACE_RESET: state => {
+    return state
+      .set('isStarted', false)
+      .set('isFinished', false)
+      .set('id', shortid.generate())
+      .set('text', computeText(state.getIn(['text', 'raw'])))
       .set('players', List([initPlayer()]))
   },
   RACE_TYPE_CHAR: (state, { payload: char }) => {
@@ -104,7 +116,7 @@ const handlers = {
   },
 }
 
-export default handleActions(handlers, state)
+export default handleActions(handlers, initialState)
 
 // Actions
 
@@ -112,6 +124,9 @@ export const initRace = createAction('RACE_INIT')
 export const typeChar = createAction('RACE_TYPE_CHAR')
 export const goNextWord = createAction('RACE_NEXT_WORD')
 export const typeBackspace = createAction('RACE_TYPE_BACKSPACE')
+export const startRace = createAction('RACE_START')
+export const stopRace = createAction('RACE_STOP')
+export const resetRace = createAction('RACE_RESET')
 
 // Selectors
 

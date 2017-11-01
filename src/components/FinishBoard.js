@@ -1,7 +1,10 @@
 import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
+import { connect } from 'react-redux'
 
 import Button from 'components/Button'
+
+import { getPlayer } from 'reducers/race'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -65,6 +68,9 @@ const StatLabel = styled.div`
   text-transform: uppercase;
 `
 
+@connect(state => ({
+  player: getPlayer(state),
+}))
 class FinishBoard extends PureComponent {
   componentDidMount() {
     setTimeout(() => {
@@ -75,7 +81,8 @@ class FinishBoard extends PureComponent {
   }
 
   render() {
-    const { onRestart } = this.props
+    const { onRestart, player } = this.props
+    console.log(player)
     return (
       <Wrapper>
         <Container>
