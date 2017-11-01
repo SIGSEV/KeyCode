@@ -82,7 +82,7 @@ class Race extends PureComponent {
               <Typematrix activeChar={typedChar} />
               <GameHeaderRight>
                 <Chronos
-                  seconds={1}
+                  seconds={60}
                   isRunning={isStarted}
                   onFinish={stopRace}
                   ref={n => (this._chronos = n)}

@@ -78,6 +78,28 @@ const Title = styled.h1`
   font-size: 36px;
 `
 
+const dummyText = `export default stats => async (req, res) => {
+  try {
+    const store = createStore()
+    const sheet = new ServerStyleSheet()
+
+    const context = {}
+    const promises = []
+
+    routes.some(route => {
+      const match = matchPath(req.url, route)
+      if (match && route.load) {
+        promises.push(route.load(store))
+      }
+      return match
+    })
+
+    await Promise.all(promises)
+
+    const root = App(store, StaticRouter, { location: req.url, context })
+    const html = __DEV__ ? '' : renderToString(sheet.collectStyles(root))
+    const styles = __DEV__ ? '' : sheet.getStyleTags()`
+
 @connect(null, {
   initRace,
   push,
@@ -93,7 +115,7 @@ class Home extends PureComponent {
           <Button
             grey
             onClick={() => {
-              initRace('hey there \nblablabl \nonethuonethuonthanthuao')
+              initRace(dummyText)
               push('/race/abc')
             }}
           >
