@@ -1,5 +1,7 @@
 import { initRace } from 'reducers/race'
 
+import dummyText from 'assets/dummy-text'
+
 export function loadRace(id) {
   return async dispatch => {
     await new Promise(resolve => setTimeout(resolve, 1e3))
@@ -7,7 +9,7 @@ export function loadRace(id) {
     dispatch(
       initRace({
         id,
-        text: 'hey there blabaoentuhason thasontu hasoentuhason thasoetn',
+        text: dummyText,
       }),
     )
   }
