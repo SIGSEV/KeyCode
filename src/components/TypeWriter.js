@@ -132,10 +132,7 @@ class TypeWriter extends PureComponent {
       return
     }
 
-    const charToType = text.get('raw')[player.get('cursor')]
-    if (!charToType) {
-      return
-    }
+    const charToType = text.get('raw')[player.get('cursor')] || ''
 
     if (char === ' ' || !charToType.trim()) {
       return goNextWord()

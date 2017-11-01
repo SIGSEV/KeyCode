@@ -81,8 +81,7 @@ class FinishBoard extends PureComponent {
   }
 
   render() {
-    const { onRestart, player } = this.props
-    console.log(player)
+    const { onRestart } = this.props
     return (
       <Wrapper>
         <Container>
@@ -103,7 +102,7 @@ class FinishBoard extends PureComponent {
             </Stat>
           </StatsContainer>
 
-          <Button accent ref={n => (this._restartBtn = n)} onClick={onRestart}>
+          <Button accent setRef={n => (this._restartBtn = n)} onClick={onRestart}>
             {'Restart'}
           </Button>
         </Container>

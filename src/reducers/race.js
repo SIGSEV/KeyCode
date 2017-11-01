@@ -85,6 +85,7 @@ const handlers = {
 
     if (nextWordIndex === -1) {
       p = p.set('cursor', word.get('end') + 1)
+      state = state.set('isFinished', true)
     } else {
       const nextWord = chunks.get(nextWordIndex)
       p = p

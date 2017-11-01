@@ -35,6 +35,10 @@ class Chronos extends PureComponent {
       this.setState({ timeStart: Date.now(), timeRemaining: seconds })
       this.tick()
     }
+    if (!isRunning && wasRunning) {
+      console.log(`stopping timer`)
+      clearTimeout(this._timeout)
+    }
   }
 
   componentWillUnmount() {
@@ -54,8 +58,11 @@ class Chronos extends PureComponent {
         if (this._unmounted) {
           return
         }
+        const { isRunning, seconds, onFinish } = this.props
+        if (!isRunning) {
+          return
+        }
         const { timeStart } = this.state
-        const { seconds, onFinish } = this.props
         const now = Date.now()
         // leap second may fuck this up, but should we care?
         const delta = now - timeStart

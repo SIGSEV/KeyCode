@@ -88,7 +88,7 @@ class Race extends PureComponent {
               <GameHeaderRight>
                 <Chronos
                   seconds={60}
-                  isRunning={isStarted}
+                  isRunning={isStarted && !isFinished}
                   onFinish={stopRace}
                   ref={n => (this._chronos = n)}
                 />

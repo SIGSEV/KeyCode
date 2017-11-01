@@ -111,7 +111,11 @@ class Button extends PureComponent {
 
   render() {
     const { isLoading } = this.state
-    const { children, to, onClick, action, ...props } = this.props
+    const { children, setRef, to, onClick, action, ...props } = this.props
+
+    if (setRef) {
+      setRef(this)
+    }
 
     const content = (
       <Motion
