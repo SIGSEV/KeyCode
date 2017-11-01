@@ -60,8 +60,13 @@ const GameHeaderRight = styled.div`
   },
 )
 class Race extends PureComponent {
+  handleReset = () => {
+    this.props.resetRace()
+    this._chronos.reset()
+  }
+
   render() {
-    const { typedChar, isStarted, isFinished, startRace, stopRace, resetRace } = this.props
+    const { typedChar, isStarted, isFinished, startRace, stopRace } = this.props
     // const typedWords = stats.get('typedWords')
     // const totalWords = stats.get('words')
     // const accuracy = typedWords
@@ -76,7 +81,12 @@ class Race extends PureComponent {
             <GameHeader>
               <Typematrix activeChar={typedChar} />
               <GameHeaderRight>
-                <Chronos seconds={6} isRunning={isStarted} onFinish={stopRace} />
+                <Chronos
+                  seconds={1}
+                  isRunning={isStarted}
+                  onFinish={stopRace}
+                  ref={n => (this._chronos = n)}
+                />
               </GameHeaderRight>
             </GameHeader>
 
@@ -85,7 +95,7 @@ class Race extends PureComponent {
             <TypeWriter isDisabled={isFinished} onStart={startRace} />
           </GameLayer>
 
-          {isFinished && <FinishBoard onRestart={resetRace} />}
+          {isFinished && <FinishBoard onRestart={this.handleReset} />}
         </Container>
       </Wrapper>
     )

@@ -42,6 +42,12 @@ class Chronos extends PureComponent {
     this._unmounted = true
   }
 
+  reset = () => {
+    clearTimeout(this._timeout)
+    const { seconds } = this.props
+    this.setState({ timeRemaining: seconds })
+  }
+
   tick = () => {
     this._timeout = setTimeout(() => {
       window.requestAnimationFrame(() => {

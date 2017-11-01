@@ -75,6 +75,8 @@ const DISPLAYED_LINES = 15
   state => ({
     player: getPlayer(state),
     text: getText(state),
+    isStarted: state.race.get('isStarted'),
+    isFinished: state.race.get('isFinished'),
   }),
   {
     typeChar,
@@ -85,11 +87,18 @@ const DISPLAYED_LINES = 15
 class TypeWriter extends PureComponent {
   state = {
     isFocused: false,
-    isStarted: false,
   }
 
   componentDidMount() {
     window.requestAnimationFrame(() => this._input.focus())
+  }
+
+  componentDidUpdate(prevProps) {
+    const { isFinished } = this.props
+    const { isFinished: wasFinished } = prevProps
+    if (wasFinished && !isFinished) {
+      this.handleClick()
+    }
   }
 
   handleFocus = () => this.setState({ isFocused: true })
@@ -97,8 +106,7 @@ class TypeWriter extends PureComponent {
   handleClick = () => this._input.focus()
 
   handleKeyDown = e => {
-    const { isDisabled, onStart, goNextWord, typeBackspace } = this.props
-    const { isStarted } = this.state
+    const { isDisabled, isStarted, onStart, goNextWord, typeBackspace } = this.props
 
     if (isDisabled) {
       return
@@ -106,7 +114,6 @@ class TypeWriter extends PureComponent {
 
     if (e.which === 13) {
       if (!isStarted) {
-        this.setState({ isStarted: true })
         onStart()
       }
       goNextWord()
@@ -118,8 +125,7 @@ class TypeWriter extends PureComponent {
   }
 
   handleChange = e => {
-    const { typeChar, isDisabled, text, player, onStart, goNextWord } = this.props
-    const { isStarted } = this.state
+    const { typeChar, isStarted, isDisabled, text, player, onStart, goNextWord } = this.props
     const { value: char } = e.target
 
     if (isDisabled) {
@@ -136,7 +142,6 @@ class TypeWriter extends PureComponent {
     }
 
     if (!isStarted) {
-      this.setState({ isStarted: true })
       onStart()
     }
 
@@ -144,8 +149,8 @@ class TypeWriter extends PureComponent {
   }
 
   render() {
-    const { isFocused, isStarted } = this.state
-    const { player, text } = this.props
+    const { isFocused } = this.state
+    const { player, text, isStarted } = this.props
 
     const cursor = player.get('cursor')
     const scroll = player.get('scroll')
