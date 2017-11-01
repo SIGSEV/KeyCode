@@ -1,58 +1,93 @@
 import React, { PureComponent } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+import { connect } from 'react-redux'
 
-import Game from 'components/Game'
+import { getPlayer } from 'reducers/race'
 
-const text = `import { renderToString } from 'react-dom/server'
-import { ServerStyleSheet } from 'styled-components'
-import { StaticRouter } from 'react-router'
-import { matchPath } from 'react-router-dom'
+import TypeWriter from 'components/TypeWriter'
+import Typematrix from 'components/Typematrix'
+import Chronos from 'components/Chronos'
+import ProgressBar from 'components/ProgressBar'
+import FinishBoard from 'components/FinishBoard'
 
-import routes from 'routes'
-import createStore from 'store'
-import page from 'server/page'
-
-import App from 'components/App'
-
-export default stats => async (req, res) => {
-  try {
-    const store = createStore()
-    const sheet = new ServerStyleSheet()
-
-    const context = {}
-    const promises = []
-
-    routes.some(route => {
-      const match = matchPath(req.url, route)
-      if (match && route.load) {
-        promises.push(route.load(store))
-      }
-      return match
-    })
-
-    await Promise.all(promises)
-
-    const root = App(store, StaticRouter, { location: req.url, context })
-    const html = __DEV__ ? '' : renderToString(sheet.collectStyles(root))
-    const styles = __DEV__ ? '' : sheet.getStyleTags()
-
-    res.end(page({ styles, html, state: store.getState(), main: stats.main || 'bundle.js' }))
-  } catch (err) {
-    res.status(500).send(err.stack)
-  }
-}`
-
-const Container = styled.div`
+const Wrapper = styled.div`
   max-width: 860px;
   margin: 0 auto;
 `
 
+const Container = styled.div`
+  color: ${p => p.theme.darkGrey00};
+  font-size: 18px;
+  line-height: 24px;
+  flex-grow: 1;
+  overflow: hidden;
+  margin: 0 -2px;
+  padding: 0 2px;
+  position: relative;
+`
+
+const animLeave = keyframes`
+  0% { transform: translate3d(0, 0, 0); opacity: 1; }
+  100% { transform: translate3d(0, -10%, 0); opacity: 0; }
+`
+
+const GameLayer = styled.div`
+  will-change: transform;
+  animation: ${p =>
+    p.isFinished ? `${animLeave} cubic-bezier(0.78, 0.01, 0.23, 0.97) 700ms` : undefined};
+  animation-fill-mode: forwards;
+`
+
+const GameHeader = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const GameHeaderRight = styled.div`
+  margin-left: auto;
+`
+
+@connect(state => ({
+  typedChar: getPlayer(state).get('typedChar'),
+}))
 class Race extends PureComponent {
+  state = {
+    isFinished: false,
+    isRunning: false,
+  }
+
+  handleStart = () => this.setState({ isRunning: true })
+  handleFinish = () => this.setState({ isRunning: false, isFinished: true })
+
   render() {
+    const { typedChar } = this.props
+    const { isRunning, isFinished } = this.state
+    // const typedWords = stats.get('typedWords')
+    // const totalWords = stats.get('words')
+    // const accuracy = typedWords
+    //   ? ((1 - stats.get('wrongWords') / typedWords) * 100).toFixed(2)
+    //   : '100.00'
+    // const progress = totalWords ? typedWords / totalWords : 0
+
     return (
-      <Container>
-        <Game text={text} />
-      </Container>
+      <Wrapper>
+        <Container>
+          <GameLayer isFinished={isFinished}>
+            <GameHeader>
+              <Typematrix activeChar={typedChar} />
+              <GameHeaderRight>
+                <Chronos seconds={6} isRunning={isRunning} onFinish={this.handleFinish} />
+              </GameHeaderRight>
+            </GameHeader>
+
+            <ProgressBar progress={0.4} />
+
+            <TypeWriter isDisabled={isFinished} onStart={this.handleStart} />
+          </GameLayer>
+
+          {isFinished && <FinishBoard onRestart={this.handleRestart} />}
+        </Container>
+      </Wrapper>
     )
   }
 }

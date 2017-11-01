@@ -1,6 +1,10 @@
 import React, { PureComponent } from 'react'
 import IconNext from 'react-icons/lib/md/keyboard-arrow-right'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
+
+import { initRace } from 'reducers/race'
 
 import Button from 'components/Button'
 import Link from 'components/Link'
@@ -74,13 +78,28 @@ const Title = styled.h1`
   font-size: 36px;
 `
 
+@connect(null, {
+  initRace,
+  push,
+})
 class Home extends PureComponent {
   render() {
+    const { initRace, push } = this.props
     return (
       <Container>
         <Hero>
           <Title>{'Improve your coding speed.'}</Title>
           <AutoTypematrix text="Welcome to KeyCode!" />
+          <Button
+            grey
+            onClick={() => {
+              initRace('hey there \nblablabl \nonethuonethuonthanthuao')
+              push('/race/abc')
+            }}
+          >
+            {'init a race'}
+            <IconNext style={{ marginLeft: 10 }} />
+          </Button>
           <Button linkTo="/race/abc" accent>
             {'Race now'}
             <IconNext style={{ marginLeft: 10 }} />

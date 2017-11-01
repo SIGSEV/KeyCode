@@ -1,18 +1,14 @@
 import React, { PureComponent } from 'react'
-import shortid from 'shortid'
 import styled, { keyframes } from 'styled-components'
-import { Map, List } from 'immutable'
+import { connect } from 'react-redux'
 
-function countLinesOffset(words, start, end) {
-  return words
-    .slice(start, end)
-    .reduce((count, word) => count + word.get('content').split('\n').length - 1, 0)
-}
+import { getPlayer, getText, typeChar, goNextWord, typeBackspace } from 'reducers/race'
 
 const Container = styled.div`
   position: relative;
   font-family: monospace;
   user-select: none;
+  min-height: 400px;
 
   &:hover {
     cursor: ${p => (p.isFocused ? 'default' : 'text')};
@@ -75,48 +71,21 @@ const Text = styled.span`
 
 const DISPLAYED_LINES = 15
 
+@connect(
+  state => ({
+    player: getPlayer(state),
+    text: getText(state),
+  }),
+  {
+    typeChar,
+    goNextWord,
+    typeBackspace,
+  },
+)
 class TypeWriter extends PureComponent {
   state = {
-    cursor: 0,
-    wordIndex: 0,
-    scroll: 0,
-    line: 0,
-    totalLines: 0,
-    words: List(),
-    typedWord: '',
     isFocused: false,
     isStarted: false,
-  }
-
-  componentWillMount() {
-    const { text, onCountWords } = this.props
-    const words = text
-      .split('')
-      .reduce((acc, char, i) => {
-        let word = acc.last()
-        if (!word || word.get('done')) {
-          word = Map({ start: i, done: false, id: shortid.generate() })
-          acc = acc.push(word)
-        }
-        word = word.set('end', i)
-        word = word.set(
-          'content',
-          text.substring(word.get('start'), word.get('end') + (i === text.length - 1 ? 2 : 1)),
-        )
-        if (!char.trim()) {
-          word = word.set('done', true)
-        } else {
-          word = word.set('end', i)
-        }
-        acc = acc.set(acc.size - 1, word)
-        return acc
-      }, List())
-      .map(word => word.set('empty', !word.get('content').trim()))
-
-    const nonEmptyWords = words.filter(w => !w.get('empty')).size
-    onCountWords(nonEmptyWords)
-
-    this.setState({ words, totalLines: countLinesOffset(words, 0, words.size - 1) })
   }
 
   componentDidMount() {
@@ -128,125 +97,75 @@ class TypeWriter extends PureComponent {
   handleClick = () => this._input.focus()
 
   handleKeyDown = e => {
-    if (this.props.isDisabled) {
-      return
-    }
-    if (e.which === 13) {
-      if (!this.state.isStarted) {
-        this.setState({ isStarted: true })
-        this.props.onStart()
-      }
-      this.handleNext()
-    }
-    if (e.which === 8) {
-      this.handleBackspace()
-    }
-  }
+    const { isDisabled, onStart, goNextWord, typeBackspace } = this.props
+    const { isStarted } = this.state
 
-  handleBackspace = () => {
-    const { onCorrection } = this.props
-    const { wordIndex, words, cursor, typedWord } = this.state
-    const word = words.get(wordIndex)
-    if (cursor === word.get('start')) {
-      return
-    }
-    const newTypedWord = typedWord.substr(0, typedWord.length - 1)
-    const nextState = {
-      cursor: cursor - 1,
-      typedWord: newTypedWord,
-    }
-    if (word.get('content').startsWith(newTypedWord)) {
-      nextState.words = this.state.words.setIn([wordIndex, 'isWrong'], false)
-    }
-    this.setState(nextState)
-    onCorrection()
-  }
-
-  handleChange = e => {
-    const { text, onChar, onStart, isDisabled } = this.props
-    const { cursor, wordIndex, typedWord, words, isStarted } = this.state
     if (isDisabled) {
       return
     }
-    const { value } = e.target
-    const char = text[cursor]
-    if (!char) {
-      return
+
+    if (e.which === 13) {
+      if (!isStarted) {
+        this.setState({ isStarted: true })
+        onStart()
+      }
+      goNextWord()
     }
-    if (value === ' ' || !char.trim()) {
-      return this.handleNext()
+
+    if (e.which === 8) {
+      typeBackspace()
     }
-    onChar(value)
-    const word = words.get(wordIndex)
-    const newTypedWord = `${typedWord}${value}`
-    const nextState = { cursor: this.state.cursor + 1, typedWord: newTypedWord }
-    if (!isStarted) {
-      nextState.isStarted = true
-      onStart()
-    }
-    if (!word.get('content').startsWith(newTypedWord)) {
-      nextState.words = this.state.words.setIn([wordIndex, 'isWrong'], true)
-    }
-    this.setState(nextState)
   }
 
-  handleNext = () => {
-    const { wordIndex, words, typedWord, scroll, line, totalLines } = this.state
-    const { onValidateWrongWord, onValidateWord } = this.props
-    const nextWordIndex = words.findIndex((w, i) => i > wordIndex && !w.get('empty'))
-    const nextState = { typedWord: '', words }
-    const word = words.get(wordIndex)
-    const jumps = countLinesOffset(words, wordIndex, nextWordIndex)
+  handleChange = e => {
+    const { typeChar, isDisabled, text, player, onStart, goNextWord } = this.props
+    const { isStarted } = this.state
+    const { value: char } = e.target
 
-    if (jumps > 0) {
-      nextState.line = line + jumps
-      if (
-        nextState.line - scroll > DISPLAYED_LINES / 2 - 1 &&
-        totalLines - scroll > DISPLAYED_LINES - 1
-      ) {
-        nextState.scroll = scroll + jumps
-      }
+    if (isDisabled) {
+      return
     }
 
-    if (!typedWord || typedWord.length !== word.get('content').trim().length) {
-      nextState.words = words.setIn([wordIndex, 'isWrong'], true)
+    const charToType = text.get('raw')[player.get('cursor')]
+    if (!charToType) {
+      return
     }
 
-    if (nextWordIndex === -1) {
-      nextState.cursor = words.getIn([wordIndex, 'end']) + 1
-    } else {
-      const nextWord = words.get(nextWordIndex)
-      Object.assign(nextState, {
-        wordIndex: nextWordIndex,
-        cursor: nextWord.get('start'),
-        typedWord: '',
-      })
+    if (char === ' ' || !charToType.trim()) {
+      return goNextWord()
     }
 
-    this.setState(nextState)
-
-    if (nextState.words.getIn([wordIndex, 'isWrong'])) {
-      onValidateWrongWord()
-    } else {
-      onValidateWord()
+    if (!isStarted) {
+      this.setState({ isStarted: true })
+      onStart()
     }
+
+    typeChar(char)
   }
 
   render() {
-    const { cursor, isFocused, isStarted, words, wordIndex, scroll } = this.state
+    const { isFocused, isStarted } = this.state
+    const { player, text } = this.props
+
+    const cursor = player.get('cursor')
+    const scroll = player.get('scroll')
+    const wordIndex = player.get('wordIndex')
+
     let curLine = 1
 
     return (
       <Container onClick={this.handleClick} isFocused={isFocused}>
-        {words.map((word, i) => {
+        {text.get('chunks').map((word, i) => {
           const isCurrent = wordIndex === i
           let res = null
+          const wordContent = word.get('content')
+
+          // render current word
           if (isCurrent) {
-            const content = word.get('content')
             const relativeCursor = cursor - word.get('start')
-            const beforeCursor = content.substring(0, relativeCursor)
-            const afterCursor = content.substring(relativeCursor + 1)
-            const onCursor = content[relativeCursor]
+            const beforeCursor = wordContent.substring(0, relativeCursor)
+            const afterCursor = wordContent.substring(relativeCursor + 1)
+            const onCursor = wordContent[relativeCursor]
             res = [
               <Text key="before" isWrong={word.get('isWrong')} isDisabled={!isFocused}>
                 {beforeCursor}
@@ -264,19 +183,24 @@ class TypeWriter extends PureComponent {
               </Text>,
             ]
           } else if (curLine > scroll && curLine <= scroll + DISPLAYED_LINES) {
+            // render other words
             res = (
               <Text
                 key={word.get('id')}
                 isDisabled={!isFocused || i > wordIndex}
                 isWrong={word.get('isWrong')}
               >
-                {word.get('content')}
+                {wordContent}
               </Text>
             )
+          } else {
+            return null
           }
-          if (word.get('content').includes('\n')) {
+
+          if (wordContent.includes('\n')) {
             curLine++
           }
+
           return res
         })}
 
