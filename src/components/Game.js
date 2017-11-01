@@ -22,7 +22,7 @@ const StatsContainer = styled.div`
 `
 
 const KeyboardContainer = styled.div`
-  padding-top: 20px;
+  padding-bottom: 20px;
   display: flex;
 `
 
@@ -86,15 +86,15 @@ class Game extends PureComponent {
 
     return (
       <Container>
+        <KeyboardContainer>
+          <Typematrix activeChar={activeChar} />
+        </KeyboardContainer>
+
         <StatsContainer>
           <Stat label="Accuracy" value={accuracy} />
           <Stat label="Corrections" value={stats.get('corrections')} />
           <Stat label="Wrong" value={stats.get('wrongWords')} />
         </StatsContainer>
-
-        <KeyboardContainer>
-          <Typematrix activeChar={activeChar} />
-        </KeyboardContainer>
 
         <ProgressBar progress={progress} />
 

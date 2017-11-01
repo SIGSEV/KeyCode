@@ -35,6 +35,7 @@ const Main = styled.div`
 @connect(
   state => ({
     hasModal: hasModal(state),
+    showFooter: !state.router.location.pathname.startsWith('/race/'),
   }),
   null,
   null,
@@ -44,7 +45,7 @@ const Main = styled.div`
 )
 class App extends Component {
   render() {
-    const { hasModal } = this.props
+    const { hasModal, showFooter } = this.props
     return (
       <Motion
         style={{
@@ -65,7 +66,7 @@ class App extends Component {
             <Main>
               <Switch>{routes.map(route => <Route key={route.path} {...route} />)}</Switch>
             </Main>
-            <Footer />
+            {showFooter && <Footer />}
           </AppContainer>
         )}
       </Motion>

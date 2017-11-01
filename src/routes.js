@@ -10,7 +10,7 @@ export default [
     component: Home,
   },
   {
-    path: '/race',
+    path: '/race/:id',
     component: Race,
   },
   {
