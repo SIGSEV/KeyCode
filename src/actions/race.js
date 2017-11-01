@@ -4,7 +4,7 @@ import dummyText from 'assets/dummy-text'
 
 export function loadRace(id) {
   return async dispatch => {
-    await new Promise(resolve => setTimeout(resolve, 1e3))
+    await new Promise(resolve => setTimeout(resolve, 500))
     // TODO load the race
     dispatch(
       initRace({
