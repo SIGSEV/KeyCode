@@ -6,7 +6,7 @@ import { findDOMNode } from 'react-dom'
 const BtnEl = props => <button {...props} />
 
 /* eslint-disable no-unused-vars */
-const stylize = El => styled(({ accent, grey, ...props }) => <El {...props} />)`
+const stylize = El => styled(({ accent, action, grey, ...props }) => <El {...props} />)`
   display: inline-flex;
   background: ${p =>
     p.accent ? p.theme.accent : p.grey ? p.theme.darkGrey02 : p.theme.darkGrey00};

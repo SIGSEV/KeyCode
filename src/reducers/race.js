@@ -1,4 +1,3 @@
-import shortid from 'shortid'
 import { handleActions, createAction } from 'redux-actions'
 import { fromJS, List } from 'immutable'
 
@@ -16,9 +15,10 @@ const initialState = fromJS({
 const DISPLAYED_LINES = 15
 
 const handlers = {
-  RACE_INIT: (state, { payload: rawText }) => {
+  RACE_INIT: (state, { payload }) => {
+    const { text: rawText, id } = payload
     return initialState
-      .set('id', shortid.generate())
+      .set('id', id)
       .set('text', computeText(rawText))
       .set('players', List([initPlayer()]))
   },
@@ -28,7 +28,6 @@ const handlers = {
     return state
       .set('isStarted', false)
       .set('isFinished', false)
-      .set('id', shortid.generate())
       .set('text', computeText(state.getIn(['text', 'raw'])))
       .set('players', List([initPlayer()]))
   },

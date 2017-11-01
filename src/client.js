@@ -5,11 +5,14 @@ import createHistory from 'history/createBrowserHistory'
 import { AppContainer } from 'react-hot-loader'
 
 import createStore from 'store'
+import immutablifyState from 'immutablify-state'
 
 import App from 'components/App'
 
 const history = createHistory()
-const store = createStore(history, window.__INITIAL_STATE__)
+
+const state = immutablifyState(window.__INITIAL_STATE__)
+const store = createStore(history, state)
 
 const render = Component => {
   hydrate(

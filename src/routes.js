@@ -3,6 +3,8 @@ import Race from 'components/Race'
 import Pricing from 'components/Pricing'
 import Challenges from 'components/Challenges'
 
+import { loadRace } from 'actions/race'
+
 export default [
   {
     path: '/',
@@ -12,6 +14,7 @@ export default [
   {
     path: '/race/:id',
     component: Race,
+    load: ({ dispatch }) => dispatch(loadRace()),
   },
   {
     path: '/pricing',

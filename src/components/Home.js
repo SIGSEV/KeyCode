@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import { initRace } from 'reducers/race'
+import { loadRace } from 'actions/race'
 
 import Button from 'components/Button'
 import Link from 'components/Link'
@@ -101,28 +101,18 @@ const dummyText = `export default stats => async (req, res) => {
     const styles = __DEV__ ? '' : sheet.getStyleTags()`
 
 @connect(null, {
-  initRace,
   push,
+  loadRace,
 })
 class Home extends PureComponent {
   render() {
-    const { initRace, push } = this.props
+    const { loadRace } = this.props
     return (
       <Container>
         <Hero>
           <Title>{'Improve your coding speed.'}</Title>
           <AutoTypematrix text="Welcome to KeyCode!" />
-          <Button
-            grey
-            onClick={() => {
-              initRace(dummyText)
-              push('/race/abc')
-            }}
-          >
-            {'init a race'}
-            <IconNext style={{ marginLeft: 10 }} />
-          </Button>
-          <Button linkTo="/race/abc" accent>
+          <Button accent action={() => loadRace('a20onthasnt')} to="/race/a20onthasnt">
             {'Race now'}
             <IconNext style={{ marginLeft: 10 }} />
           </Button>
