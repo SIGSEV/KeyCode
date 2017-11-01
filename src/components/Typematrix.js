@@ -104,20 +104,21 @@ export class AutoTypematrix extends PureComponent {
   }
 
   componentWillUnmount() {
+    clearTimeout(this._timeout)
     this._unmounted = true
   }
 
   delayType = () => {
-    setTimeout(this.type, random(100, 250))
+    this._timeout = setTimeout(this.type, random(100, 250))
   }
 
   type = () => {
-    if (this._unmounted) {
-      return
-    }
     const { cursor } = this.state
     const { text } = this.props
     window.requestAnimationFrame(() => {
+      if (this._unmounted) {
+        return
+      }
       this.setState({
         cursor: cursor === text.length - 1 ? 0 : cursor + 1,
       })
