@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router'
 import { Provider, connect } from 'react-redux'
 import styled, { ThemeProvider } from 'styled-components'
 import { Motion, spring } from 'react-motion'
+import { withRouter } from 'react-router-dom'
 
 import routes from 'routes'
 import theme from 'theme'
@@ -33,10 +34,11 @@ const Main = styled.div`
   position: relative;
 `
 
+@withRouter
 @connect(
-  state => ({
+  (state, props) => ({
     hasModal: hasModal(state),
-    showFooter: !state.router.location.pathname.startsWith('/race/'),
+    showFooter: !props.location.pathname.startsWith('/race/'),
   }),
   null,
   null,
