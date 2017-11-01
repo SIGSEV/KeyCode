@@ -108,7 +108,7 @@ const handlers = {
     const newTypedWord = typedWord.substr(0, typedWord.length - 1)
     p = p
       .set('cursor', cursor - 1)
-      .set('typedWord', 'newTypedWord')
+      .set('typedWord', newTypedWord)
       .set('corrections', p.get('corrections') + 1)
     if (word.get('content').startsWith(newTypedWord)) {
       chunks = chunks.setIn([wordIndex, 'isWrong'], false)
