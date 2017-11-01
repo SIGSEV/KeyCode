@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react'
+import styled from 'styled-components'
+
 import Game from 'components/Game'
 
 const text = `import { renderToString } from 'react-dom/server'
@@ -40,9 +42,18 @@ export default stats => async (req, res) => {
   }
 }`
 
+const Container = styled.div`
+  max-width: 860px;
+  margin: 0 auto;
+`
+
 class Race extends PureComponent {
   render() {
-    return <Game text={text} />
+    return (
+      <Container>
+        <Game text={text} />
+      </Container>
+    )
   }
 }
 

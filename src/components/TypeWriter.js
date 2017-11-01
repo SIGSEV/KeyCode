@@ -129,10 +129,14 @@ class TypeWriter extends PureComponent {
   handleClick = () => this._input.focus()
 
   handleKeyDown = e => {
-    if (!this.state.isStarted) {
-      this.setState({ isStarted: true })
+    if (this.props.isDisabled) {
+      return
     }
     if (e.which === 13) {
+      if (!this.state.isStarted) {
+        this.setState({ isStarted: true })
+        this.props.onStart()
+      }
       this.handleNext()
     }
     if (e.which === 8) {
@@ -160,8 +164,11 @@ class TypeWriter extends PureComponent {
   }
 
   handleChange = e => {
-    const { text, onChar } = this.props
-    const { cursor, wordIndex, typedWord, words } = this.state
+    const { text, onChar, onStart, isDisabled } = this.props
+    const { cursor, wordIndex, typedWord, words, isStarted } = this.state
+    if (isDisabled) {
+      return
+    }
     const { value } = e.target
     const char = text[cursor]
     if (!char) {
@@ -174,6 +181,10 @@ class TypeWriter extends PureComponent {
     const word = words.get(wordIndex)
     const newTypedWord = `${typedWord}${value}`
     const nextState = { cursor: this.state.cursor + 1, typedWord: newTypedWord }
+    if (!isStarted) {
+      nextState.isStarted = true
+      onStart()
+    }
     if (!word.get('content').startsWith(newTypedWord)) {
       nextState.words = this.state.words.setIn([wordIndex, 'isWrong'], true)
     }
@@ -238,7 +249,7 @@ class TypeWriter extends PureComponent {
             const afterCursor = content.substring(relativeCursor + 1)
             const onCursor = content[relativeCursor]
             res = [
-              <Text key="before" isWrong={word.get('isWrong')}>
+              <Text key="before" isWrong={word.get('isWrong')} isDisabled={!isFocused}>
                 {beforeCursor}
               </Text>,
               <Cursor
