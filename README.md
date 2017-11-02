@@ -1,19 +1,15 @@
-# KeyCode
+<h1 align="center">KeyCode</h1>
+<p align="center">:keyboard: Improve your coding speed, like a god.</p>
 
+### Development
 
-### ROAD TO V1
+Just figure that shit by looking at the `package.json`, lazy biatch.
 
-#### little shit
-- [ ] update link to source on Footer to real repo url
+### Roadmap
 
 #### backend crap
-- [ ] set up DB (SQL? mongo? dynamo?), with ability to use distant DB (nobody wants to shit up with local DB shit)
-- [ ] implement authentication w github
-  - [ ] Oauth
-    - [ ] create user in DB. store the minimum amount of data, the rest will be fetched via graphql on request.
-    - [ ] attach user to `req`
-  - [ ] cookie, `me` reducer, use auth token in requests in api middleware
-  - [ ] init user if exists when loading page
+- [ ] https, if thats possible, i think a comodo certificate is $100
+- [ ] use auth token in requests in api middleware
 - [ ] forward the github search https://developer.github.com/v3/search/
     - [ ] `/search` endpoint, using user auth to query github
     - [ ] reduce result weight server-side
