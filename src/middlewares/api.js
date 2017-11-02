@@ -32,7 +32,7 @@ export default store => next => async action => {
 
   const headers = {
     Accept: 'application/json',
-    Authorization: getCookie('token'),
+    SIGSEV: getCookie('token'),
     'Content-Type': 'application/json',
   }
 

@@ -14,8 +14,8 @@ const checkJwt = expressJwt({
   secret,
   credentialsRequired: false,
   getToken: req => {
-    if (req.headers.authorization && req.headers.authorization) {
-      return req.headers.authorization
+    if (req.headers.sigsev) {
+      return req.headers.sigsev
     }
     if (req.cookies && req.cookies.token) {
       return req.cookies.token
