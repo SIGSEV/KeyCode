@@ -11,8 +11,9 @@ import App from 'components/App'
 
 export default stats => async (req, res) => {
   try {
-    const store = createStore()
+    const store = createStore(null, { user: req.user })
     const sheet = new ServerStyleSheet()
+    // shieet booi
 
     const context = {}
     const promises = []

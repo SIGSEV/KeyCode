@@ -1,11 +1,13 @@
-require('dotenv').config()
-
 import express from 'express'
 import compression from 'compression'
+import cookieParser from 'cookie-parser'
 import path from 'path'
+
+import 'api/init'
 
 import render from 'server/render'
 import * as globals from 'globals'
+import { setUser } from 'api/services/auth'
 
 Object.keys(globals).forEach(key => (global[key] = globals[key]))
 
@@ -27,8 +29,9 @@ if (__PROD__) {
   server.use('/dist', express.static(DIST_FOLDER))
 }
 
+server.use(cookieParser())
 server.use('/assets', express.static(ASSETS_FOLDER))
-server.use(render(stats))
+server.use(setUser(), render(stats))
 
 server.listen(port, 'localhost', () => {
   console.log(`[server] listening on port ${port} - ${__ENV__}`) // eslint-disable-line no-console

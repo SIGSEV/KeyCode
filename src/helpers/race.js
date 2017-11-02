@@ -12,5 +12,8 @@ export function initPlayer() {
     typedWord: '',
     typedChar: null,
     typedWordsCount: 0,
+
+    validKeys: {},
+    wrongKeys: {},
   })
 }

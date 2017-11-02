@@ -28,9 +28,12 @@ const Choices = styled.div`
 `
 
 const Choice = styled.div`
+  height: 22rem;
   width: ${p => (p.isBig ? 300 : 250)}px;
   border-radius: 8px;
   border: 3px solid ${p => p.theme.darkGrey02};
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 900px) {
     width: 300px;
@@ -71,6 +74,7 @@ const Feature = styled.div`
 
 const ChoiceFooter = styled.div`
   background: ${p => p.theme.lightgrey02};
+  margin-top: auto;
   padding: 20px;
   display: flex;
   justify-content: center;

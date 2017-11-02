@@ -2,11 +2,8 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { openModal, closeModal } from 'reducers/modals'
-
 import Button from 'components/Button'
 import Link from 'components/Link'
-import Modal from 'components/Modal'
 
 const Container = styled.div`
   display: flex;
@@ -27,6 +24,9 @@ const Container = styled.div`
 
 const HeaderRight = styled.div`
   margin-left: auto;
+  display: flex;
+  align-items: center;
+
   > * + * {
     margin-left: 40px;
   }
@@ -42,13 +42,25 @@ const Bold = styled.div`
   user-select: none;
 `
 
-@connect(null, {
-  openModal,
-  closeModal,
-})
+const Pic = styled.img`
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 150ms ease-in;
+  &:hover {
+    opacity: 1;
+  }
+`
+
+@connect(({ user }) => ({ user }))
 class Header extends PureComponent {
+  login = () => {
+    window.location.href = `${__APIURL__}/auth`
+    return new Promise(resolve => setTimeout(resolve, 10e3))
+  }
+
   render() {
-    const { openModal, closeModal } = this.props
+    const { user } = this.props
+
     return (
       <Container>
         <Link to="/">
@@ -56,15 +68,12 @@ class Header extends PureComponent {
         </Link>
         <HeaderRight>
           <Link to="/pricing">{'Pricing'}</Link>
-          <Button onClick={() => openModal('github')}>{'Login with GitHub'}</Button>
+          {user ? (
+            <Pic src={user.avatar} width={50} />
+          ) : (
+            <Button action={this.login}>{'Login with GitHub'}</Button>
+          )}
         </HeaderRight>
-        <Modal name="github" title="Wanna log with github?">
-          {'Blabl balblablb lab lablalaua bal'}
-          <br />
-          <Button grey style={{ marginTop: 40 }} onClick={() => closeModal('github')}>
-            {'Got it!'}
-          </Button>
-        </Modal>
       </Container>
     )
   }
