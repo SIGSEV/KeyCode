@@ -5,7 +5,7 @@ import expressJwt from 'express-jwt'
 import compose from 'composable-middleware'
 import { isObject, isString } from 'lodash/isString'
 
-import { __URL__, __APIURL__ } from 'globals'
+import { __DEV__, __URL__, __APIURL__ } from 'globals'
 import { updateOrCreate, getById, newResult } from 'api/services/user'
 
 const secret = process.env.SEED
@@ -64,8 +64,8 @@ export const setToken = (req, res) => {
 passport.use(
   new Strategy(
     {
-      clientID: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+      clientID: process.env[`GITHUB_ID${__DEV__ ? '_DEV' : ''}`],
+      clientSecret: process.env[`GITHUB_SECRET${__DEV__ ? '_DEV' : ''}`],
       callbackURL: `${__APIURL__}/auth/callback`,
       scope: ['write:org', 'read:org'],
       failureRedirect: __URL__,

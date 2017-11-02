@@ -9,7 +9,6 @@ Just figure that shit by looking at the `package.json`, lazy biatch.
 
 #### backend crap
 - [ ] https, if thats possible, i think a comodo certificate is $100
-- [ ] use auth token in requests in api middleware
 - [ ] forward the github search https://developer.github.com/v3/search/
     - [ ] `/search` endpoint, using user auth to query github
     - [ ] reduce result weight server-side
