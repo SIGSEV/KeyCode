@@ -1,3 +1,15 @@
+const getCookie = name => {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+
+  if (parts.length === 2) {
+    return parts
+      .pop()
+      .split(';')
+      .shift()
+  }
+}
+
 export default store => next => async action => {
   const isGraphql = action.type.startsWith('G:')
   const isAPI = action.type.startsWith('API:')
@@ -20,6 +32,7 @@ export default store => next => async action => {
 
   const headers = {
     Accept: 'application/json',
+    Authorization: getCookie('token'),
     'Content-Type': 'application/json',
   }
 

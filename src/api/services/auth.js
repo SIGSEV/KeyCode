@@ -14,8 +14,8 @@ const checkJwt = expressJwt({
   secret,
   credentialsRequired: false,
   getToken: req => {
-    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      return req.headers.authorization.split(' ')[1]
+    if (req.headers.authorization && req.headers.authorization) {
+      return req.headers.authorization
     }
     if (req.cookies && req.cookies.token) {
       return req.cookies.token
@@ -42,7 +42,7 @@ export const isAuthenticated = () =>
     .use(checkJwt)
     .use(async (req, res, next) => {
       try {
-        if (!req.user.id) {
+        if (!req.user || !req.user.id) {
           throw new Error('You need to be authenticated.')
         }
 
