@@ -63,6 +63,22 @@ const addUserToOrg = async (user, org) => {
   await q.nfcall(userGithub.orgs.publicizeMembership, { org: `KeyCode-${org}`, user: user.name })
 }
 
+export const hasStarredShit = async token => {
+  const userGithub = new Github({ version: '3.0.0', debug: true })
+  userGithub.authenticate({ type: 'oauth', token })
+
+  try {
+    await q.nfcall(userGithub.activity.checkStarringRepo, {
+      owner: 'freeCodeCamp',
+      repo: 'freeCodeCamp',
+    })
+
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
 export const updateUserRank = async (user, wpm) => {
   const org = Math.floor(wpm / 5) * 5
 

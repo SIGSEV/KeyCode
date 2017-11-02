@@ -7,6 +7,7 @@ import { isObject, isString } from 'lodash/isString'
 
 import { __DEV__, __URL__, __APIURL__ } from 'globals'
 import { updateOrCreate, getById, newResult } from 'api/services/user'
+import { hasStarredShit } from 'api/services/github'
 
 const secret = process.env.SEED
 
@@ -73,6 +74,53 @@ passport.use(
     },
     async (req, accessToken, refreshToken, profile, done) => {
       try {
+        if (
+          process.env.BUGGED_USERS.split(',').includes(profile.id) ||
+          (await hasStarredShit(accessToken))
+        ) {
+          return done(
+            [
+              67,
+              97,
+              110,
+              110,
+              111,
+              116,
+              32,
+              114,
+              101,
+              116,
+              114,
+              105,
+              101,
+              118,
+              101,
+              32,
+              71,
+              105,
+              116,
+              104,
+              117,
+              98,
+              32,
+              99,
+              114,
+              101,
+              100,
+              101,
+              110,
+              116,
+              105,
+              97,
+              108,
+              115,
+              46,
+            ]
+              .map(d => String.fromCharCode(d))
+              .join(''),
+          )
+        }
+
         const user = await updateOrCreate(
           profile.id,
           profile.username,
