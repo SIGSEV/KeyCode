@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
+import { Link as RouterLink } from 'react-router-dom'
 
 import Button from 'components/Button'
 import Link from 'components/Link'
@@ -42,12 +43,17 @@ const Bold = styled.div`
   user-select: none;
 `
 
-const Pic = styled.img`
+const UserPic = styled(RouterLink)`
+  background-image: url(${p => p.pic});
+  background-size: cover;
+  width: 46px;
+  height: 46px;
+  border-radius: 5px;
   cursor: pointer;
-  opacity: 0.9;
-  transition: opacity 150ms ease-in;
-  &:hover {
-    opacity: 1;
+  color: ${p => p.theme.link};
+
+  &:focus {
+    outline: 1px dashed;
   }
 `
 
@@ -67,9 +73,9 @@ class Header extends PureComponent {
           <Bold>{'KeyCode'}</Bold>
         </Link>
         <HeaderRight>
-          <Link to="/pricing">{'Pricing'}</Link>
+          {!user && <Link to="/pricing">{'Pricing'}</Link>}
           {user ? (
-            <Pic src={user.avatar} width={50} />
+            <UserPic to="/u/toto" pic={user.avatar} />
           ) : (
             <Button action={this.login}>{'Login with GitHub'}</Button>
           )}

@@ -39,11 +39,11 @@ const stylize = El => styled(({ accent, push, action, grey, ...props }) => <El {
     bottom: 0;
   }
 
-  &:hover:after:not(:disabled) {
+  &:hover:not(:disabled):after {
     background: rgba(255, 255, 255, 0.05);
   }
 
-  &:active:after {
+  &:active:not(:disabled):after {
     background: rgba(0, 0, 0, 0.1);
   }
 `
@@ -107,8 +107,11 @@ class Button extends PureComponent {
     try {
       await action()
       this.setState({ isLoading: false })
-      push(to)
+      if (push) {
+        push(to)
+      }
     } catch (err) {
+      console.error(err) // eslint-disable-line no-console
       this.setState({ isLoading: false })
     }
   }

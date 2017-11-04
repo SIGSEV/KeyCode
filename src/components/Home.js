@@ -90,7 +90,7 @@ class Home extends PureComponent {
         <Hero>
           <Title>{'Improve your coding speed.'}</Title>
           <AutoTypematrix text="Welcome to KeyCode!" />
-          <Button accent action={() => loadRace('a20onthasnt')} to="/race/a20onthasnt">
+          <Button accent action={() => loadRace('a20onthasnt')} to="/r/a20onthasnt">
             {'Race now'}
             <IconNext style={{ marginLeft: 10 }} />
           </Button>

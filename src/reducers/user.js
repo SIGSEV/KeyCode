@@ -1,11 +1,11 @@
-import { handleActions } from 'redux-actions'
-import { fromJS } from 'immutable'
+import { handleActions, createAction } from 'redux-actions'
 
 const initialState = null
 
-export default handleActions(
-  {
-    LOGIN: () => {},
-  },
-  initialState,
-)
+const handlers = {
+  LOGOUT: () => null,
+}
+
+export default handleActions(handlers, initialState)
+
+export const logout = createAction('LOGOUT')

@@ -13,7 +13,6 @@ export default stats => async (req, res) => {
   try {
     const store = createStore(null, { user: req.user })
     const sheet = new ServerStyleSheet()
-    // shieet booi
 
     const context = {}
     const promises = []
