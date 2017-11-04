@@ -23,14 +23,16 @@ export function getStats(player) {
   const time = player.get('time')
   const minuteRatio = time / 60
   const corrections = player.get('corrections')
+  const typedWords = player.get('typedWordsCount')
   const wrongWords = player.get('wrongWordsCount')
-  const goodWords = player.get('typedWordsCount') - wrongWords
-  const wpm = minuteRatio <= 0 ? 0 : Math.round(goodWords / minuteRatio)
+  const goodWords = typedWords - wrongWords
+  const accuracy = goodWords / typedWords
+  const wpm = minuteRatio <= 0 ? 0 : Math.round(goodWords * accuracy / minuteRatio) - corrections
 
   return {
-    wpm,
     wrongWords,
     corrections,
-    score: wpm, // not a really good score, eh?
+    wpm: Math.max(0, wpm),
+    score: Math.max(0, wpm - corrections / 4),
   }
 }
