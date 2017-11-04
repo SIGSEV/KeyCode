@@ -36,7 +36,6 @@ class Chronos extends PureComponent {
       this.tick()
     }
     if (!isRunning && wasRunning) {
-      console.log(`stopping timer`)
       clearTimeout(this._timeout)
     }
   }
@@ -45,6 +44,8 @@ class Chronos extends PureComponent {
     clearTimeout(this._timeout)
     this._unmounted = true
   }
+
+  get = () => this.props.seconds - this.state.timeRemaining;
 
   reset = () => {
     clearTimeout(this._timeout)

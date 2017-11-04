@@ -93,6 +93,12 @@ class TypeWriter extends PureComponent {
     window.requestAnimationFrame(() => this._input.focus())
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.player.get('cursor') >= nextProps.text.get('raw').length) {
+      this.props.onFinish()
+    }
+  }
+
   componentDidUpdate(prevProps) {
     const { isFinished } = this.props
     const { isFinished: wasFinished } = prevProps

@@ -3,8 +3,10 @@ import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 
 import Button from 'components/Button'
+import Score from 'components/Score'
 
 import { getPlayer } from 'reducers/race'
+import { getStats } from 'helpers/race'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -50,11 +52,28 @@ const StatsContainer = styled.div`
   justify-content: center;
 `
 
+const statAnim = keyframes`
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -40px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+`
+
 const Stat = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
+
+  opacity: 0;
+  will-change: transform;
+  animation: ${statAnim} 250ms cubic-bezier(0.39, 1.27, 0.35, 1.14);
+  animation-delay: ${p => p.delay * 1000}ms;
+  animation-fill-mode: forwards;
 `
 
 const StatValue = styled.div`
@@ -72,32 +91,43 @@ const StatLabel = styled.div`
   player: getPlayer(state),
 }))
 class FinishBoard extends PureComponent {
+  state = {
+    showScore: false,
+  }
+
   componentDidMount() {
     setTimeout(() => {
       window.requestAnimationFrame(() => {
         this._restartBtn.focus()
+        this.setState({ showScore: true })
       })
     }, 700)
   }
 
   render() {
-    const { onRestart } = this.props
+    const { onRestart, player } = this.props
+    const { showScore } = this.state
+
+    const stats = getStats(player)
+
     return (
       <Wrapper>
         <Container>
+          <div style={{ height: 70 }}>{showScore && <Score score={40} />}</div>
+
           <StatsContainer>
-            <Stat delay={1}>
-              <StatValue>{'84'}</StatValue>
+            <Stat delay={0.6}>
+              <StatValue>{stats.wpm}</StatValue>
               <StatLabel>{'WPM'}</StatLabel>
             </Stat>
 
-            <Stat delay={2}>
-              <StatValue>{'0'}</StatValue>
+            <Stat delay={0.7}>
+              <StatValue>{stats.wrongWords}</StatValue>
               <StatLabel>{'Wrong words'}</StatLabel>
             </Stat>
 
-            <Stat delay={3}>
-              <StatValue>{'0'}</StatValue>
+            <Stat delay={0.8}>
+              <StatValue>{stats.corrections}</StatValue>
               <StatLabel>{'Corrections'}</StatLabel>
             </Stat>
           </StatsContainer>

@@ -23,7 +23,8 @@ const handlers = {
       .set('players', List([initPlayer()]))
   },
   RACE_START: state => state.set('isStarted', true),
-  RACE_STOP: state => state.set('isFinished', true),
+  RACE_STOP: (state, { payload: time }) =>
+    state.set('isFinished', true).setIn(['players', 0, 'time'], time),
   RACE_RESET: state => {
     return state
       .set('isStarted', false)
@@ -32,28 +33,32 @@ const handlers = {
       .set('players', List([initPlayer()]))
   },
   RACE_TYPE_CHAR: (state, { payload: char }) => {
-    const p = state.getIn(['players', 0])
+    let p = state.getIn(['players', 0])
 
     const cursor = p.get('cursor')
     const wordIndex = p.get('wordIndex')
     const typedWord = p.get('typedWord')
-
     const newTypedWord = `${typedWord}${char}`
+    const charToType = state.getIn(['text', 'raw'])[cursor]
 
-    return state
-      .updateIn(['players', 0], p => {
-        return p
-          .set('typedChar', char)
-          .set('cursor', cursor + 1)
-          .set('typedWord', newTypedWord)
-      })
-      .updateIn(['text'], text => {
-        const word = text.getIn(['chunks', wordIndex])
-        if (!word.get('content').startsWith(newTypedWord)) {
-          text = text.setIn(['chunks', wordIndex, 'isWrong'], true)
-        }
-        return text
-      })
+    if (charToType === char) {
+      p = p.update('validKeys', keys => keys.set(char, keys.get(char, 0) + 1))
+    } else {
+      p = p.update('wrongKeys', keys => keys.set(char, keys.get(char, 0) + 1))
+    }
+
+    p = p
+      .set('typedChar', char)
+      .set('cursor', cursor + 1)
+      .set('typedWord', newTypedWord)
+
+    return state.setIn(['players', 0], p).updateIn(['text'], text => {
+      const word = text.getIn(['chunks', wordIndex])
+      if (!word.get('content').startsWith(newTypedWord)) {
+        text = text.setIn(['chunks', wordIndex, 'isWrong'], true)
+      }
+      return text
+    })
   },
   RACE_NEXT_WORD: state => {
     let chunks = state.getIn(['text', 'chunks'])
@@ -81,11 +86,14 @@ const handlers = {
       chunks = chunks.setIn([wordIndex, 'isWrong'], true)
     }
 
+    if (chunks.getIn([wordIndex, 'isWrong'])) {
+      p = p.set('wrongWordsCount', p.get('wrongWordsCount', 0) + 1)
+    }
+
     p = p.set('typedWordsCount', p.get('typedWordsCount') + 1)
 
     if (nextWordIndex === -1) {
       p = p.set('cursor', word.get('end') + 1)
-      state = state.set('isFinished', true)
     } else {
       const nextWord = chunks.get(nextWordIndex)
       p = p

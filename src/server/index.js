@@ -1,4 +1,5 @@
 import express from 'express'
+import fetch from 'node-fetch'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import path from 'path'
@@ -9,6 +10,7 @@ import render from 'server/render'
 import * as globals from 'globals'
 import { setUser } from 'api/services/auth'
 
+global.fetch = fetch
 Object.keys(globals).forEach(key => (global[key] = globals[key]))
 
 const ASSETS_FOLDER = path.join(__dirname, '../assets')

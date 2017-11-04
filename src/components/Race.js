@@ -62,12 +62,17 @@ const GameHeaderRight = styled.div`
 )
 class Race extends PureComponent {
   handleReset = () => {
-    this.props.resetRace()
     this._chronos.reset()
+    this.props.resetRace()
+  }
+
+  handleStop = () => {
+    const time = this._chronos.get()
+    this.props.stopRace(time)
   }
 
   render() {
-    const { player, text, isStarted, isFinished, startRace, stopRace } = this.props
+    const { player, text, isStarted, isFinished, startRace } = this.props
 
     const typedChar = player.get('typedChar')
     const typedWordsCount = player.get('typedWordsCount')
@@ -89,7 +94,7 @@ class Race extends PureComponent {
                 <Chronos
                   seconds={60}
                   isRunning={isStarted && !isFinished}
-                  onFinish={stopRace}
+                  onFinish={this.handleStop}
                   ref={n => (this._chronos = n)}
                 />
               </GameHeaderRight>
@@ -97,7 +102,7 @@ class Race extends PureComponent {
 
             <ProgressBar progress={progress} />
 
-            <TypeWriter isDisabled={isFinished} onStart={startRace} />
+            <TypeWriter isDisabled={isFinished} onStart={startRace} onFinish={this.handleStop} />
           </GameLayer>
 
           {isFinished && <FinishBoard onRestart={this.handleReset} />}

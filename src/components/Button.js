@@ -104,9 +104,13 @@ class Button extends PureComponent {
   handleAction = async () => {
     const { action, to, push } = this.props
     this.setState({ isLoading: true })
-    await action()
-    this.setState({ isLoading: false })
-    push(to)
+    try {
+      await action()
+      this.setState({ isLoading: false })
+      push(to)
+    } catch (err) {
+      this.setState({ isLoading: false })
+    }
   }
 
   render() {

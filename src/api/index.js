@@ -7,6 +7,8 @@ import 'api/init'
 import { getAll } from 'api/services/user'
 import { setToken, isAuthenticated } from 'api/services/auth'
 
+global.fetch = fetch
+
 const api = express.Router()
 
 const GITHUB_BASE = 'https://api.github.com/graphql'
