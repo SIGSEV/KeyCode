@@ -67,7 +67,7 @@ const Stat = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  width: 190px;
 
   opacity: 0;
   will-change: transform;
@@ -83,7 +83,8 @@ const StatValue = styled.div`
 `
 
 const StatLabel = styled.div`
-  font-size: 13px;
+  font-size: 12px;
+  letter-spacing: 1px;
   text-transform: uppercase;
 `
 
@@ -113,7 +114,7 @@ class FinishBoard extends PureComponent {
     return (
       <Wrapper>
         <Container>
-          <div style={{ height: 70 }}>{showScore && <Score score={40} />}</div>
+          <div style={{ height: 70 }}>{showScore && <Score score={stats.score} />}</div>
 
           <StatsContainer>
             <Stat delay={0.6}>

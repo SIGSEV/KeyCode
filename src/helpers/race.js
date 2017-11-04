@@ -31,6 +31,6 @@ export function getStats(player) {
     wpm,
     wrongWords,
     corrections,
-    score: 0,
+    score: wpm, // not a really good score, eh?
   }
 }
