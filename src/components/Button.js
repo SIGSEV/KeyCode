@@ -7,13 +7,15 @@ import { Link as RouterLink } from 'react-router-dom'
 import { findDOMNode } from 'react-dom'
 import { Motion, spring } from 'react-motion'
 
-const BtnEl = ({ isLoading, ...props }) => <button disabled={isLoading} {...props} />
+const BtnEl = ({ isLoading, isDisabled, ...props }) => (
+  <button disabled={isLoading || isDisabled} {...props} />
+)
 
 /* eslint-disable no-unused-vars */
 const stylize = El => styled(({ accent, push, action, grey, ...props }) => <El {...props} />)`
   position: relative;
   display: inline-flex;
-  opacity: ${p => (p.isLoading ? 0.7 : 1)};
+  opacity: ${p => (p.isLoading || p.isDisabled ? 0.7 : 1)};
   overflow: hidden;
   background: ${p =>
     p.accent ? p.theme.accent : p.grey ? p.theme.darkGrey02 : p.theme.darkGrey00};
