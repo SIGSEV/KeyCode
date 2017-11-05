@@ -21,7 +21,7 @@ export default [
   {
     path: '/r/:id',
     component: Race,
-    load: ({ dispatch }) => dispatch(loadRace()),
+    load: ({ dispatch }, { url }) => dispatch(loadRace(url.split('/')[2])),
   },
   {
     path: '/u/:id',
