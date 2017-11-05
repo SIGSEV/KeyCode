@@ -12,6 +12,7 @@ const uniqueId = async () => {
         .toLowerCase(),
     )
     .join('-')
+    .replace(/\//g, '')
 
   const exists = await Text.findOne({ id })
   if (exists) {
