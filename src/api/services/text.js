@@ -21,10 +21,10 @@ const uniqueId = async () => {
   return id
 }
 
-export const createText = payload =>
+export const createText = async payload =>
   Text.create({
     ...payload,
-    id: uniqueId(),
+    id: await uniqueId(),
   })
 
 export const getText = async id => {
