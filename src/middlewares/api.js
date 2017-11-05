@@ -1,5 +1,3 @@
-import { __BROWSER__ } from 'globals'
-
 const getCookie = name => {
   const value = `; ${document.cookie}`
   const parts = value.split(`; ${name}=`)
@@ -20,7 +18,7 @@ export default store => next => async action => {
     return next(action)
   }
 
-  const { dispatch } = store
+  const { dispatch, getState } = store
   const prefix = action.type.split(':')[1]
 
   let { url = '', body, method = 'GET' } = action.payload
@@ -34,11 +32,8 @@ export default store => next => async action => {
 
   const headers = {
     Accept: 'application/json',
+    SIGSEV: getState().user.token,
     'Content-Type': 'application/json',
-  }
-
-  if (__BROWSER__) {
-    headers.SIGSEV = getCookie('token')
   }
 
   if (body) {
