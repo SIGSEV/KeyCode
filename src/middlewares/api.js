@@ -8,6 +8,7 @@ export default store => next => async action => {
 
   const { dispatch, getState } = store
   const prefix = action.type.split(':')[1]
+  const state = getState()
 
   let { url = '', body, method = 'GET' } = action.payload
 
@@ -20,8 +21,11 @@ export default store => next => async action => {
 
   const headers = {
     Accept: 'application/json',
-    SIGSEV: getState().user.token,
     'Content-Type': 'application/json',
+  }
+
+  if (state.user && state.user.token) {
+    headers.SIGSEV = state.user.token
   }
 
   if (body) {
