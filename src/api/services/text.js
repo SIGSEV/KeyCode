@@ -37,7 +37,7 @@ export const getRandomText = async () => {
 
 export const getText = async id => {
   const text = await Text.findOne({ id })
-  const leaders = await Race.find({ textId: id })
+  const leaders = await Race.find({ textId: text._id })
     .sort('-wpm')
     .limit(10)
     .exec()
