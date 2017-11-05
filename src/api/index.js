@@ -5,7 +5,7 @@ import passport from 'passport'
 import 'api/init'
 
 import { getAllUsers } from 'api/services/user'
-import { createText } from 'api/services/text'
+import { getText, getTexts, voteText, createText } from 'api/services/text'
 import { setToken, isAuthenticated } from 'api/services/auth'
 
 global.fetch = fetch
@@ -30,6 +30,10 @@ api.post('/graphql', async (req, res) => {
   }
 })
 
+/**
+ * Users
+ */
+
 api.get('/users', async (req, res) => {
   try {
     res.send(await getAllUsers())
@@ -39,6 +43,10 @@ api.get('/users', async (req, res) => {
 })
 
 api.get('/users/me', isAuthenticated(), (req, res) => res.send(req.user))
+
+/**
+ * Texts
+ */
 
 api.post('/texts', isAuthenticated(), async (req, res) => {
   const { raw, language } = req.body
@@ -53,17 +61,33 @@ api.post('/texts', isAuthenticated(), async (req, res) => {
   }
 })
 
-api.get('/texts', (req, res) => {
+api.put('/texts/:id/star', isAuthenticated(), async (req, res) => {
   try {
-    res.send([
-      `var Ma_premiere__FN = function()  { 
-     return "1" + [];
-};;`,
-    ])
+    res.send(await voteText(req.params.id, req.user._id))
   } catch ({ message }) {
     res.status(500).send({ message })
   }
 })
+
+api.get('/texts/:id', async (req, res) => {
+  try {
+    res.send(await getText(req.params.id))
+  } catch ({ message }) {
+    res.status(500).send({ message })
+  }
+})
+
+api.get('/texts', async (req, res) => {
+  try {
+    res.send(await getTexts(req.query.language))
+  } catch ({ message }) {
+    res.status(500).send({ message })
+  }
+})
+
+/**
+ * Auth
+ */
 
 api.get('/auth', (req, res, next) => {
   passport.authenticate('github', { state: req.query.data })(req, res, next)

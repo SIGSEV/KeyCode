@@ -6,7 +6,10 @@ export default mongoose.model(
     id: { type: String, unique: true },
     language: String,
     raw: String,
+
+    stars: { type: Number, default: 0 },
     rates: Schema.Types.Mixed,
+
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
