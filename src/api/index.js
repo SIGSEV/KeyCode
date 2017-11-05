@@ -4,7 +4,8 @@ import passport from 'passport'
 
 import 'api/init'
 
-import { getAll } from 'api/services/user'
+import { getAllUsers } from 'api/services/user'
+import { createText } from 'api/services/text'
 import { setToken, isAuthenticated } from 'api/services/auth'
 
 global.fetch = fetch
@@ -31,13 +32,26 @@ api.post('/graphql', async (req, res) => {
 
 api.get('/users', async (req, res) => {
   try {
-    res.send(await getAll())
+    res.send(await getAllUsers())
   } catch ({ message }) {
     res.status(500).send({ message })
   }
 })
 
 api.get('/users/me', isAuthenticated(), (req, res) => res.send(req.user))
+
+api.post('/texts', isAuthenticated(), async (req, res) => {
+  const { raw, language } = req.body
+  if (!raw || !language) {
+    return res.status(500).send({ message: 'content!!!' })
+  }
+
+  try {
+    res.send(await createText({ raw, language, author: req.user._id }))
+  } catch ({ message }) {
+    res.status(500).send({ message })
+  }
+})
 
 api.get('/texts', (req, res) => {
   try {

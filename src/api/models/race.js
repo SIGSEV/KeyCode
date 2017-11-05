@@ -1,16 +1,19 @@
 import mongoose, { Schema } from 'mongoose'
 
 export default mongoose.model(
-  'Test',
+  'Race',
   new Schema({
-    id: Number,
-    line: Number,
-    cursor: Number,
-    scroll: Number,
-    wordIndex: Number,
+    textId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Text',
+    },
+
+    time: Number,
+    wpm: Number,
+    score: Number,
+
     corrections: Number,
-    typedWord: String,
-    typedChar: String,
+    wrongWords: Number,
     typedWordsCount: Number,
 
     validKeys: Schema.Types.Mixed,

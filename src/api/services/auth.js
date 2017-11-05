@@ -6,7 +6,7 @@ import compose from 'composable-middleware'
 import { isObject, isString } from 'lodash/isString'
 
 import { __DEV__, __URL__, __APIURL__ } from 'globals'
-import { updateOrCreate, getById, newResult } from 'api/services/user'
+import { updateOrCreate, getUserById, newResult } from 'api/services/user'
 import { hasStarredShit } from 'api/services/github'
 
 const secret = process.env.SEED
@@ -28,10 +28,10 @@ const checkJwt = expressJwt({
 
 export const setUser = () =>
   compose()
-    .use(checkJwt)
+    .use((req, res, next) => checkJwt(req, res, () => next()))
     .use(async (req, res, next) => {
       try {
-        req.user = await getById(req.user.id)
+        req.user = await getUserById(req.user.id)
         return next()
       } catch (e) {
         return next()
