@@ -43,7 +43,7 @@ export const getText = async id => {
     .exec()
 
   const out = text.toObject()
-  out.leaders = leaders.toObject()
+  out.leaders = leaders
   return out
 }
 
