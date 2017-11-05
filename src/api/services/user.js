@@ -1,9 +1,9 @@
-import pick from 'lodash/pick'
+// import pick from 'lodash/pick'
 
 import User from 'api/models/user'
 import Test from 'api/models/test'
 
-import { updateUserOrg } from 'api/services/github'
+// import { updateUserOrg } from 'api/services/github'
 
 export const getAll = () => User.findAll()
 export const getById = id => User.findById(id)

@@ -1,7 +1,7 @@
 import q from 'q'
 import Github from 'github'
 
-const orgs = [...Array(31)].map((_, i) => i * 5)
+// const orgs = [...Array(31)].map((_, i) => i * 5)
 const orgIds = {
   5: 1810152,
   10: 1810158,
