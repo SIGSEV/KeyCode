@@ -94,7 +94,10 @@ class Home extends PureComponent {
             {'Random race'}
             <IconNext style={{ marginLeft: 10 }} />
           </Button>
-          {'Create race'}
+          <div>
+            {'or '}
+            <Link to="/new">{'Create race'}</Link>
+          </div>
         </Hero>
 
         <Narrow>
