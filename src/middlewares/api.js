@@ -1,3 +1,5 @@
+import { __BROWSER__ } from 'globals'
+
 const getCookie = name => {
   const value = `; ${document.cookie}`
   const parts = value.split(`; ${name}=`)
@@ -32,8 +34,11 @@ export default store => next => async action => {
 
   const headers = {
     Accept: 'application/json',
-    SIGSEV: getCookie('token'),
     'Content-Type': 'application/json',
+  }
+
+  if (__BROWSER__) {
+    headers.SIGSEV = getCookie('token')
   }
 
   if (body) {
