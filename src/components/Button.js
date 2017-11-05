@@ -130,8 +130,18 @@ class Button extends PureComponent {
   }
 
   render() {
-    const { isLoading } = this.state
-    const { children, setRef, to, onClick, action, ...props } = this.props
+    const { isLoading: stateIsLoading } = this.state
+    const {
+      children,
+      setRef,
+      to,
+      onClick,
+      action,
+      isLoading: propsIsLoading,
+      ...props
+    } = this.props
+
+    const isLoading = stateIsLoading || propsIsLoading
 
     if (setRef) {
       setRef(this)

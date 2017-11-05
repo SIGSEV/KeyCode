@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import { Field as FormField, Form as FormikForm, Formik } from 'formik'
+import { connect } from 'react-redux'
+
+import { createText } from 'actions/text'
 
 import Button from 'components/Button'
 
@@ -78,26 +81,36 @@ const Row = styled.div`
   }
 `
 
+@connect(null, {
+  createText,
+})
 class CreateText extends PureComponent {
   render() {
+    const { createText } = this.props
     return (
       <Narrow>
         <Formik
-          onSubmit={values => {
-            console.log(values)
+          onSubmit={async (values, props) => {
+            try {
+              const res = await createText(values)
+              console.log(res)
+              props.setSubmitting(false)
+            } catch (err) {
+              props.setSubmitting(false)
+            }
           }}
           initialValues={{
-            name: '',
-            content: '',
+            title: '',
+            raw: '',
             language: '',
           }}
           validate={values => {
             const errors = {}
-            if (!values.name) {
-              errors.name = 'Required'
+            if (!values.title) {
+              errors.title = 'Required'
             }
-            if (!values.content) {
-              errors.content = 'Required'
+            if (!values.raw) {
+              errors.raw = 'Required'
             }
             if (!values.language) {
               errors.language = 'Required'
@@ -110,7 +123,7 @@ class CreateText extends PureComponent {
                 <Row>
                   <FormGroup>
                     <Label>{'Title'}</Label>
-                    <Field name="name" placeholder="My own race" autoFocus />
+                    <Field name="title" placeholder="My own race" autoFocus />
                   </FormGroup>
                   <FormGroup>
                     <Label>{'Language'}</Label>
@@ -119,9 +132,9 @@ class CreateText extends PureComponent {
                       {({ field }) => {
                         return (
                           <FormSelect name="language" onChange={field.onChange}>
-                            <option value="red">Red</option>
-                            <option value="green">Green</option>
-                            <option value="blue">Blue</option>
+                            <option value="">{'Select language...'}</option>
+                            <option value="JS">{'JavaScript'}</option>
+                            <option value="PHP">{'PHP'}</option>
                           </FormSelect>
                         )
                       }}
@@ -130,9 +143,11 @@ class CreateText extends PureComponent {
                 </Row>
                 <FormGroup>
                   <Label>{'Content'}</Label>
-                  <TextareaField component="textarea" name="content" placeholder="Hello world..." />
+                  <TextareaField component="textarea" name="raw" placeholder="Hello world..." />
                 </FormGroup>
-                <Button isDisabled={!props.isValid}>{'Create'}</Button>
+                <Button isLoading={props.isSubmitting} isDisabled={!props.isValid}>
+                  {'Create'}
+                </Button>
               </Form>
             )
           }}
