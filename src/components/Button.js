@@ -96,6 +96,17 @@ class Button extends PureComponent {
     isLoading: false,
   }
 
+  componentWillUnmount() {
+    this._unmounted = true
+  }
+
+  safeSetState = (...args) => {
+    if (this._unmounted) {
+      return
+    }
+    this.setState(...args)
+  }
+
   focus() {
     const node = findDOMNode(this) // eslint-disable-line react/no-find-dom-node
     node.focus()
@@ -103,16 +114,16 @@ class Button extends PureComponent {
 
   handleAction = async () => {
     const { action, to, push } = this.props
-    this.setState({ isLoading: true })
+    this.safeSetState({ isLoading: true })
     try {
       await action()
-      this.setState({ isLoading: false })
+      this.safeSetState({ isLoading: false })
       if (push) {
         push(to)
       }
     } catch (err) {
       console.error(err) // eslint-disable-line no-console
-      this.setState({ isLoading: false })
+      this.safeSetState({ isLoading: false })
     }
   }
 
