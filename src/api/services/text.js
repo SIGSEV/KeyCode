@@ -39,7 +39,7 @@ export const getText = async id => {
   const text = await Text.findOne({ id })
   const leaders = await Race.find({ textId: id })
     .sort('-wpm')
-    .filter(10)
+    .limit(10)
     .exec()
 
   const out = text.toObject()
