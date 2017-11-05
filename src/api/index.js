@@ -49,13 +49,13 @@ api.get('/users/me', isAuthenticated(), (req, res) => res.send(req.user))
  */
 
 api.post('/texts', isAuthenticated(), async (req, res) => {
-  const { raw, language } = req.body
-  if (!raw || !language) {
+  const { raw, language, title } = req.body
+  if (!raw || !language || !title) {
     return res.status(500).send({ message: 'content!!!' })
   }
 
   try {
-    res.send(await createText({ raw, language, author: req.user._id }))
+    res.send(await createText({ raw, language, title, author: req.user._id }))
   } catch ({ message }) {
     res.status(500).send({ message })
   }

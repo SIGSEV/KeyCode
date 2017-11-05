@@ -4,6 +4,7 @@ export default mongoose.model(
   'Text',
   new Schema({
     id: { type: String, unique: true },
+    title: String,
     language: String,
     raw: String,
 
