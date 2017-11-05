@@ -47,7 +47,7 @@ export const isAuthenticated = () =>
           throw new Error('You need to be authenticated.')
         }
 
-        req.user = await getById(req.user.id)
+        req.user = await getUserById(req.user.id)
         return next()
       } catch (e) {
         return next(e.message)
