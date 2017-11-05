@@ -2,8 +2,10 @@ import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import { Field as FormField, Form as FormikForm, Formik } from 'formik'
 import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 
 import { createText } from 'actions/text'
+import { loadRace } from 'actions/race'
 
 import Button from 'components/Button'
 
@@ -83,18 +85,21 @@ const Row = styled.div`
 
 @connect(null, {
   createText,
+  loadRace,
+  push,
 })
 class CreateText extends PureComponent {
   render() {
-    const { createText } = this.props
+    const { createText, loadRace, push } = this.props
     return (
       <Narrow>
         <Formik
           onSubmit={async (values, props) => {
             try {
-              const res = await createText(values)
-              console.log(res)
+              const text = await createText(values)
+              await loadRace(text.id)
               props.setSubmitting(false)
+              push(`/r/${text.id}`)
             } catch (err) {
               props.setSubmitting(false)
             }

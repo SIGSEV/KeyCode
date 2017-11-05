@@ -45,6 +45,7 @@ export default store => next => async action => {
     const payload = { method, headers, body }
     const data = await fetch(url, payload).then(d => d.json())
     dispatch({ type: `${prefix}_SUCCESS`, payload: { data } })
+    return data
   } catch (err) {
     dispatch({ type: `${prefix}_ERROR` })
     throw new Error(err)
