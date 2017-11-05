@@ -5,7 +5,7 @@ import passport from 'passport'
 import 'api/init'
 
 import { getAllUsers } from 'api/services/user'
-import { getText, getTexts, voteText, createText } from 'api/services/text'
+import { getText, getTexts, getRandomText, voteText, createText } from 'api/services/text'
 import { setToken, isAuthenticated } from 'api/services/auth'
 
 global.fetch = fetch
@@ -64,6 +64,14 @@ api.post('/texts', isAuthenticated(), async (req, res) => {
 api.put('/texts/:id/star', isAuthenticated(), async (req, res) => {
   try {
     res.send(await voteText(req.params.id, req.user._id))
+  } catch ({ message }) {
+    res.status(500).send({ message })
+  }
+})
+
+api.get('/texts/random', async (req, res) => {
+  try {
+    res.send(await getRandomText())
   } catch ({ message }) {
     res.status(500).send({ message })
   }

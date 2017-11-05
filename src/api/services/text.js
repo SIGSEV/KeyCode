@@ -27,6 +27,13 @@ export const createText = async payload =>
     id: await uniqueId(),
   })
 
+export const getRandomText = async () => {
+  const count = await Text.count()
+  const random = Math.floor(Math.random() * count)
+  const text = await Text.findOne().skip(random)
+  return { id: text._id.toString() }
+}
+
 export const getText = async id => {
   const text = await Text.findOne({ id })
   const leaders = await Race.find({ textId: id })
