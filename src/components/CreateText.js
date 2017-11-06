@@ -91,6 +91,7 @@ const Row = styled.div`
 class CreateText extends PureComponent {
   render() {
     const { createText, loadRace, push } = this.props
+
     return (
       <Narrow>
         <Formik

@@ -24,7 +24,7 @@ const handlers = {
     return initialState
       .set('id', id)
       .set('title', title)
-      .set('rates', rates)
+      .set('rates', fromJS(rates || {}))
       .set('stars', stars)
       .set('text', computeText(raw))
       .set('players', List([initPlayer()]))
