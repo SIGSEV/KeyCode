@@ -63,7 +63,7 @@ api.post('/texts', isAuthenticated(), async (req, res) => {
 
 api.put('/texts/:id/star', isAuthenticated(), async (req, res) => {
   try {
-    res.send(await voteText(req.params.id, req.user._id))
+    res.send(await voteText(req.params.id, req.user._id.toString()))
   } catch ({ message }) {
     res.status(500).send({ message })
   }

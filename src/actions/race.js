@@ -11,12 +11,7 @@ export function loadRace(id) {
       },
     })
 
-    dispatch(
-      initRace({
-        id,
-        text: text.raw,
-      }),
-    )
+    dispatch(initRace(text))
   }
 }
 
@@ -29,15 +24,7 @@ export function loadRandom() {
       },
     })
 
-    const { id, raw } = text
-
-    dispatch(
-      initRace({
-        id,
-        text: raw,
-      }),
-    )
-
-    dispatch(push(`/r/${id}`))
+    dispatch(initRace(text))
+    dispatch(push(`/r/${text.id}`))
   }
 }

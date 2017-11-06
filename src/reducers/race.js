@@ -6,7 +6,10 @@ import { computeText, countLinesOffset } from 'helpers/text'
 
 const initialState = fromJS({
   id: null,
+  title: null,
   text: null,
+  stars: 0,
+  rates: {},
   isStarted: false,
   isFinished: false,
   players: [],
@@ -16,10 +19,14 @@ const DISPLAYED_LINES = 15
 
 const handlers = {
   RACE_INIT: (state, { payload }) => {
-    const { text: rawText, id } = payload
+    const { raw, id, title, rates, stars } = payload
+
     return initialState
       .set('id', id)
-      .set('text', computeText(rawText))
+      .set('title', title)
+      .set('rates', rates)
+      .set('stars', stars)
+      .set('text', computeText(raw))
       .set('players', List([initPlayer()]))
   },
   RACE_START: state => state.set('isStarted', true),
@@ -123,6 +130,14 @@ const handlers = {
       chunks = chunks.setIn([wordIndex, 'isWrong'], false)
     }
     return state.setIn(['players', 0], p).setIn(['text', 'chunks'], chunks)
+  },
+  STAR_TEXT_SUCCESS: (state, { payload: { data } }) => {
+    const { id, rates, stars } = data
+    if (state.get('id') !== id) {
+      return state
+    }
+
+    return state.set('rates', fromJS(rates)).set('stars', stars)
   },
 }
 

@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
+import Star from 'react-icons/lib/go/star'
 
 import { getPlayer, getText, startRace, stopRace, resetRace } from 'reducers/race'
+import { starText } from 'actions/text'
 
 import TypeWriter from 'components/TypeWriter'
 import Typematrix from 'components/Typematrix'
@@ -47,14 +49,32 @@ const GameHeaderRight = styled.div`
   margin-left: auto;
 `
 
+const RaceTitle = styled.div`
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  svg {
+    cursor: pointer;
+  }
+
+  > * + * {
+    margin-left: 0.5rem;
+  }
+`
+
 @connect(
   state => ({
+    userId: state.user._id,
     player: getPlayer(state),
     text: getText(state),
+    id: state.race.get('id'),
+    title: state.race.get('title'),
+    rates: state.race.get('rates'),
+    stars: state.race.get('stars'),
     isStarted: state.race.get('isStarted'),
     isFinished: state.race.get('isFinished'),
   }),
   {
+    starText,
     startRace,
     stopRace,
     resetRace,
@@ -72,7 +92,19 @@ class Race extends PureComponent {
   }
 
   render() {
-    const { player, text, isStarted, isFinished, startRace } = this.props
+    const {
+      player,
+      id,
+      text,
+      title,
+      rates,
+      userId,
+      stars,
+      isStarted,
+      isFinished,
+      startRace,
+      starText,
+    } = this.props
 
     const typedChar = player.get('typedChar')
     const typedWordsCount = player.get('typedWordsCount')
@@ -83,11 +115,20 @@ class Race extends PureComponent {
     //   : '100.00'
 
     const progress = totalWords ? typedWordsCount / totalWords : 0
+    const hasStarred = userId && rates.get(userId)
 
     return (
       <Wrapper>
         <Container>
           <GameLayer isFinished={isFinished}>
+            <RaceTitle>
+              <span>{title}</span>
+              <Star
+                onClick={() => userId && starText(id)}
+                style={{ color: hasStarred ? '#ffb401' : 'lightgrey' }}
+              />
+              <span>({stars})</span>
+            </RaceTitle>
             <GameHeader>
               <Typematrix activeChar={typedChar} />
               <GameHeaderRight>

@@ -52,17 +52,11 @@ export const getText = async id => {
 }
 
 export const voteText = async (id, user) => {
-  const test = await getText(id)
+  const text = await Text.findOne({ id })
+  const stars = text.stars + (text.rates[user] ? -1 : 1)
+  await text.update({ $set: { stars, [`rates.${user}`]: !text.rates[user] } })
 
-  if (test.rates[user]) {
-    test.stars--
-    delete test.rates[user]
-  } else {
-    test.stars++
-    test.rates[user] = true
-  }
-
-  return test.save()
+  return getText(id)
 }
 
 export const getTexts = language =>

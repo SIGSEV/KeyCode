@@ -2,23 +2,26 @@ import mongoose, { Schema } from 'mongoose'
 
 export default mongoose.model(
   'Race',
-  new Schema({
-    textId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Text',
+  new Schema(
+    {
+      textId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Text',
+      },
+
+      time: Number,
+      wpm: Number,
+      score: Number,
+
+      corrections: Number,
+      wrongWords: Number,
+      typedWordsCount: Number,
+
+      validKeys: { type: Schema.Types.Mixed, default: {} },
+      wrongKeys: { type: Schema.Types.Mixed, default: {} },
+
+      language: String,
     },
-
-    time: Number,
-    wpm: Number,
-    score: Number,
-
-    corrections: Number,
-    wrongWords: Number,
-    typedWordsCount: Number,
-
-    validKeys: Schema.Types.Mixed,
-    wrongKeys: Schema.Types.Mixed,
-
-    language: String,
-  }),
+    { minimize: false },
+  ),
 )

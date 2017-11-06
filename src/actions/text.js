@@ -20,3 +20,13 @@ export function loadTexts(language) {
     },
   }
 }
+
+export function starText(id) {
+  return {
+    type: 'API:STAR_TEXT',
+    payload: {
+      url: `/texts/${id}/star`,
+      method: 'PUT',
+    },
+  }
+}
