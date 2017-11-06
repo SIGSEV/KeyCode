@@ -24,8 +24,8 @@ export default store => next => async action => {
     'Content-Type': 'application/json',
   }
 
-  if (state.user && state.user.token) {
-    headers.SIGSEV = state.user.token
+  if (state.user && state.user.jwt) {
+    headers.SIGSEV = state.user.jwt
   }
 
   if (body) {

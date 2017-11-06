@@ -6,12 +6,13 @@ import { matchPath } from 'react-router-dom'
 import routes from 'routes'
 import createStore from 'store'
 import page from 'server/page'
+import { getToken } from 'api/services/auth'
 
 import App from 'components/App'
 
 export default stats => async (req, res) => {
   try {
-    const store = createStore(null, { user: req.user })
+    const store = createStore(null, { user: { ...req.user, jwt: getToken(req) } })
     const sheet = new ServerStyleSheet()
 
     const context = {}

@@ -11,19 +11,21 @@ import { hasStarredShit } from 'api/services/github'
 
 const secret = process.env.SEED
 
+export const getToken = req => {
+  if (req.headers.sigsev) {
+    return req.headers.sigsev
+  }
+  if (req.cookies && req.cookies.token) {
+    return req.cookies.token
+  }
+
+  return null
+}
+
 const checkJwt = expressJwt({
   secret,
   credentialsRequired: false,
-  getToken: req => {
-    if (req.headers.sigsev) {
-      return req.headers.sigsev
-    }
-    if (req.cookies && req.cookies.token) {
-      return req.cookies.token
-    }
-
-    return null
-  },
+  getToken,
 })
 
 export const setUser = () =>
