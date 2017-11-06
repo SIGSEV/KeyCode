@@ -28,15 +28,7 @@ export const createText = async payload =>
     id: await uniqueId(),
   })
 
-export const getRandomText = async () => {
-  const count = await Text.count()
-  const random = Math.floor(Math.random() * count)
-  const text = await Text.findOne().skip(random)
-  return { id: text._id.toString() }
-}
-
-export const getText = async id => {
-  const text = await Text.findOne({ id })
+const populateLeaders = async text => {
   const leaders = await Race.find({ textId: text._id })
     .sort('-wpm')
     .limit(10)
@@ -45,6 +37,18 @@ export const getText = async id => {
   const out = text.toObject()
   out.leaders = leaders
   return out
+}
+
+export const getRandomText = async () => {
+  const count = await Text.count()
+  const random = Math.floor(Math.random() * count)
+  const text = await Text.findOne().skip(random)
+  return populateLeaders(text)
+}
+
+export const getText = async id => {
+  const text = await Text.findOne({ id })
+  return populateLeaders(text)
 }
 
 export const voteText = async (id, user) => {

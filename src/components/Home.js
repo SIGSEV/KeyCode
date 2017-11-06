@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import { loadRace } from 'actions/race'
+import { loadRace, loadRandom } from 'actions/race'
 
 import Button from 'components/Button'
 import Link from 'components/Link'
@@ -81,16 +81,18 @@ const Title = styled.h1`
 @connect(null, {
   push,
   loadRace,
+  loadRandom,
 })
 class Home extends PureComponent {
   render() {
-    const { loadRace } = this.props
+    const { loadRandom } = this.props
+
     return (
       <Container>
         <Hero>
           <Title>{'Improve your coding speed.'}</Title>
           <AutoTypematrix text="Welcome to KeyCode!" />
-          <Button accent action={() => loadRace('a20onthasnt')} to="/r/a20onthasnt">
+          <Button accent action={() => loadRandom()}>
             {'Random race'}
             <IconNext style={{ marginLeft: 10 }} />
           </Button>
