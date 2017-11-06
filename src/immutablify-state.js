@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable'
 
-const immutableReducers = ['race']
+const immutableReducers = ['race', 'texts']
 
 export default function immutablifyState(state) {
   for (const i in state) {

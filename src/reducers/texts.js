@@ -9,7 +9,9 @@ const initialState = fromJS({
 export default handleActions(
   {
     LOAD_TEXTS_SUCCESS: (state, { payload: { query, data } }) =>
-      query.language ? state.setIn(['languages', query.language], data) : state.set('global', data),
+      query.language
+        ? state.setIn(['languages', query.language], fromJS(data))
+        : state.set('global', fromJS(data)),
   },
   initialState,
 )

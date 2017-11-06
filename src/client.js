@@ -32,6 +32,7 @@ if (module.hot) {
     const nextApp = require('components/App')
     render(nextApp)
   })
+
   module.hot.accept('handle-socket', () => {
     socket.close()
     socket = io.connect(__URL__)

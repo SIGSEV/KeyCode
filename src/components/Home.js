@@ -6,6 +6,7 @@ import { push } from 'react-router-redux'
 import Star from 'react-icons/lib/go/star'
 
 import { loadRace, loadRandom } from 'actions/race'
+import { loadTexts } from 'actions/text'
 
 import Button from 'components/Button'
 import Link from 'components/Link'
@@ -83,8 +84,16 @@ const Title = styled.h1`
   push,
   loadRace,
   loadRandom,
+  loadTexts,
 })
 class Home extends PureComponent {
+  componentDidMount() {
+    const { texts, loadTexts } = this.props
+    if (!texts.get('global').size) {
+      loadTexts()
+    }
+  }
+
   render() {
     const { texts, loadRace, loadRandom } = this.props
 
@@ -121,15 +130,15 @@ class Home extends PureComponent {
           </Section>
 
           <SectionTitle>{'Top rated'}</SectionTitle>
-          {texts.global.map(text => (
-            <div key={text.id}>
-              {text.title}
-              <Button action={() => loadRace(text.id)} to={`/r/${text.id}`} accent>
+          {texts.get('global').map(text => (
+            <div key={text.get('id')}>
+              {text.get('title')}
+              <Button action={() => loadRace(text.get('id'))} to={`/r/${text.get('id')}`} accent>
                 load
               </Button>
               <marquee>
-                {text.language} <Star />
-                {text.stars}
+                {text.get('language')} <Star />
+                {text.get('stars')}
               </marquee>
               <hr />
             </div>
