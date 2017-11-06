@@ -6,12 +6,14 @@ import User from 'components/User'
 import CreateText from 'components/CreateText'
 
 import { loadRace } from 'actions/race'
+import { loadTexts } from 'actions/text'
 
 export default [
   {
     path: '/',
     exact: true,
     component: Home,
+    load: ({ dispatch }) => dispatch(loadTexts()),
   },
   {
     path: '/new',

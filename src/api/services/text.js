@@ -68,4 +68,5 @@ export const voteText = async (id, user) => {
 export const getTexts = language =>
   Text.find(language ? { language } : {})
     .sort('-stars')
+    .limit(language ? 100 : 10)
     .exec()

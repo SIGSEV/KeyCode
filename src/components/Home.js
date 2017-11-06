@@ -3,6 +3,7 @@ import IconNext from 'react-icons/lib/md/keyboard-arrow-right'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+import Star from 'react-icons/lib/go/star'
 
 import { loadRace, loadRandom } from 'actions/race'
 
@@ -78,14 +79,14 @@ const Title = styled.h1`
   font-size: 36px;
 `
 
-@connect(null, {
+@connect(({ texts }) => ({ texts }), {
   push,
   loadRace,
   loadRandom,
 })
 class Home extends PureComponent {
   render() {
-    const { loadRandom } = this.props
+    const { texts, loadRace, loadRandom } = this.props
 
     return (
       <Container>
@@ -120,6 +121,19 @@ class Home extends PureComponent {
           </Section>
 
           <SectionTitle>{'Top rated'}</SectionTitle>
+          {texts.global.map(text => (
+            <div key={text.id}>
+              {text.title}
+              <Button action={() => loadRace(text.id)} to={`/r/${text.id}`} accent>
+                load
+              </Button>
+              <marquee>
+                {text.language} <Star />
+                {text.stars}
+              </marquee>
+              <hr />
+            </div>
+          ))}
         </Narrow>
       </Container>
     )

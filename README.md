@@ -15,4 +15,5 @@ Just figure that shit by looking at the `package.json`, lazy biatch.
 - [ ] join user room, websockets
 
 #### frontend junk
-- [ ] find a good way to choose a test: user may want to search into their repos, maybe search in the trending repos? on the high starred repos? (on freecodecamp?). after that, they want to search for a file into that repo. so it will be like a multi step form. has to be easy and fast and able to pilot via keyboard (no shit).
+- [ ] find a good way to choose a test: on the high starred repos? (on freecodecamp?). after that, they want to search for a file into that repo. so it will be like a multi step form. has to be easy and fast and able to pilot via keyboard (no shit).
+- [ ] discuss scrolltop [behavior](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/guides/scroll-restoration.md)
