@@ -11,14 +11,17 @@ const Container = styled.div`
   padding: 100px;
   text-align: center;
   font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 class Footer extends PureComponent {
   render() {
     return (
       <Container>
-        {'Built with vim by SIGSEV. - '}
-        <IconGithub style={{ marginRight: 5 }} />
+        {'Built with vim by SIGSEV. -'}
+        <IconGithub style={{ marginRight: 5, marginLeft: 5 }} />
         <Link href="https://github.com/SIGSEV/KeyCode" target="_blank" rel="noreferrer noopener">
           {'Source code'}
         </Link>
