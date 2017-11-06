@@ -88,10 +88,8 @@ const Title = styled.h1`
 })
 class Home extends PureComponent {
   componentDidMount() {
-    const { texts, loadTexts } = this.props
-    if (!texts.get('global').size) {
-      loadTexts()
-    }
+    const { loadTexts } = this.props
+    loadTexts()
   }
 
   render() {
