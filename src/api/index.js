@@ -55,7 +55,7 @@ api.post('/texts', isAuthenticated(), async (req, res) => {
   }
 
   try {
-    res.send(await createText({ raw, language, title, author: req.user._id }))
+    res.send(await createText({ raw, language, title, author: req.user ? req.user._id : null }))
   } catch ({ message }) {
     res.status(500).send({ message })
   }

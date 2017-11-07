@@ -24,7 +24,6 @@ export const getToken = req => {
 
 const checkJwt = expressJwt({
   secret,
-  credentialsRequired: false,
   getToken,
 })
 
