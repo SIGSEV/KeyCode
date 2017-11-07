@@ -1,6 +1,9 @@
 import express from 'express'
 
+import * as globals from 'globals'
 import api from 'api'
+
+Object.keys(globals).forEach(key => (global[key] = globals[key]))
 
 const server = express()
 const port = process.env.DEV_API_PORT || 3001
