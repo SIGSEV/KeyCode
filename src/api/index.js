@@ -118,7 +118,12 @@ api.get('/texts', async (req, res) => {
  */
 
 api.get('/auth', (req, res, next) => {
-  passport.authenticate('github', { state: req.query.data })(req, res, next)
+  const redirect = encodeURIComponent(req.query.redirect)
+  const params = {
+    state: req.query.data,
+    callbackURL: `${__APIURL__}/auth/callback?redirect=${redirect}`,
+  }
+  passport.authenticate('github', params)(req, res, next)
 })
 
 api.get(

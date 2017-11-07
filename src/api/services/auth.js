@@ -58,9 +58,8 @@ export const isAuthenticated = () =>
 export const setToken = (req, res) => {
   const { id } = req.user
   const token = jwt.sign({ id }, secret, { expiresIn: 60 * 60 * 48 })
-
   res.cookie('token', token)
-  res.redirect(__URL__)
+  res.redirect(`${__URL__}${req.query.redirect}`)
 }
 
 passport.use(
@@ -68,7 +67,6 @@ passport.use(
     {
       clientID: process.env[`GITHUB_ID${__DEV__ ? '_DEV' : ''}`],
       clientSecret: process.env[`GITHUB_SECRET${__DEV__ ? '_DEV' : ''}`],
-      callbackURL: `${__APIURL__}/auth/callback`,
       scope: ['write:org', 'read:org'],
       failureRedirect: __URL__,
       passReqToCallback: true,

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Link as RouterLink } from 'react-router-dom'
@@ -57,10 +58,13 @@ const UserPic = styled(RouterLink)`
   }
 `
 
+@withRouter
 @connect(({ user }) => ({ user }))
 class Header extends PureComponent {
   login = () => {
-    window.location.href = `${__APIURL__}/auth`
+    const { pathname } = this.props.location
+    const redirect = encodeURIComponent(pathname)
+    window.location.href = `${__APIURL__}/auth?redirect=${redirect}`
     return new Promise(resolve => setTimeout(resolve, 10e3))
   }
 
