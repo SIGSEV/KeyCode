@@ -11,6 +11,7 @@ import theme from 'theme'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 import PreventRetardedSize from 'components/PreventRetardedSize'
+import ScrollTop from 'components/ScrollTop'
 
 import { hasModal } from 'reducers/modals'
 
@@ -81,7 +82,9 @@ export default (store, Router, routerProps) => (
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <Router {...routerProps}>
-        <App />
+        <ScrollTop>
+          <App />
+        </ScrollTop>
       </Router>
     </ThemeProvider>
   </Provider>
