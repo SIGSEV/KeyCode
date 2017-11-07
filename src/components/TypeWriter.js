@@ -66,7 +66,8 @@ const Text = styled.span`
   opacity: ${p => (p.isDisabled ? 0.5 : 1)};
   pointer-events: none;
   white-space: pre;
-  color: ${p => (p.isWrong ? p.theme.red : '')};
+  background-color: ${p => (p.isHardWrong ? p.theme.red : '')};
+  color: ${p => (p.isWrong ? p.theme.red : p.isHardWrong ? 'white' : '')};
 `
 
 const DISPLAYED_LINES = 15
@@ -158,6 +159,7 @@ class TypeWriter extends PureComponent {
     const cursor = player.get('cursor')
     const scroll = player.get('scroll')
     const wordIndex = player.get('wordIndex')
+    const typedWord = player.get('typedWord')
 
     let curLine = 1
 
@@ -171,25 +173,37 @@ class TypeWriter extends PureComponent {
           // render current word
           if (isCurrent) {
             const relativeCursor = cursor - word.get('start')
-            const beforeCursor = wordContent.substring(0, relativeCursor)
-            const afterCursor = wordContent.substring(relativeCursor + 1)
-            const onCursor = wordContent[relativeCursor]
-            res = [
-              <Text key="before" isWrong={word.get('isWrong')} isDisabled={!isFocused}>
-                {beforeCursor}
-              </Text>,
-              <Cursor
-                key="on"
-                isWrong={word.get('isWrong')}
-                isBlinking={!isStarted && isFocused}
-                isDisabled={!isFocused}
-              >
-                {onCursor}
-              </Cursor>,
-              <Text key="after" isDisabled>
-                {afterCursor}
-              </Text>,
-            ]
+
+            const wordChunks = wordContent.split('').reduce((acc, char, i) => {
+              const isCursor = i === relativeCursor
+              const isWrong = !isCursor && wordContent[i] !== typedWord[i] && i < typedWord.length
+              const last = acc[acc.length - 1]
+              if (isCursor || !last || last.isWrong !== isWrong || last.isCursor) {
+                acc.push({ isWrong, isCursor, content: char })
+              } else {
+                last.content += char
+              }
+              return acc
+            }, [])
+
+            /* eslint-disable react/no-array-index-key */
+            return wordChunks.map(
+              (chunk, i) =>
+                chunk.isCursor ? (
+                  <Cursor key={i} isBlinking={!isStarted && isFocused} isDisabled={!isFocused}>
+                    {chunk.content}
+                  </Cursor>
+                ) : (
+                  <Text
+                    key={i}
+                    isHardWrong={chunk.isWrong}
+                    isDisabled={!isFocused || i > relativeCursor}
+                  >
+                    {chunk.content}
+                  </Text>
+                ),
+            )
+            /* eslint-enable react/no-array-index-key */
           } else if (curLine > scroll && curLine <= scroll + DISPLAYED_LINES) {
             // render other words
             res = (
