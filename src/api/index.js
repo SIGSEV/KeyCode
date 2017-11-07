@@ -75,7 +75,7 @@ api.post('/texts', setUser(), async (req, res) => {
 
 api.put('/texts/:id/star', isAuthenticated(), async (req, res) => {
   try {
-    res.send(await voteText(req.params.id, req.user))
+    res.send(await voteText(req.params.id, req.user._id.toString()))
   } catch ({ message }) {
     res.status(500).send({ message })
   }
