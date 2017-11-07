@@ -1,6 +1,8 @@
 import express from 'express'
 import fetch from 'node-fetch'
 import passport from 'passport'
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 
 import 'api/init'
 
@@ -11,6 +13,9 @@ import { setUser, setToken, isAuthenticated } from 'api/services/auth'
 global.fetch = fetch
 
 const api = express.Router()
+
+api.use(bodyParser.json())
+api.use(cookieParser())
 
 const GITHUB_BASE = 'https://api.github.com/graphql'
 
