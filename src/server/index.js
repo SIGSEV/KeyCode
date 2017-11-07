@@ -3,6 +3,7 @@ import http from 'http'
 import socketIO from 'socket.io'
 import fetch from 'node-fetch'
 import compression from 'compression'
+import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import path from 'path'
 
@@ -37,6 +38,7 @@ if (__PROD__) {
   app.use('/dist', express.static(DIST_FOLDER))
 }
 
+app.use(bodyParser.json())
 app.use(cookieParser())
 app.use('/assets', express.static(ASSETS_FOLDER))
 app.use(setUser(), render(stats))
