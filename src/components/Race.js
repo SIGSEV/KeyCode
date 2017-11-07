@@ -63,7 +63,7 @@ const RaceTitle = styled.div`
 
 @connect(
   state => ({
-    userId: state.user._id,
+    userId: state.user && state.user._id,
     player: getPlayer(state),
     text: getText(state),
     id: state.race.get('id'),

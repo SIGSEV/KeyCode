@@ -13,6 +13,7 @@ export function getMe() {
 
 export function logout() {
   return dispatch => {
+    document.cookie = 'token=; Max-Age=0'
     dispatch(rawLogout())
     dispatch(push('/'))
   }
