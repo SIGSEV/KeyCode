@@ -2,9 +2,10 @@ import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 import Star from 'react-icons/lib/go/star'
+import Trash from 'react-icons/lib/go/trashcan'
 
 import { getPlayer, getText, startRace, stopRace, resetRace } from 'reducers/race'
-import { starText } from 'actions/text'
+import { starText, deleteText } from 'actions/text'
 
 import TypeWriter from 'components/TypeWriter'
 import Typematrix from 'components/Typematrix'
@@ -64,10 +65,12 @@ const RaceTitle = styled.div`
 @connect(
   state => ({
     userId: state.user && state.user._id,
+    isAdmin: state.user && state.user.admin,
     player: getPlayer(state),
     text: getText(state),
     id: state.race.get('id'),
     title: state.race.get('title'),
+    author: state.race.get('author'),
     rates: state.race.get('rates'),
     stars: state.race.get('stars'),
     isStarted: state.race.get('isStarted'),
@@ -75,6 +78,7 @@ const RaceTitle = styled.div`
   }),
   {
     starText,
+    deleteText,
     startRace,
     stopRace,
     resetRace,
@@ -93,17 +97,20 @@ class Race extends PureComponent {
 
   render() {
     const {
+      userId,
+      isAdmin,
       player,
       id,
       text,
       title,
       rates,
-      userId,
+      author,
       stars,
       isStarted,
       isFinished,
       startRace,
       starText,
+      deleteText,
     } = this.props
 
     const typedChar = player.get('typedChar')
@@ -116,6 +123,7 @@ class Race extends PureComponent {
 
     const progress = totalWords ? typedWordsCount / totalWords : 0
     const hasStarred = userId && rates.get(userId)
+    const canEdit = userId === author || isAdmin
 
     return (
       <Wrapper>
@@ -128,6 +136,7 @@ class Race extends PureComponent {
                 style={{ color: hasStarred ? '#ffb401' : 'lightgrey' }}
               />
               <span>({stars})</span>
+              {canEdit && <Trash onClick={() => deleteText(id)} />}
             </RaceTitle>
             <GameHeader>
               <Typematrix activeChar={typedChar} />

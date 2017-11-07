@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux'
+
 export function createText(body) {
   return {
     type: 'API:TEXT_CREATE',
@@ -28,5 +30,19 @@ export function starText(id) {
       url: `/texts/${id}/star`,
       method: 'PUT',
     },
+  }
+}
+
+export function deleteText(id) {
+  return async dispatch => {
+    await dispatch({
+      type: 'API:DELETE_TEXT',
+      payload: {
+        url: `/texts/${id}`,
+        method: 'DELETE',
+      },
+    })
+
+    dispatch(push('/'))
   }
 }

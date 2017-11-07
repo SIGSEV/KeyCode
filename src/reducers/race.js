@@ -8,6 +8,7 @@ const initialState = fromJS({
   id: null,
   title: null,
   text: null,
+  author: null,
   stars: 0,
   rates: {},
   isStarted: false,
@@ -19,11 +20,12 @@ const DISPLAYED_LINES = 15
 
 const handlers = {
   RACE_INIT: (state, { payload }) => {
-    const { raw, id, title, rates, stars } = payload
+    const { raw, id, title, author, rates, stars } = payload
 
     return initialState
       .set('id', id)
       .set('title', title)
+      .set('author', author)
       .set('rates', fromJS(rates || {}))
       .set('stars', stars)
       .set('text', computeText(raw))

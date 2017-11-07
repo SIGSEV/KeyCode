@@ -7,8 +7,15 @@ import cookieParser from 'cookie-parser'
 import 'api/init'
 
 import { getAllUsers } from 'api/services/user'
-import { getText, getTexts, getRandomText, voteText, createText } from 'api/services/text'
 import { setUser, setToken, isAuthenticated } from 'api/services/auth'
+import {
+  deleteText,
+  getText,
+  getTexts,
+  getRandomText,
+  voteText,
+  createText,
+} from 'api/services/text'
 
 global.fetch = fetch
 
@@ -68,7 +75,7 @@ api.post('/texts', setUser(), async (req, res) => {
 
 api.put('/texts/:id/star', isAuthenticated(), async (req, res) => {
   try {
-    res.send(await voteText(req.params.id, req.user._id.toString()))
+    res.send(await voteText(req.params.id, req.user))
   } catch ({ message }) {
     res.status(500).send({ message })
   }
@@ -85,6 +92,14 @@ api.get('/texts/random', async (req, res) => {
 api.get('/texts/:id', async (req, res) => {
   try {
     res.send(await getText(req.params.id))
+  } catch ({ message }) {
+    res.status(500).send({ message })
+  }
+})
+
+api.delete('/texts/:id', isAuthenticated(), async (req, res) => {
+  try {
+    res.send(await deleteText(req.params.id, req.user))
   } catch ({ message }) {
     res.status(500).send({ message })
   }

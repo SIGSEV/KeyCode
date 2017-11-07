@@ -51,12 +51,21 @@ export const getText = async id => {
   return populateLeaders(text)
 }
 
-export const voteText = async (id, user) => {
+export const voteText = async (id, userId) => {
   const text = await Text.findOne({ id })
-  const stars = text.stars + (text.rates[user] ? -1 : 1)
-  await text.update({ $set: { stars, [`rates.${user}`]: !text.rates[user] } })
+  const stars = text.stars + (text.rates[userId] ? -1 : 1)
+  await text.update({ $set: { stars, [`rates.${userId}`]: !text.rates[userId] } })
 
   return getText(id)
+}
+
+export const deleteText = async (id, user) => {
+  const text = await Text.findOne({ id })
+  if (user.admin || user._id.equals(text.author)) {
+    return text.remove()
+  }
+
+  throw new Error('Unauthorized.')
 }
 
 export const getTexts = language =>
