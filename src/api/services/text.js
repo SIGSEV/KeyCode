@@ -25,6 +25,7 @@ const uniqueId = async () => {
 export const createText = async payload =>
   Text.create({
     ...payload,
+    raw: payload.raw.trim(),
     id: await uniqueId(),
   })
 
