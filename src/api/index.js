@@ -6,7 +6,7 @@ import 'api/init'
 
 import { getAllUsers } from 'api/services/user'
 import { getText, getTexts, getRandomText, voteText, createText } from 'api/services/text'
-import { setToken, isAuthenticated } from 'api/services/auth'
+import { setUser, setToken, isAuthenticated } from 'api/services/auth'
 
 global.fetch = fetch
 
@@ -48,7 +48,7 @@ api.get('/users/me', isAuthenticated(), (req, res) => res.send(req.user))
  * Texts
  */
 
-api.post('/texts', isAuthenticated(), async (req, res) => {
+api.post('/texts', setUser(), async (req, res) => {
   const { raw, language, title } = req.body
   if (!raw || !language || !title) {
     return res.status(500).send({ message: 'content!!!' })
