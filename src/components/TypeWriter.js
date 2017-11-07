@@ -95,7 +95,7 @@ class TypeWriter extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.player.get('cursor') >= nextProps.text.get('raw').length) {
+    if (nextProps.player.get('typedWordsCount') === nextProps.text.get('wordsCount')) {
       this.props.onFinish()
     }
   }
@@ -139,7 +139,14 @@ class TypeWriter extends PureComponent {
       return
     }
 
-    const charToType = text.get('raw')[player.get('cursor')] || ''
+    const rawText = text.get('raw')
+    const charToType = rawText[player.get('cursor')] || ''
+    const cursor = player.get('cursor')
+
+    if (cursor === rawText.length - 1) {
+      typeChar(char)
+      return goNextWord()
+    }
 
     if (char === ' ' || !charToType.trim()) {
       return goNextWord()
