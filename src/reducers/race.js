@@ -20,27 +20,25 @@ const DISPLAYED_LINES = 15
 
 const handlers = {
   RACE_INIT: (state, { payload }) => {
-    const { raw, id, title, author, rates, stars } = payload
+    const { raw, ...rest } = payload
 
-    return initialState
-      .set('id', id)
-      .set('title', title)
-      .set('author', author)
-      .set('rates', fromJS(rates || {}))
-      .set('stars', stars)
-      .set('text', computeText(raw))
-      .set('players', List([initPlayer()]))
+    return initialState.merge(
+      fromJS({
+        ...rest,
+        text: computeText(raw),
+        players: List([initPlayer()]),
+      }),
+    )
   },
   RACE_START: state => state.set('isStarted', true),
   RACE_STOP: (state, { payload: time }) =>
     state.set('isFinished', true).setIn(['players', 0, 'time'], time),
-  RACE_RESET: state => {
-    return state
+  RACE_RESET: state =>
+    state
       .set('isStarted', false)
       .set('isFinished', false)
       .set('text', computeText(state.getIn(['text', 'raw'])))
-      .set('players', List([initPlayer()]))
-  },
+      .set('players', List([initPlayer()])),
   RACE_TYPE_CHAR: (state, { payload: char }) => {
     let p = state.getIn(['players', 0])
 

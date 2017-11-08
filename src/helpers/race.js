@@ -19,12 +19,12 @@ export function initPlayer() {
   })
 }
 
-export function getStats(player) {
-  const time = player.get('time')
+export function getStats(base) {
+  const time = base.get('time')
   const minuteRatio = time / 60
-  const corrections = player.get('corrections')
-  const typedWords = player.get('typedWordsCount')
-  const wrongWords = player.get('wrongWordsCount')
+  const corrections = base.get('corrections')
+  const typedWords = base.get('typedWordsCount')
+  const wrongWords = base.get('wrongWordsCount')
   const goodWords = typedWords - wrongWords
   const accuracy = goodWords / typedWords
   const wpm = minuteRatio <= 0 ? 0 : Math.round(goodWords * accuracy / minuteRatio) - corrections

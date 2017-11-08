@@ -5,9 +5,10 @@ import expressJwt from 'express-jwt'
 import compose from 'composable-middleware'
 import { isObject, isString } from 'lodash/isString'
 
-import { __DEV__, __URL__, __APIURL__ } from 'globals'
-import { updateOrCreate, getUserById, newResult } from 'api/services/user'
+import { __DEV__, __URL__ } from 'globals'
+import { updateOrCreate, getUserById } from 'api/services/user'
 import { hasStarredShit } from 'api/services/github'
+import { saveRace } from 'api/services/race'
 
 const secret = process.env.SEED
 
@@ -131,14 +132,12 @@ passport.use(
           return done(null, user)
         }
 
-        const failsave = JSON.parse(req.query.state)
-        if (!isObject(failsave)) {
+        const failSave = JSON.parse(req.query.state)
+        if (!isObject(failSave)) {
           throw new Error('Invalid failsave.')
         }
 
-        failsave.userId = user.id
-
-        newResult(failsave)
+        saveRace(failSave, user)
         done(null, user)
       } catch (e) {
         done(e)

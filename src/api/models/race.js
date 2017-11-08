@@ -14,7 +14,7 @@ export default mongoose.model(
       score: Number,
 
       corrections: Number,
-      wrongWords: Number,
+      wrongWordsCount: Number,
       typedWordsCount: Number,
 
       validKeys: { type: Schema.Types.Mixed, default: {} },

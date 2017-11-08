@@ -28,3 +28,35 @@ export function loadRandom() {
     dispatch(push(`/r/${text.id}`))
   }
 }
+
+export function saveRace(time) {
+  return (dispatch, getState) => {
+    const { user, race } = getState()
+    if (!user) {
+      return
+    }
+
+    // Assuming p[0] is always logged user
+    const {
+      id: textId,
+      players: [{ corrections, typedWordsCount, validKeys, wrongKeys, wrongWordsCount }],
+    } = race.toJS()
+
+    dispatch({
+      type: 'API:SAVE_RACE',
+      payload: {
+        url: '/races',
+        method: 'POST',
+        body: {
+          textId,
+          time,
+          corrections,
+          typedWordsCount,
+          validKeys,
+          wrongKeys,
+          wrongWordsCount,
+        },
+      },
+    })
+  }
+}

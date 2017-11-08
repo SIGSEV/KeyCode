@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react'
-import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, withRouter } from 'react-router-dom'
 
 import Button from 'components/Button'
 import Link from 'components/Link'

@@ -8,6 +8,7 @@ import 'api/init'
 
 import { getAllUsers } from 'api/services/user'
 import { setUser, setToken, isAuthenticated } from 'api/services/auth'
+import { saveRace } from 'api/services/race'
 import {
   deleteText,
   getText,
@@ -55,6 +56,18 @@ api.get('/users', async (req, res) => {
 })
 
 api.get('/users/me', isAuthenticated(), (req, res) => res.send(req.user))
+
+/**
+ * Races
+ */
+
+api.post('/races', isAuthenticated(), async (req, res) => {
+  try {
+    res.send(await saveRace(req.body, req.user))
+  } catch ({ message }) {
+    res.status(500).send({ message })
+  }
+})
 
 /**
  * Texts

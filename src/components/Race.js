@@ -6,6 +6,7 @@ import Trash from 'react-icons/lib/go/trashcan'
 
 import { getPlayer, getText, startRace, stopRace, resetRace } from 'reducers/race'
 import { starText, deleteText } from 'actions/text'
+import { saveRace } from 'actions/race'
 
 import TypeWriter from 'components/TypeWriter'
 import Typematrix from 'components/Typematrix'
@@ -82,6 +83,7 @@ const RaceTitle = styled.div`
     startRace,
     stopRace,
     resetRace,
+    saveRace,
   },
 )
 class Race extends PureComponent {
@@ -91,8 +93,14 @@ class Race extends PureComponent {
   }
 
   handleStop = () => {
+    const { isFinished, stopRace, saveRace } = this.props
+    if (isFinished) {
+      return
+    }
+
     const time = this._chronos.get()
-    this.props.stopRace(time)
+    stopRace(time)
+    saveRace(time)
   }
 
   render() {
