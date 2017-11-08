@@ -193,6 +193,8 @@ class TypeWriter extends PureComponent {
               return acc
             }, [])
 
+            const cursorIndexInWord = wordChunks.findIndex(c => c.isCursor)
+
             /* eslint-disable react/no-array-index-key */
             return wordChunks.map(
               (chunk, i) =>
@@ -204,7 +206,7 @@ class TypeWriter extends PureComponent {
                   <Text
                     key={i}
                     isHardWrong={chunk.isWrong}
-                    isDisabled={!isFocused || i > relativeCursor}
+                    isDisabled={!isFocused || i > cursorIndexInWord}
                   >
                     {chunk.content}
                   </Text>
