@@ -18,14 +18,14 @@ const addUserToOrg = async (user, org) => {
     throw new Error('Yes sure, not possible yet g0d/h4xxor')
   }
 
-  const userGithub = new Github({ version: '3.0.0', debug: true })
+  const userGithub = new Github({ version: '3.0.0' })
   userGithub.authenticate({ type: 'oauth', token: user.token })
 
   user.currentOrg = org
   await user.save()
 
   await q.nfcall(github.orgs.addTeamMembership, { id: teamIds[org], username: user.name })
-  await q.nfcall(userGithub.user.editOrganizationMembership, {
+  await q.nfcall(userGithub.users.editOrgMembership, {
     org: `KeyCode-${org}`,
     state: 'active',
   })
