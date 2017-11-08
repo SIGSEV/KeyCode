@@ -11,8 +11,7 @@ import 'api/init'
 import render from 'server/render'
 import handleIO from 'server/socket'
 import * as globals from 'globals'
-import { setUser } from 'api/services/auth'
-import { initPassport } from 'api/services/auth'
+import { setUser, initPassport } from 'api/services/auth'
 
 global.fetch = fetch
 Object.keys(globals).forEach(key => (global[key] = globals[key]))

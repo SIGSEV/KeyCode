@@ -1,4 +1,6 @@
-dist/
-node_modules/
-npm-debug.log
+/dist/
+/node_modules/
+/src/logos/output/
+
+/npm-debug.log
 /.env

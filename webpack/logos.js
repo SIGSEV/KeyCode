@@ -9,4 +9,13 @@ module.exports = {
     filename: 'bundle.js',
   },
   plugins: [new HtmlWebpackPlugin()],
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        secure: false,
+        pathRewrite: { '^/api': '' },
+      },
+    },
+  },
 }

@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 
 import 'api/init'
 
+import writeLogo from 'logos/write-logo'
 import { getAllUsers } from 'api/services/user'
 import { setUser, setToken, isAuthenticated } from 'api/services/auth'
 import { saveRace } from 'api/services/race'
@@ -146,5 +147,16 @@ api.get(
   }),
   setToken,
 )
+
+/**
+ * Logos
+ */
+api.post('/write-logo', async (req, res) => {
+  if (__DEV__) {
+    await writeLogo(req.body)
+    return res.send(200, 'ok')
+  }
+  res.send(401, 'l0l we got a h4ck3r h3r3')
+})
 
 export default api
