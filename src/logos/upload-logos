@@ -1,0 +1,120 @@
+#!/bin/env node
+
+/* eslint-disable no-console */
+
+require('dotenv').load()
+
+const puppeteer = require('puppeteer')
+const path = require('path')
+
+// yep! and you know what? I don't care.
+// and you know what? it's actually useful
+// because sometimes the process hang up in
+// the middle
+const nums = [
+  5,
+  10,
+  15,
+  20,
+  25,
+  30,
+  35,
+  40,
+  45,
+  50,
+  55,
+  60,
+  65,
+  70,
+  75,
+  80,
+  85,
+  90,
+  95,
+  100,
+  105,
+  110,
+  115,
+  120,
+  125,
+  130,
+  135,
+  140,
+  145,
+  150,
+  155,
+  160,
+  165,
+  170,
+  175,
+  180,
+  185,
+  190,
+  195,
+  200,
+]
+
+// ------------
+;(async () => {
+  const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
+  const page = await browser.newPage()
+  try {
+    await page.setViewport({ width: 1920, height: 1080 })
+
+    console.log(`loading github...`)
+    await page.goto('https://github.com/login')
+
+    const inputUsername = await page.$('#login_field')
+    await inputUsername.type(process.env.GITHUB_MASTER_USERNAME)
+
+    const inputPassword = await page.$('#password')
+    await inputPassword.type(process.env.GITHUB_MASTER_PASSWORD)
+
+    const loginBtn = await page.$('input.btn.btn-primary')
+    await loginBtn.click()
+
+    console.log(`logging in...`)
+    await page.waitForNavigation()
+
+    for (let i = 0; i < nums.length; i++) {
+      await updateImg(page, nums[i])
+    }
+
+    await browser.close()
+    console.log(`done`)
+  } catch (err) {
+    console.log(err)
+    await page.screenshot({ path: 'example.png' })
+    await browser.close()
+  }
+})()
+
+async function updateImg(page, num) {
+  const url = `https://github.com/organizations/KeyCode-${num}/settings/profile`
+  console.log(`going to keycode ${url}...`)
+  await page.goto(url)
+
+  console.log(`uploading pic...`)
+  const uploadPic = await page.$('#upload-profile-picture')
+  const picPath = path.resolve(__dirname, `./output/${num}.png`)
+  await uploadPic.uploadFile(picPath)
+
+  console.log(`waiting for box...`)
+  await page.waitForFunction(() => {
+    const facebox = document.querySelector('#facebox')
+    return facebox.style.display !== 'none'
+  })
+
+  console.log(`waiting for image...`)
+  await page.waitForSelector('.jcrop-tracker')
+
+  console.log(`clicking...`)
+  const btnSubmit = await page.$('.facebox-footer button[type=submit]')
+  await btnSubmit.click()
+
+  console.log(`hiding modal...`)
+  await page.waitForFunction(() => {
+    const facebox = document.querySelector('#facebox')
+    return facebox === null
+  })
+}
