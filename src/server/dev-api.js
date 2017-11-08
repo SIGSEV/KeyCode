@@ -1,10 +1,12 @@
 import express from 'express'
 
 import * as globals from 'globals'
+import api from 'api'
+import { initPassport } from 'api/services/auth'
 
 Object.keys(globals).forEach(key => (global[key] = globals[key]))
 
-const api = require('api')
+initPassport()
 
 const server = express()
 const port = process.env.DEV_API_PORT || 3001
