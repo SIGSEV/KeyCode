@@ -5,7 +5,6 @@ import expressJwt from 'express-jwt'
 import compose from 'composable-middleware'
 import { isObject, isString } from 'lodash/isString'
 
-import { __DEV__, __URL__ } from 'globals'
 import { updateOrCreate, getUserById } from 'api/services/user'
 import { hasStarredShit } from 'api/services/github'
 import { saveRace } from 'api/services/race'
