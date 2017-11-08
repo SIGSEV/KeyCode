@@ -30,23 +30,25 @@ export default function generateLogo(num, opts = {}) {
   ctx.fillStyle = 'white'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
+  ctx.fillStyle = 'black'
+
   // K
-  const kSize = 80
-  // ctx.fillStyle = '#ddd'
-  ctx.fillStyle = 'rgba(22, 135, 238, 0.7)'
+  const kSize = 30
+  ctx.fillStyle = '#aaa'
+  // ctx.fillStyle = 'rgba(22, 135, 238, 0.7)'
   ctx.font = `${kSize}px "Inter UI Black"`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'top'
-  ctx.fillText('K', size / 2 + 5, size / 2 - kSize / 2 - 5)
+  ctx.fillText('K', size / 2, size - kSize - 10)
 
   // num
-  const numSize = 40
+  const numSize = 45
   ctx.fillStyle = 'black'
   // ctx.fillStyle = '#1687ee'
   ctx.font = `${numSize}px "Inter UI Black"`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'top'
-  ctx.fillText(num, size / 2, size / 2 - numSize / 2)
+  ctx.fillText(num, size / 2, 5)
 
   return canvas
 }
