@@ -100,7 +100,8 @@ class Race extends PureComponent {
 
     const time = this._chronos.get()
     stopRace(time)
-    saveRace(time)
+
+    saveRace()
   }
 
   render() {

@@ -29,7 +29,7 @@ export function loadRandom() {
   }
 }
 
-export function saveRace(time) {
+export function saveRace() {
   return (dispatch, getState) => {
     const { user, race } = getState()
     if (!user) {
@@ -39,7 +39,7 @@ export function saveRace(time) {
     // Assuming p[0] is always logged user
     const {
       id: textId,
-      players: [{ corrections, typedWordsCount, validKeys, wrongKeys, wrongWordsCount }],
+      players: [{ time, corrections, typedWordsCount, validKeys, wrongKeys, wrongWordsCount }],
     } = race.toJS()
 
     dispatch({
