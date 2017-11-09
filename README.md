@@ -8,8 +8,6 @@ Just figure that shit by looking at the `package.json`, lazy biatch.
 ### Roadmap
 
 #### backend crap
-- [ ] revisit score saving if user was unlogged
-- [ ] github invitation check
 - [ ] global leaderboard, languages specific
 - [ ] user stats, past races for profile (with historical data)
 - [ ] join user room, websockets
