@@ -19,6 +19,24 @@ export function initPlayer() {
   })
 }
 
+export const getPayload = race => {
+  // Assuming p[0] is always logged user
+  const {
+    id: textId,
+    players: [{ time, corrections, typedWordsCount, validKeys, wrongKeys, wrongWordsCount }],
+  } = race.toJS()
+
+  return {
+    textId,
+    time,
+    corrections,
+    typedWordsCount,
+    validKeys,
+    wrongKeys,
+    wrongWordsCount,
+  }
+}
+
 export function getStats(base) {
   const time = base.get('time')
   const minuteRatio = time / 60

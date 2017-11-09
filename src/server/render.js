@@ -14,7 +14,7 @@ export default stats => async (req, res) => {
   try {
     const store = createStore(
       null,
-      req.user && { user: { ...req.user.toObject(), jwt: getToken(req) } },
+      req.user ? { user: { ...req.user.toObject(), jwt: getToken(req) } } : {},
     )
 
     const sheet = new ServerStyleSheet()

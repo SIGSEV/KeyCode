@@ -1,6 +1,7 @@
 import { push } from 'react-router-redux'
 
 import { initRace } from 'reducers/race'
+import { getPayload } from 'helpers/race'
 
 export function loadRace(id) {
   return async dispatch => {
@@ -36,26 +37,12 @@ export function saveRace() {
       return
     }
 
-    // Assuming p[0] is always logged user
-    const {
-      id: textId,
-      players: [{ time, corrections, typedWordsCount, validKeys, wrongKeys, wrongWordsCount }],
-    } = race.toJS()
-
     dispatch({
       type: 'API:SAVE_RACE',
       payload: {
         url: '/races',
         method: 'POST',
-        body: {
-          textId,
-          time,
-          corrections,
-          typedWordsCount,
-          validKeys,
-          wrongKeys,
-          wrongWordsCount,
-        },
+        body: getPayload(race),
       },
     })
   }

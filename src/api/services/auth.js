@@ -3,7 +3,8 @@ import { Strategy } from 'passport-github'
 import jwt from 'jsonwebtoken'
 import expressJwt from 'express-jwt'
 import compose from 'composable-middleware'
-import { isObject, isString } from 'lodash/isString'
+import isString from 'lodash/isString'
+import isObject from 'lodash/isObject'
 
 import { updateOrCreate, getUserById } from 'api/services/user'
 import { hasStarredShit } from 'api/services/github'
@@ -128,11 +129,11 @@ export const initPassport = () => {
             accessToken,
           )
 
-          if (!req.query.state || !isString(req.query.state)) {
+          if (!req.query.save || !isString(req.query.save)) {
             return done(null, user)
           }
 
-          const failSave = JSON.parse(req.query.state)
+          const failSave = JSON.parse(req.query.save)
           if (!isObject(failSave)) {
             throw new Error('Invalid failsave.')
           }

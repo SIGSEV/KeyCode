@@ -135,7 +135,9 @@ api.get('/auth', (req, res, next) => {
   const redirect = encodeURIComponent(req.query.redirect)
   const params = {
     state: req.query.data,
-    callbackURL: `${__APIURL__}/auth/callback?redirect=${redirect}`,
+    callbackURL: `${__APIURL__}/auth/callback?redirect=${redirect}${req.query.save
+      ? `&save=${req.query.save}`
+      : ''}`,
   }
   passport.authenticate('github', params)(req, res, next)
 })

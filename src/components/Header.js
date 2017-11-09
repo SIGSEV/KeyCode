@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Link as RouterLink, withRouter } from 'react-router-dom'
 
+import { getPayload } from 'helpers/race'
 import Button from 'components/Button'
 import Link from 'components/Link'
 
@@ -58,12 +59,15 @@ const UserPic = styled(RouterLink)`
 `
 
 @withRouter
-@connect(({ user }) => ({ user }))
+@connect(({ user, race }) => ({ user, race }))
 class Header extends PureComponent {
   login = () => {
-    const { pathname } = this.props.location
+    const { race, location: { pathname } } = this.props
     const redirect = encodeURIComponent(pathname)
-    window.location.href = `${__APIURL__}/auth?redirect=${redirect}`
+    const save = getPayload(race)
+    const savePayload = save.time ? `&save=${JSON.stringify(save)}` : ''
+
+    window.location.href = `${__APIURL__}/auth?redirect=${redirect}${savePayload}`
     return new Promise(resolve => setTimeout(resolve, 10e3))
   }
 
