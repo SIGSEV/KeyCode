@@ -37,7 +37,8 @@ const populateText = async text => {
 
   const out = text.toObject()
   out.leaders = leaders.reduce(
-    (acc, cur) => (acc.some(a => a.user._id.equals(cur.user._id)) ? acc : acc.concat([cur])),
+    (acc, cur) =>
+      acc.length === 10 || acc.some(a => a.user._id.equals(cur.user._id)) ? acc : acc.concat([cur]),
     [],
   )
 
