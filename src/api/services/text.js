@@ -29,27 +29,33 @@ export const createText = async payload =>
     id: await uniqueId(),
   })
 
-const populateLeaders = async text => {
-  const leaders = await Race.find({ textId: text._id })
+const populateText = async text => {
+  const leaders = await Race.find({ text: text._id }, 'wpm score user')
     .sort('-wpm')
-    .limit(10)
+    .populate('user', 'name avatar')
     .exec()
 
   const out = text.toObject()
-  out.leaders = leaders
+  out.leaders = leaders.reduce(
+    (acc, cur) => (acc.some(a => a.user._id.equals(cur.user._id)) ? acc : acc.concat([cur])),
+    [],
+  )
+
   return out
 }
 
 export const getRandomText = async () => {
   const count = await Text.count()
   const random = Math.floor(Math.random() * count)
-  const text = await Text.findOne().skip(random)
-  return populateLeaders(text)
+  const text = await Text.findOne()
+    .skip(random)
+    .populate('author', 'name avatar')
+  return populateText(text)
 }
 
 export const getText = async id => {
-  const text = await Text.findOne({ id })
-  return populateLeaders(text)
+  const text = await Text.findOne({ id }).populate('author', 'name avatar')
+  return populateText(text)
 }
 
 export const voteText = async (id, userId) => {

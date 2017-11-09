@@ -64,7 +64,8 @@ api.get('/users/me', isAuthenticated(), (req, res) => res.send(req.user))
 
 api.post('/races', isAuthenticated(), async (req, res) => {
   try {
-    res.send(await saveRace(req.body, req.user))
+    await saveRace(req.body, req.user)
+    res.status(200).end()
   } catch ({ message }) {
     res.status(500).send({ message })
   }

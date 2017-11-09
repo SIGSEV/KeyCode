@@ -4,9 +4,13 @@ export default mongoose.model(
   'Race',
   new Schema(
     {
-      textId: {
+      text: {
         type: Schema.Types.ObjectId,
         ref: 'Text',
+      },
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
       },
 
       time: Number,

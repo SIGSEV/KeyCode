@@ -25,7 +25,8 @@ export const saveRace = async (payload, user) => {
   const text = await Text.findOne({ id: textId })
 
   await Race.create({
-    textId: text._id,
+    text: text._id,
+    user: user._id,
     time,
     wpm,
     score,
