@@ -48,13 +48,10 @@ const handlers = {
     const newTypedWord = `${typedWord}${char}`
     const charToType = state.getIn(['text', 'raw'])[cursor]
 
-    if (charToType === char) {
-      p = p.update('validKeys', keys => keys.set(char, keys.get(char, 0) + 1))
-    } else {
-      p = p.update('wrongKeys', keys => keys.set(char, keys.get(char, 0) + 1))
-    }
-
     p = p
+      .update(charToType === char ? 'validKeys' : 'wrongKeys', keys =>
+        keys.set(char.charCodeAt(), keys.get(char.charCodeAt(), 0) + 1),
+      )
       .set('typedChar', char)
       .set('cursor', cursor + 1)
       .set('typedWord', newTypedWord)
