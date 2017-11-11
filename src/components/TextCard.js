@@ -172,8 +172,10 @@ class TextCard extends Component {
         </Main>
 
         <Leaders>
-          {text.get('leaders').map(leader => (
+          {text.get('leaders').map((leader, i) => (
             <Link
+              data-balloon={`${i + 1}. ${leader.getIn(['user', 'name'])} - ${leader.get('score')}`}
+              data-balloon-pos="up"
               onClick={this.prevent}
               to={`/u/${leader.getIn(['user', 'name'])}`}
               key={leader.getIn(['user', 'name'])}

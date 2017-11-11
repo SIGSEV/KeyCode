@@ -11,6 +11,7 @@ export default ({ styles, state, html, main }) => `<!doctype html>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.5.0/balloon.min.css">
 
     <style>
       @font-face {
