@@ -155,9 +155,9 @@ api.get('/auth', (req, res, next) => {
   const redirect = encodeURIComponent(req.query.redirect)
   const params = {
     state: req.query.data,
-    callbackURL: `${__APIURL__}/auth/callback?redirect=${redirect}${req.query.save
-      ? `&save=${req.query.save}`
-      : ''}`,
+    callbackURL: `${__APIURL__}/auth/callback?redirect=${redirect}${
+      req.query.save ? `&save=${req.query.save}` : ''
+    }`,
   }
   passport.authenticate('github', params)(req, res, next)
 })
@@ -176,9 +176,10 @@ api.get(
 api.post('/write-logo', async (req, res) => {
   if (__DEV__) {
     await writeLogo(req.body)
-    return res.send(200, 'ok')
+    return res.status(200).end()
   }
-  res.send(401, 'l0l we got a h4ck3r h3r3')
+
+  res.status(401).send('l0l we got a h4ck3r h3r3')
 })
 
 export default api

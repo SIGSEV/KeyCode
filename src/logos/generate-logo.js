@@ -1,3 +1,5 @@
+import { getColor, getTextColor } from '../../src/helpers/colors'
+
 const PIXEL_RATIO = (function() {
   const ctx = document.createElement('canvas').getContext('2d')
   const dpr = window.devicePixelRatio || 1
@@ -21,34 +23,35 @@ function createHiDPICanvas(size) {
   return can
 }
 
-export default function generateLogo(num, opts = {}) {
+export default function generateLogo(suffix, opts = {}) {
   const { size = 90 } = opts
   const canvas = createHiDPICanvas(size)
   const ctx = canvas.getContext('2d')
+  const isNum = !isNaN(suffix)
 
-  // white background
-  ctx.fillStyle = 'white'
+  // background
+  ctx.fillStyle = isNum ? 'white' : getColor(suffix)
   ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-  ctx.fillStyle = 'black'
 
   // K
   const kSize = 30
-  ctx.fillStyle = '#aaa'
+  ctx.fillStyle = isNum ? '#aaa' : getTextColor(getColor(suffix))
   // ctx.fillStyle = 'rgba(22, 135, 238, 0.7)'
   ctx.font = `${kSize}px "Inter UI Black"`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'top'
-  ctx.fillText('K', size / 2, size - kSize - 10)
+  ctx.fillText('K', size / 2, isNum ? size - kSize - 10 : size / 2 - kSize / 2)
 
-  // num
-  const numSize = 45
-  ctx.fillStyle = 'black'
-  // ctx.fillStyle = '#1687ee'
-  ctx.font = `${numSize}px "Inter UI Black"`
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'top'
-  ctx.fillText(num, size / 2, 5)
+  if (isNum) {
+    // num
+    const numSize = 45
+    ctx.fillStyle = 'black'
+    // ctx.fillStyle = '#1687ee'
+    ctx.font = `${numSize}px "Inter UI Black"`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'top'
+    ctx.fillText(suffix, size / 2, 5)
+  }
 
   return canvas
 }

@@ -1,41 +1,86 @@
 import generateLogo from './generate-logo'
 import teamIds from '../api/team-ids'
+import { languages } from '../../src/helpers/text'
 
 const style = document.createElement('style')
 style.innerHTML = `
+  @font-face {
+    font-family: 'Inter UI Black';
+    font-weight: normal;
+    font-style: normal;
+    src: url('../src/assets/fonts/inter/Inter-UI-Black.woff2') format('woff2');
+  }
+
+  body {
+    font-family: "Inter UI Black";
+    background-color: #ddd;
+  }
+
   canvas {
     margin: 10px;
   }
 `
 
-const button = document.createElement('button')
-button.innerHTML = 'generate images'
-button.style.display = 'block'
+document.head.appendChild(style)
 
-document.body.appendChild(button)
-button.addEventListener('click', async () => {
-  button.setAttribute('disabled', 'disabled')
+/**
+ * Layout
+ */
+
+const text = document.createElement('div')
+text.innerHTML = 'KeyCode-logo generator'
+document.body.appendChild(text)
+
+const makeBtn = text => {
+  const button = document.createElement('button')
+  button.innerHTML = text
+  button.style.display = 'block'
+  document.body.appendChild(button)
+  return button
+}
+
+const genBtn = makeBtn('generate')
+const upBtn = makeBtn('upload')
+
+const root = document.createElement('div')
+document.body.appendChild(root)
+
+/**
+ * Events
+ */
+
+const addCanvas = suffix => {
+  const canvas = generateLogo(suffix)
+  canvas.setAttribute('suffix', suffix)
+  root.appendChild(canvas)
+}
+
+const gen = () => {
+  const nums = Object.keys(teamIds)
+  root.innerHTML = null
+
+  nums.forEach(addCanvas)
+  languages.forEach(addCanvas)
+}
+
+gen()
+
+genBtn.addEventListener('click', gen)
+
+upBtn.addEventListener('click', async () => {
+  upBtn.setAttribute('disabled', 'disabled')
   const allCanvas = [...document.querySelectorAll('canvas')]
   const allDataUrl = allCanvas.map(c => {
-    const num = c.getAttribute('num')
+    const suffix = c.getAttribute('suffix')
     const data = c.toDataURL()
-    return { num, data }
+    return { suffix, data }
   })
+
   for (let i = 0; i < allDataUrl.length; i++) {
     await uploadLogo(allDataUrl[i])
   }
-  button.removeAttribute('disabled')
-})
 
-document.head.appendChild(style)
-document.body.style.backgroundColor = '#ddd'
-
-const nums = Object.keys(teamIds)
-
-nums.forEach(num => {
-  const canvas = generateLogo(num)
-  canvas.setAttribute('num', num)
-  document.body.appendChild(canvas)
+  upBtn.removeAttribute('disabled')
 })
 
 function uploadLogo(logo) {
