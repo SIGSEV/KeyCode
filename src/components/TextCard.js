@@ -67,6 +67,7 @@ const Title = styled.div`
 const Leaders = styled.div`
   display: flex;
   flex-grow: 1;
+  justify-content: flex-end;
   min-width: 10rem;
   padding: 0 4rem;
 `
