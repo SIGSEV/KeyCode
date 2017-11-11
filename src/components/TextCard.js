@@ -109,6 +109,10 @@ const Loader = styled.div`
   push,
 })
 class TextCard extends Component {
+  static defaultProps = {
+    hideLang: false,
+  }
+
   state = {
     loading: false,
   }
@@ -131,7 +135,7 @@ class TextCard extends Component {
 
   render() {
     const { loading } = this.state
-    const { text } = this.props
+    const { text, hideLang } = this.props
     const language = text.get('language')
 
     return (
@@ -141,8 +145,8 @@ class TextCard extends Component {
         <Main>
           <Title>
             <span>{text.get('title')}</span>
-            <LanguageDot type={language} />
-            <span>{language}</span>
+            {!hideLang && <LanguageDot type={language} />}
+            {!hideLang && <span>{language}</span>}
           </Title>
 
           <div className="author">

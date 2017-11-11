@@ -1,7 +1,7 @@
 import Home from 'components/Home'
 import Race from 'components/Race'
 import Pricing from 'components/Pricing'
-import Challenges from 'components/Challenges'
+import Language from 'components/Language'
 import User from 'components/User'
 import CreateText from 'components/CreateText'
 
@@ -35,7 +35,7 @@ export default [
   },
   {
     path: '/l/:id',
-    component: Challenges,
+    component: Language,
     load: ({ dispatch, params: { id } }) => dispatch(loadTexts(id)),
   },
 ]
