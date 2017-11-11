@@ -118,6 +118,17 @@ class TextCard extends Component {
     loading: false,
   }
 
+  componentWillUnmount() {
+    this._unmounted = true
+  }
+
+  safeSetState = (...args) => {
+    if (this._unmounted) {
+      return
+    }
+    this.setState(...args)
+  }
+
   load = async () => {
     const { text, loadRace, push } = this.props
     const { loading } = this.state
@@ -126,9 +137,9 @@ class TextCard extends Component {
     }
 
     const id = text.get('id')
-    this.setState({ loading: true })
+    this.safeSetState({ loading: true })
     await loadRace(id)
-    this.setState({ loading: false })
+    this.safeSetState({ loading: false })
     push(`/r/${id}`)
   }
 
