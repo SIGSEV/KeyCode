@@ -8,6 +8,7 @@ import { getPlayer, getText, startRace, stopRace, resetRace } from 'reducers/rac
 import { starText, deleteText } from 'actions/text'
 import { saveRace } from 'actions/race'
 
+import LanguageDot from 'components/LanguageDot'
 import TypeWriter from 'components/TypeWriter'
 import Typematrix from 'components/Typematrix'
 import Chronos from 'components/Chronos'
@@ -52,14 +53,25 @@ const GameHeaderRight = styled.div`
 `
 
 const RaceTitle = styled.div`
+  display: flex;
+  align-items: center;
   margin-bottom: 1rem;
   font-size: 2rem;
   svg {
     cursor: pointer;
   }
 
+  .left {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    > * + * {
+      margin-left: 0.5rem;
+    }
+  }
+
   > * + * {
-    margin-left: 0.5rem;
+    margin-left: 1rem;
   }
 `
 
@@ -71,6 +83,7 @@ const RaceTitle = styled.div`
     text: getText(state),
     id: state.race.get('id'),
     title: state.race.get('title'),
+    language: state.race.get('language'),
     author: state.race.get('author'),
     rates: state.race.get('rates'),
     stars: state.race.get('stars'),
@@ -109,6 +122,7 @@ class Race extends PureComponent {
       userId,
       isAdmin,
       player,
+      language,
       id,
       text,
       title,
@@ -132,7 +146,7 @@ class Race extends PureComponent {
 
     const progress = totalWords ? typedWordsCount / totalWords : 0
     const hasStarred = userId && rates.get(userId)
-    const canEdit = userId === author || isAdmin
+    const canEdit = userId === author.get('_id') || isAdmin
 
     return (
       <Wrapper>
@@ -140,12 +154,15 @@ class Race extends PureComponent {
           <GameLayer isFinished={isFinished}>
             <RaceTitle>
               <span>{title}</span>
-              <Star
-                onClick={() => userId && starText(id)}
-                style={{ color: hasStarred ? '#ffb401' : 'lightgrey' }}
-              />
-              <span>({stars})</span>
-              {canEdit && <Trash onClick={() => deleteText(id)} />}
+              <LanguageDot type={language} size="1rem" />
+              <div className="left">
+                <span>{stars}</span>
+                <Star
+                  onClick={() => userId && starText(id)}
+                  style={{ color: hasStarred ? '#ffb401' : 'lightgrey' }}
+                />
+                {canEdit && <Trash onClick={() => deleteText(id)} />}
+              </div>
             </RaceTitle>
             <GameHeader>
               <Typematrix activeChar={typedChar} />

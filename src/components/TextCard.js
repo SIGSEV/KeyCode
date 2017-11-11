@@ -5,8 +5,9 @@ import { push } from 'react-router-redux'
 import { Link } from 'react-router-dom'
 import Star from 'react-icons/lib/go/star'
 
-import { getColor } from 'helpers/colors'
 import { loadRace } from 'actions/race'
+
+import LanguageDot from 'components/LanguageDot'
 
 const Container = styled.div`
   display: flex;
@@ -61,13 +62,6 @@ const Title = styled.div`
   * + * {
     margin-left: 0.5rem;
   }
-`
-
-const LanguageDot = styled.div`
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: ${p => getColor(p.type)};
-  border-radius: 50%;
 `
 
 const Leaders = styled.div`
