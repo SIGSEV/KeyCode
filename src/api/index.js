@@ -9,7 +9,7 @@ import 'api/init'
 import writeLogo from 'logos/write-logo'
 import { getAllUsers } from 'api/services/user'
 import { setUser, setToken, isAuthenticated } from 'api/services/auth'
-import { saveRace } from 'api/services/race'
+import { saveRace, getLeaderboard } from 'api/services/race'
 import {
   deleteText,
   getText,
@@ -130,6 +130,18 @@ api.delete('/texts/:id', isAuthenticated(), async (req, res) => {
 api.get('/texts', async (req, res) => {
   try {
     res.send(await getTexts((req.query.language || '').toLowerCase()))
+  } catch ({ message }) {
+    res.status(500).send({ message })
+  }
+})
+
+/**
+ * Leaderboard
+ */
+
+api.get('/leaderboard', async (req, res) => {
+  try {
+    res.send(await getLeaderboard((req.query.language || '').toLowerCase()))
   } catch ({ message }) {
     res.status(500).send({ message })
   }

@@ -33,7 +33,7 @@ export const createText = async payload =>
 
 const populateText = async text => {
   const leaders = await Race.find({ text: text._id }, 'wpm score user')
-    .sort('-wpm')
+    .sort('-score')
     .populate('user', 'name avatar')
     .exec()
 

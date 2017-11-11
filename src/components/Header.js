@@ -80,7 +80,8 @@ class Header extends PureComponent {
           <Bold>{'KeyCode'}</Bold>
         </Link>
         <HeaderRight>
-          {!user && <Link to="/pricing">{'Pricing'}</Link>}
+          <Link to="/leaderboard">{'LeaderBoard'}</Link>
+          <Link to="/pricing">{'Pricing'}</Link>
           {user ? (
             <UserPic to="/u/toto" pic={user.avatar} />
           ) : (

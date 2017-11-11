@@ -220,6 +220,14 @@ const colors = {
 
 export const getColor = language => colors[language] || '#dedcdc'
 
+export const hexToRGB = (hex, alpha) => {
+  const bigint = parseInt(hex.substr(1), 16)
+  const r = (bigint >> 16) & 255
+  const g = (bigint >> 8) & 255
+  const b = bigint & 255
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
 // https://stackoverflow.com/a/6511606/2054072
 export const getTextColor = hex => {
   const c = hex.substr(1)

@@ -29,7 +29,7 @@ const Container = styled.div`
   a {
     text-decoration: none;
     &:hover {
-      text-decoration: underline;
+      color: ${p => p.theme.blue};
     }
   }
 
@@ -129,7 +129,7 @@ class TextCard extends Component {
     this.setState(...args)
   }
 
-  load = async () => {
+  load = async e => {
     const { text, loadRace, push } = this.props
     const { loading } = this.state
     if (loading) {
@@ -137,10 +137,16 @@ class TextCard extends Component {
     }
 
     const id = text.get('id')
+    const url = `/r/${id}`
+    const spe = e.shiftKey || e.metaKey
+    if (spe) {
+      return window.open(url)
+    }
+
     this.safeSetState({ loading: true })
     await loadRace(id)
     this.safeSetState({ loading: false })
-    push(`/r/${id}`)
+    push(url)
   }
 
   prevent = e => e.stopPropagation()
@@ -161,14 +167,16 @@ class TextCard extends Component {
             {!hideLang && <span>{language}</span>}
           </Title>
 
-          <div className="author">
+          <Link
+            onClick={this.prevent}
+            to={`/u/${text.getIn(['author', 'name'])}`}
+            className="author"
+          >
             <div>
               <img src={text.getIn(['author', 'avatar'])} />
             </div>
-            <Link onClick={this.prevent} to={`/u/${text.getIn(['author', 'name'])}`}>
-              {text.getIn(['author', 'name'])}
-            </Link>
-          </div>
+            <span>{text.getIn(['author', 'name'])}</span>
+          </Link>
         </Main>
 
         <Leaders>

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import IconNext from 'react-icons/lib/md/keyboard-arrow-right'
+import ReactRotatingText from 'react-rotating-text'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
@@ -16,7 +17,7 @@ import { AutoTypematrix } from 'components/Typematrix'
 
 const Container = styled.div`
   > * + * {
-    margin-top: 70px;
+    margin-top: 50px;
   }
 `
 
@@ -24,7 +25,7 @@ const Narrow = styled.div`
   max-width: 860px;
   margin: 0 auto;
   > * + * {
-    margin-top: 70px;
+    margin-top: 50px;
   }
 `
 
@@ -116,7 +117,21 @@ class Home extends PureComponent {
     return (
       <Container>
         <Hero>
-          <Title>{'Improve your coding speed.'}</Title>
+          <Title>
+            <ReactRotatingText
+              emptyPause={500}
+              items={[
+                'Challenge',
+                'Perfect',
+                'Enhance',
+                'Advance',
+                'Sublimate',
+                'Upgrade',
+                'Develop',
+              ]}
+            />
+            {' your coding speed.'}
+          </Title>
           <AutoTypematrix text="Welcome to KeyCode!" />
           <Button accent action={() => loadRandom()}>
             {'Random race'}

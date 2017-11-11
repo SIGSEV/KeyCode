@@ -5,8 +5,10 @@ import styled from 'styled-components'
 import { getColor } from 'helpers/colors'
 import { lowerMap } from 'helpers/text'
 import { loadTexts } from 'actions/text'
+import { loadLeaders } from 'actions/leaders'
 
 import TextCard from 'components/TextCard'
+import LeaderCard from 'components/LeaderCard'
 
 const Container = styled.div`
   > * + * {
@@ -28,28 +30,49 @@ const SubTitle = styled.div`
   text-transform: uppercase;
 `
 
+const Leaders = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`
+
 @connect(
-  ({ texts }, { match: { params: { id } } }) => ({
+  ({ texts, leaders }, { match: { params: { id } } }) => ({
     texts: texts.getIn(['languages', id], []),
+    leaders: leaders.languages[id] || [],
   }),
   {
     loadTexts,
+    loadLeaders,
   },
 )
 class Language extends PureComponent {
   componentDidMount() {
-    const { loadTexts, match: { params: { id } } } = this.props
+    const { loadTexts, loadLeaders, match: { params: { id } } } = this.props
     loadTexts(id)
+    loadLeaders(id)
   }
 
   render() {
-    const { texts, match: { params: { id } } } = this.props
+    const { texts, leaders, match: { params: { id } } } = this.props
     const realLang = lowerMap[id]
 
     return (
       <Container>
         <Title type={realLang}>{id}</Title>
         <SubTitle>{'Leaderboard'}</SubTitle>
+
+        <div>
+          <LeaderCard leader={leaders[0]} rank={0} />
+          <Leaders>
+            {leaders
+              .filter((f, i) => i)
+              .map((leader, i) => (
+                <LeaderCard key={leader.user.name} leader={leader} rank={i + 1} />
+              ))}
+          </Leaders>
+        </div>
+
         <SubTitle>{'Races'}</SubTitle>
         <div>{texts.map(text => <TextCard text={text} hideLang key={text.get('id')} />)}</div>
       </Container>

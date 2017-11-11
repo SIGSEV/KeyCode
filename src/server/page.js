@@ -32,6 +32,13 @@ export default ({ styles, state, html, main }) => `<!doctype html>
         src: url('/assets/fonts/inter/Inter-UI-Black.woff2') format('woff2');
       }
 
+      @keyframes blinking-cursor { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+
+      .react-rotating-text-cursor {
+        font-weight: lighter;
+        animation: blinking-cursor 0.8s cubic-bezier(0.68, 0.01, 0.01, 0.99) 0s infinite;
+      }
+
       * {
         box-sizing: border-box;
         margin: 0;

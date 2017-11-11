@@ -6,6 +6,55 @@ import Race from 'api/models/race'
 import { getStats } from 'helpers/race'
 import { updateUserRank } from 'api/services/github'
 
+export const getLeaderboard = language =>
+  Race.aggregate(
+    [
+      language && { $match: { language } },
+      { $sort: { score: -1 } },
+      {
+        $group: {
+          _id: '$user',
+          user: { $first: '$user' },
+          wpm: { $first: '$wpm' },
+          score: { $first: '$score' },
+          language: { $first: '$language' },
+          text: { $first: '$text' },
+        },
+      },
+      { $limit: 10 },
+      { $project: { _id: 0 } },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $lookup: {
+          from: 'texts',
+          localField: 'text',
+          foreignField: '_id',
+          as: 'text',
+        },
+      },
+      { $unwind: { path: '$user' } },
+      { $unwind: { path: '$text' } },
+      {
+        $project: {
+          wpm: 1,
+          score: 1,
+          language: 1,
+          'text.id': 1,
+          'text.title': 1,
+          'user.name': 1,
+          'user.avatar': 1,
+        },
+      },
+    ].filter(f => f),
+  )
+
 export const saveRace = async (payload, user) => {
   const {
     textId,
@@ -18,6 +67,10 @@ export const saveRace = async (payload, user) => {
   } = payload
 
   const { wpm, score } = getStats(Map({ time, corrections, typedWordsCount, wrongWordsCount }))
+
+  if (!score) {
+    throw new Error('Prevented saving noob score.')
+  }
 
   Object.keys(validKeys).forEach(k => (user.validKeys[k] += validKeys[k]))
   Object.keys(wrongKeys).forEach(k => (user.wrongKeys[k] += wrongKeys[k]))

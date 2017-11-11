@@ -5,6 +5,7 @@ import modals from 'reducers/modals'
 import race from 'reducers/race'
 import user from 'reducers/user'
 import texts from 'reducers/texts'
+import leaders from 'reducers/leaders'
 
 export default combineReducers({
   router,
@@ -12,4 +13,5 @@ export default combineReducers({
   race,
   user,
   texts,
+  leaders,
 })
