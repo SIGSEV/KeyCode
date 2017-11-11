@@ -129,7 +129,7 @@ api.delete('/texts/:id', isAuthenticated(), async (req, res) => {
 
 api.get('/texts', async (req, res) => {
   try {
-    res.send(await getTexts(req.query.language))
+    res.send(await getTexts((req.query.language || '').toLowerCase()))
   } catch ({ message }) {
     res.status(500).send({ message })
   }
