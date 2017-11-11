@@ -22,6 +22,7 @@ const stylize = El => styled(({ accent, push, action, grey, ...props }) => <El {
   border-radius: 2px;
   font-size: 12px;
   padding: 3px;
+  text-transform: uppercase;
   color: white;
   outline: none;
   position: relative;
@@ -60,7 +61,6 @@ const Wrapper = styled.div`
   padding: 0 20px;
   align-items: center;
   border: 1px dashed transparent;
-  text-transform: uppercase;
   font-weight: bold;
   text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
 `

@@ -1,6 +1,33 @@
 import shortid from 'shortid'
 import { List, Map } from 'immutable'
 
+export const languages = [
+  'JavaScript',
+  'Ada',
+  'Brainfuck',
+  'Bro',
+  'C',
+  'C++',
+  'Clojure',
+  'CSS',
+  'Elm',
+  'Go',
+  'HTML',
+  'Python',
+  'Ruby',
+  'Rust',
+  'Shell',
+  'Swift',
+  'TypeScript',
+  'VimScript',
+  'Java',
+  'PHP',
+]
+
+export const lowerMap = languages.reduce((acc, l) => ((acc[l.toLowerCase()] = l), acc), {})
+
+export const promotedLanguages = ['JavaScript', 'Python', 'Go', 'Ruby']
+
 export function countLinesOffset(chunks, start, end) {
   return chunks
     .slice(start, end)

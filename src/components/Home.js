@@ -3,11 +3,13 @@ import IconNext from 'react-icons/lib/md/keyboard-arrow-right'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import Star from 'react-icons/lib/go/star'
 
-import { loadRace, loadRandom } from 'actions/race'
+import { languages, promotedLanguages } from 'helpers/text'
+import { loadRandom } from 'actions/race'
 import { loadTexts } from 'actions/text'
+import { getColor, getTextColor } from 'helpers/colors'
 
+import TextCard from 'components/TextCard'
 import Button from 'components/Button'
 import Link from 'components/Link'
 import { AutoTypematrix } from 'components/Typematrix'
@@ -53,25 +55,31 @@ const SectionTitle = styled.h2`
 
 const SectionTitleLink = styled.div`
   margin-left: auto;
+  color: ${p => p.theme.link};
+  cursor: pointer;
 `
 
 const ChallengesCollection = styled.div`
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   margin: 10px -10px -10px -10px;
 `
 
-const Challenge = styled.div`
+const Challenge = styled(Button)`
+  cursor: pointer;
   text-align: center;
   width: 200px;
   height: 200px;
-  background: ${p => p.theme.lightgrey01};
+  background-color: ${p => getColor(p.lang)};
+  color: ${p => getTextColor(getColor(p.lang))};
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 30px;
   margin: 10px;
+  text-transform: none;
 `
 
 const Title = styled.h1`
@@ -82,18 +90,28 @@ const Title = styled.h1`
 
 @connect(({ texts }) => ({ texts }), {
   push,
-  loadRace,
   loadRandom,
   loadTexts,
 })
 class Home extends PureComponent {
+  state = {
+    openLangs: false,
+  }
+
   componentDidMount() {
     const { loadTexts } = this.props
     loadTexts()
   }
 
+  renderLanguage = l => (
+    <Challenge action={() => this.props.loadTexts(l)} to={`/l/${l.toLowerCase()}`} lang={l} key={l}>
+      {l}
+    </Challenge>
+  )
+
   render() {
-    const { texts, loadRace, loadRandom } = this.props
+    const { openLangs } = this.state
+    const { texts, loadRandom } = this.props
 
     return (
       <Container>
@@ -114,33 +132,23 @@ class Home extends PureComponent {
           <Section>
             <SectionTitle>
               {'Challenges by language'}
-              <SectionTitleLink>
-                <Link to="/challenges">{'See all (42)'}</Link>
+              <SectionTitleLink onClick={() => this.setState({ openLangs: !openLangs })}>
+                <div>{openLangs ? 'Unsee' : `See all (${languages.length})`}</div>
               </SectionTitleLink>
             </SectionTitle>
 
             <ChallengesCollection>
-              <Challenge>{'JS'}</Challenge>
-              <Challenge>{'C'}</Challenge>
-              <Challenge>{'Ruby (stanford)'}</Challenge>
-              <Challenge>{'Python'}</Challenge>
+              {promotedLanguages.map(this.renderLanguage)}
+
+              {openLangs &&
+                languages.filter(l => !promotedLanguages.includes(l)).map(this.renderLanguage)}
             </ChallengesCollection>
           </Section>
 
           <SectionTitle>{'Top rated'}</SectionTitle>
-          {texts.get('global').map(text => (
-            <div key={text.get('id')}>
-              {text.get('title')}
-              <Button action={() => loadRace(text.get('id'))} to={`/r/${text.get('id')}`} accent>
-                load
-              </Button>
-              <marquee>
-                {text.get('language')} <Star />
-                {text.get('stars')}
-              </marquee>
-              <hr />
-            </div>
-          ))}
+          <div>
+            {texts.get('global').map(text => <TextCard text={text} key={text.get('id')} />)}
+          </div>
         </Narrow>
       </Container>
     )

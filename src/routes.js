@@ -23,7 +23,7 @@ export default [
   {
     path: '/r/:id',
     component: Race,
-    load: ({ dispatch }, { url }) => dispatch(loadRace(url.split('/')[2])),
+    load: ({ dispatch, params: { id } }) => dispatch(loadRace(id)),
   },
   {
     path: '/u/:id',
@@ -34,7 +34,8 @@ export default [
     component: Pricing,
   },
   {
-    path: '/challenges',
+    path: '/l/:id',
     component: Challenges,
+    load: ({ dispatch, params: { id } }) => dispatch(loadTexts(id)),
   },
 ]

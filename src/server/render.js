@@ -25,12 +25,8 @@ export default stats => async (req, res) => {
     routes.some(route => {
       const match = matchPath(req.url, route)
       if (match && route.load) {
-        promises.push(
-          route.load(store, {
-            // TODO: give real react-router params
-            url: req.url,
-          }),
-        )
+        const { dispatch } = store
+        promises.push(route.load({ dispatch, ...match }))
       }
       return match
     })

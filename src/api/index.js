@@ -82,7 +82,14 @@ api.post('/texts', setUser(), async (req, res) => {
   }
 
   try {
-    res.send(await createText({ raw, language, title, author: req.user ? req.user._id : null }))
+    res.send(
+      await createText({
+        raw,
+        language: language.toLowerCase(),
+        title,
+        author: req.user ? req.user._id : null,
+      }),
+    )
   } catch ({ message }) {
     res.status(500).send({ message })
   }

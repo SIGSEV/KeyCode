@@ -3,6 +3,8 @@ import faker from 'faker'
 import Text from 'api/models/text'
 import Race from 'api/models/race'
 
+import { lowerMap } from 'helpers/text'
+
 const uniqueId = async () => {
   const id = [...Array(3)]
     .map(() =>
@@ -35,7 +37,11 @@ const populateText = async text => {
     .populate('user', 'name avatar')
     .exec()
 
+  await text.populate({ path: 'author', select: 'name avatar' }).execPopulate()
+
   const out = text.toObject()
+
+  out.language = lowerMap[out.language]
   out.leaders = leaders.reduce(
     (acc, cur) =>
       acc.length === 10 || acc.some(a => a.user._id.equals(cur.user._id)) ? acc : acc.concat([cur]),
@@ -48,14 +54,13 @@ const populateText = async text => {
 export const getRandomText = async () => {
   const count = await Text.count()
   const random = Math.floor(Math.random() * count)
-  const text = await Text.findOne()
-    .skip(random)
-    .populate('author', 'name avatar')
+  const text = await Text.findOne().skip(random)
+
   return populateText(text)
 }
 
 export const getText = async id => {
-  const text = await Text.findOne({ id }).populate('author', 'name avatar')
+  const text = await Text.findOne({ id })
   return populateText(text)
 }
 
@@ -76,8 +81,11 @@ export const deleteText = async (id, user) => {
   throw new Error('Unauthorized.')
 }
 
-export const getTexts = language =>
-  Text.find(language ? { language } : {})
+export const getTexts = async language => {
+  const texts = await Text.find(language ? { language } : {})
     .sort('-stars')
     .limit(language ? 100 : 10)
     .exec()
+
+  return Promise.all(texts.map(populateText))
+}

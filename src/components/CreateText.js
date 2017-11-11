@@ -4,6 +4,7 @@ import { Field as FormField, Form as FormikForm, Formik } from 'formik'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
+import { languages } from 'helpers/text'
 import { createText } from 'actions/text'
 import { loadRace } from 'actions/race'
 
@@ -139,8 +140,7 @@ class CreateText extends PureComponent {
                         return (
                           <FormSelect name="language" onChange={field.onChange}>
                             <option value="">{'Select language...'}</option>
-                            <option value="JS">{'JavaScript'}</option>
-                            <option value="PHP">{'PHP'}</option>
+                            {languages.map(l => <option key={l} value={l}>{l}</option>)}
                           </FormSelect>
                         )
                       }}
