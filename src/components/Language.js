@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { getColor } from 'helpers/colors'
 import { lowerMap } from 'helpers/text'
+import { loadTexts } from 'actions/text'
 
 import TextCard from 'components/TextCard'
 
@@ -27,10 +28,20 @@ const SubTitle = styled.div`
   text-transform: uppercase;
 `
 
-@connect(({ texts }, { match: { params: { id } } }) => ({
-  texts: texts.getIn(['languages', id], []),
-}))
+@connect(
+  ({ texts }, { match: { params: { id } } }) => ({
+    texts: texts.getIn(['languages', id], []),
+  }),
+  {
+    loadTexts,
+  },
+)
 class Language extends PureComponent {
+  componentDidMount() {
+    const { loadTexts, match: { params: { id } } } = this.props
+    loadTexts(id)
+  }
+
   render() {
     const { texts, match: { params: { id } } } = this.props
     const realLang = lowerMap[id]
