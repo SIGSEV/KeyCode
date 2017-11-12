@@ -3,10 +3,16 @@ import Github from 'github'
 
 import teamIds from 'api/team-ids'
 
-// const orgs = [...Array(40)].map((_, i) => i * 5 + 5)
-
 const github = new Github({ version: '3.0.0' })
 github.authenticate({ type: 'token', token: process.env.GITHUB_TOKEN })
+
+// const orgs = [...Array(40)].map((_, i) => i * 5 + 5)
+
+// languages.forEach(lang => {
+//   github.orgs.getTeams({ org: `KeyCode-${lang}` }, (err, res) => {
+//     console.log(`${lang}: ${res.data[0].id},`)
+//   })
+// })
 
 const removeUserFromOrg = user =>
   q

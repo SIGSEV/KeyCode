@@ -6,7 +6,7 @@ export const languages = [
   'Ada',
   'Brainfuck',
   'C',
-  'C++',
+  'Cpp',
   'Clojure',
   'CSS',
   'Elm',

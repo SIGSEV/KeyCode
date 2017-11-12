@@ -26,7 +26,7 @@ const colors = {
   Brainfuck: '#2F2530',
   C: '#555555',
   'C#': '#178600',
-  'C++': '#f34b7d',
+  Cpp: '#f34b7d',
   Ceylon: '#dfa535',
   Chapel: '#8dc63f',
   Cirru: '#ccccff',

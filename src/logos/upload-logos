@@ -54,6 +54,32 @@ const nums = [
   200,
 ]
 
+const orgs = [
+  'JavaScript',
+  'Ada',
+  'Brainfuck',
+  'C',
+  'Cpp',
+  'Clojure',
+  'CSS',
+  'Elm',
+  'Go',
+  'HTML',
+  'Python',
+  'Ruby',
+  'Rust',
+  'Shell',
+  'Swift',
+  'TeX',
+  'TypeScript',
+  'VimScript',
+  'Java',
+  'PHP',
+].concat(nums)
+
+// Array of orgs to create
+const toCreate = []
+
 // ------------
 ;(async () => {
   const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
@@ -76,8 +102,12 @@ const nums = [
     console.log(`logging in...`)
     await page.waitForNavigation()
 
-    for (let i = 0; i < nums.length; i++) {
-      await updateImg(page, nums[i])
+    for (let i = 0; i < toCreate.length; i++) {
+      await createOrg(page, toCreate[i])
+    }
+
+    for (let i = 0; i < orgs.length; i++) {
+      await updateImg(page, orgs[i])
     }
 
     await browser.close()
@@ -89,14 +119,45 @@ const nums = [
   }
 })()
 
-async function updateImg(page, num) {
-  const url = `https://github.com/organizations/KeyCode-${num}/settings/profile`
+// yes it's in the upload-logo script, fuck it
+async function createOrg(page, suffix) {
+  console.log(`creating ${suffix}...`)
+  await page.goto('https://github.com/organizations/new')
+
+  const orgLogin = await page.$('#organization_login')
+  await orgLogin.type(`KeyCode-${suffix}`)
+
+  const billing = await page.$('#organization_billing_email')
+  await billing.type('keycode@sigsev.io')
+
+  const submit = await page.$('button.btn.btn-primary')
+  await submit.click()
+
+  await page.waitForNavigation()
+
+  console.log(`creating team...`)
+
+  await page.goto(`https://github.com/orgs/KeyCode-${suffix}/new-team`)
+
+  const team = await page.$('#team-name')
+  await team.type('Members')
+
+  await page.waitFor(1e3)
+
+  const submitTeam = await page.$('button.btn.btn-primary')
+  await submitTeam.click()
+
+  await page.waitForNavigation()
+}
+
+async function updateImg(page, suffix) {
+  const url = `https://github.com/organizations/KeyCode-${suffix}/settings/profile`
   console.log(`going to keycode ${url}...`)
   await page.goto(url)
 
   console.log(`uploading pic...`)
   const uploadPic = await page.$('#upload-profile-picture')
-  const picPath = path.resolve(__dirname, `./output/${num}.png`)
+  const picPath = path.resolve(__dirname, `./output/${suffix}.png`)
   await uploadPic.uploadFile(picPath)
 
   console.log(`waiting for box...`)
