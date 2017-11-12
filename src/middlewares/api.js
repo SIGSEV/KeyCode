@@ -1,5 +1,7 @@
 import qs from 'query-string'
 
+import { addToast } from 'reducers/toasts'
+
 export default store => next => async action => {
   const isGraphql = action.type.startsWith('G:')
   const isAPI = action.type.startsWith('API:')
@@ -47,6 +49,10 @@ export default store => next => async action => {
     dispatch({ type: `${prefix}_SUCCESS`, payload: { ...payload, query, data } })
     return data
   } catch (err) {
+    if (err.message) {
+      dispatch(addToast(err.message, 'error'))
+    }
+
     dispatch({ type: `${prefix}_ERROR` })
     throw new Error(err)
   }

@@ -10,6 +10,7 @@ import theme from 'theme'
 
 import Header from 'components/Header'
 import Footer from 'components/Footer'
+import Toasts from 'components/Toasts'
 import PreventRetardedSize from 'components/PreventRetardedSize'
 import ScrollTop from 'components/ScrollTop'
 
@@ -84,6 +85,7 @@ export default (store, Router, routerProps) => (
       <Router {...routerProps}>
         <ScrollTop>
           <App />
+          <Toasts />
         </ScrollTop>
       </Router>
     </ThemeProvider>

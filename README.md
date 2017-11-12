@@ -16,4 +16,3 @@ Just figure that shit by looking at the `package.json`, lazy biatch.
 - [ ] find a good way to choose a test: on the high starred repos? (on freecodecamp?). after that, they want to search for a file into that repo. so it will be like a multi step form. has to be easy and fast and able to pilot via keyboard (no shit).
 - [ ] change score calculation (use cpm instead)
 - [ ] improve textwriter to allow horizontal scroll, maybe code highlight for non-erroneous chars?
-- [ ] toasts for api errors
