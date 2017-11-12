@@ -55,7 +55,7 @@ export const updateUserRank = async (user, score) => {
   }
 
   if (user.currentOrg) {
-    await removeUserFromOrg(user, user.currentOrg)
+    await removeUserFromOrg(user.name, user.currentOrg)
   }
 
   if (org > 200) {
