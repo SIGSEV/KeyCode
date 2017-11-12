@@ -20,11 +20,16 @@ export function initPlayer() {
 }
 
 export const getPayload = race => {
+  const normal = race.toJS()
+  if (!normal.players || !normal.players[0]) {
+    return {}
+  }
+
   // Assuming p[0] is always logged user
   const {
     id: textId,
     players: [{ time, corrections, typedWordsCount, validKeys, wrongKeys, wrongWordsCount }],
-  } = race.toJS()
+  } = normal
 
   return {
     textId,
