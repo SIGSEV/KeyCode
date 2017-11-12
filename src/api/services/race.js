@@ -59,6 +59,7 @@ export const getLeaderboard = language =>
           'user.avatar': 1,
         },
       },
+      { $sort: { score: -1 } },
     ].filter(f => f),
   )
 
