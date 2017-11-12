@@ -4,7 +4,7 @@ import { Field as FormField, Form as FormikForm, Formik } from 'formik'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import { languages } from 'helpers/text'
+import { languages, textConds } from 'helpers/text'
 import { createText } from 'actions/text'
 import { loadRace } from 'actions/race'
 
@@ -135,21 +135,27 @@ class CreateText extends PureComponent {
                   <FormGroup>
                     <Label>{'Language'}</Label>
 
-                    <FormField>
-                      {({ field }) => {
-                        return (
-                          <FormSelect name="language" onChange={field.onChange}>
-                            <option value="">{'Select language...'}</option>
-                            {languages.map(l => <option key={l} value={l}>{l}</option>)}
-                          </FormSelect>
-                        )
-                      }}
+                    <FormField name="language">
+                      {({ field }) => (
+                        <FormSelect onChange={field.onChange}>
+                          <option value="">{'Select language...'}</option>
+                          {languages.map(l => (
+                            <option key={l} value={l}>
+                              {l}
+                            </option>
+                          ))}
+                        </FormSelect>
+                      )}
                     </FormField>
                   </FormGroup>
                 </Row>
                 <FormGroup>
                   <Label>{'Content'}</Label>
-                  <TextareaField component="textarea" name="raw" placeholder="Hello world..." />
+                  <TextareaField
+                    component="textarea"
+                    name="raw"
+                    placeholder={`${textConds.min}-${textConds.max} chars`}
+                  />
                 </FormGroup>
                 <Button isLoading={props.isSubmitting} isDisabled={!props.isValid}>
                   {'Create'}

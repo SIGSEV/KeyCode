@@ -3,7 +3,7 @@ import faker from 'faker'
 import Text from 'api/models/text'
 import Race from 'api/models/race'
 
-import { lowerMap } from 'helpers/text'
+import { lowerMap, textConds } from 'helpers/text'
 
 const uniqueId = async () => {
   const id = [...Array(3)]
@@ -24,12 +24,24 @@ const uniqueId = async () => {
   return id
 }
 
-export const createText = async payload =>
-  Text.create({
+export const createText = async payload => {
+  const raw = payload.raw.trim()
+  if (raw.length < textConds.min || raw.length > textConds.max) {
+    throw new Error(`Text length incorrect (${textConds.min}-${textConds.max})`)
+  }
+
+  const keys = raw.split('').reduce((acc, cur) => ((acc[cur.charCodeAt()] = true), acc), {})
+
+  if (Object.keys(keys).length < 20 && payload.language !== 'brainfuck') {
+    throw new Error('Your test is too ez to deserve being on our platform')
+  }
+
+  return Text.create({
     ...payload,
-    raw: payload.raw.trim(),
+    raw,
     id: await uniqueId(),
   })
+}
 
 const populateText = async text => {
   const leaders = await Race.find({ text: text._id }, 'wpm score user')

@@ -24,6 +24,11 @@ export const languages = [
   'PHP',
 ]
 
+export const textConds = {
+  min: 300,
+  max: 1000,
+}
+
 export const lowerMap = languages.reduce((acc, l) => ((acc[l.toLowerCase()] = l), acc), {})
 
 export const promotedLanguages = ['JavaScript', 'Python', 'Go', 'Ruby']

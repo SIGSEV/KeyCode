@@ -22,7 +22,6 @@ export const getLeaderboard = language =>
         },
       },
       { $limit: 10 },
-      { $project: { _id: 0 } },
       {
         $lookup: {
           from: 'users',
