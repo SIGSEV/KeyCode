@@ -5,6 +5,7 @@ import fetch from 'node-fetch'
 import compression from 'compression'
 import path from 'path'
 import cookieParser from 'cookie-parser'
+import { scheduleJob } from 'node-schedule'
 
 import 'api/init'
 
@@ -12,11 +13,17 @@ import render from 'server/render'
 import handleIO from 'server/socket'
 import * as globals from 'globals'
 import { setUser, initPassport } from 'api/services/auth'
+import { refreshLeaderOrgs } from 'api/services/race'
 
 global.fetch = fetch
 Object.keys(globals).forEach(key => (global[key] = globals[key]))
 
 initPassport()
+
+if (__PROD__ && (process.env.NODE_APP_INSTANCE || 0) < 1) {
+  console.log('[cron]   started') // eslint-disable-line
+  scheduleJob('42 * * * *', refreshLeaderOrgs)
+}
 
 const ASSETS_FOLDER = path.join(__dirname, '../assets')
 const DIST_FOLDER = path.join(__dirname, '../../dist')

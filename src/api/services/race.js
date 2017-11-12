@@ -1,10 +1,17 @@
 import { Map } from 'immutable'
 
+import User from 'api/models/user'
 import Text from 'api/models/text'
 import Race from 'api/models/race'
 
+import { languages } from 'helpers/text'
 import { getStats } from 'helpers/race'
-import { updateUserRank } from 'api/services/github'
+import {
+  getTeamMembers,
+  addUserToOrg,
+  removeUserFromOrg,
+  updateUserRank,
+} from 'api/services/github'
 
 export const getLeaderboard = language =>
   Race.aggregate(
@@ -42,6 +49,7 @@ export const getLeaderboard = language =>
       { $unwind: { path: '$text' } },
       {
         $project: {
+          _id: 0,
           wpm: 1,
           score: 1,
           language: 1,
@@ -53,6 +61,34 @@ export const getLeaderboard = language =>
       },
     ].filter(f => f),
   )
+
+export const refreshLeaderOrgs = () => {
+  languages.forEach(async language => {
+    try {
+      const leaders = await getLeaderboard(language.toLowerCase())
+      const leaderNames = leaders.map(l => l.user.name)
+      const members = (await getTeamMembers(language)).filter(f => f.login !== 'KeyCode-Master')
+      const memberNames = members.map(m => m.login)
+
+      memberNames.forEach(async name => {
+        if (!leaderNames.includes(name)) {
+          await removeUserFromOrg(name, language)
+        }
+      })
+
+      leaders.forEach(async leader => {
+        if (memberNames.includes(leader.user.name)) {
+          return
+        }
+
+        const user = await User.findOne({ name: leader.user.name })
+        await addUserToOrg(user, language)
+      })
+    } catch (e) {
+      console.log(e) // eslint-disable-line
+    }
+  })
+}
 
 export const saveRace = async (payload, user) => {
   const {

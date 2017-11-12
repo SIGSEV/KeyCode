@@ -8,26 +8,29 @@ const github = new Github({ version: '3.0.0' })
 github.authenticate({ type: 'token', token: process.env.GITHUB_TOKEN })
 
 /**
- * Get the fuck out of the current org
+ * Get them
  */
-const removeUserFromOrg = user =>
-  q
-    .nfcall(github.orgs.removeMember, { org: `KeyCode-${user.currentOrg}`, username: user.name })
-    .catch(() => null)
+export const getTeamMembers = org =>
+  q.nfcall(github.orgs.getTeamMembers, { id: teamIds[org] }).then(res => res.data)
 
 /**
- * All the flow: add the team membership, accept the invite and publish org appartenance
+ * Are you in booiiii?
  */
-const addUserToOrg = async (user, org) => {
-  if (org > 200) {
-    throw new Error('Yes sure, not possible yet g0d/h4xxor')
-  }
+export const isUserInOrg = (username, org) =>
+  q.nfcall(github.orgs.getOrgMembership, { org: `KeyCode-${org}`, username })
 
+/**
+ * Get the fuck out
+ */
+export const removeUserFromOrg = (username, org) =>
+  q.nfcall(github.orgs.removeMember, { org: `KeyCode-${org}`, username }).catch(() => null)
+
+/**
+ * Real shit: add the team membership, accept the invite and publish org appartenance
+ */
+export const addUserToOrg = async (user, org) => {
   const userGithub = new Github({ version: '3.0.0' })
   userGithub.authenticate({ type: 'oauth', token: user.token })
-
-  user.currentOrg = org
-  await user.save()
 
   await q.nfcall(github.orgs.addTeamMembership, { id: teamIds[org], username: user.name })
   await q.nfcall(userGithub.users.editOrgMembership, {
@@ -52,10 +55,17 @@ export const updateUserRank = async (user, score) => {
   }
 
   if (user.currentOrg) {
-    await removeUserFromOrg(user)
+    await removeUserFromOrg(user, user.currentOrg)
+  }
+
+  if (org > 200) {
+    throw new Error('Yes sure, not possible yet g0d/h4xxor')
   }
 
   await addUserToOrg(user, org)
+
+  user.currentOrg = org
+  await user.save()
 }
 
 /**
