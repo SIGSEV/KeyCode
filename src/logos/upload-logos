@@ -54,7 +54,7 @@ const nums = [
   200,
 ]
 
-const orgs = [
+const languages = [
   'JavaScript',
   'Ada',
   'Brainfuck',
@@ -75,7 +75,9 @@ const orgs = [
   'VimScript',
   'Java',
   'PHP',
-].concat(nums)
+]
+
+const orgs = languages.concat(nums)
 
 // Array of orgs to create
 const toCreate = []
@@ -102,6 +104,10 @@ const toCreate = []
     console.log(`logging in...`)
     await page.waitForNavigation()
 
+    // for (let i = 0; i < orgs.length; i++) {
+    //   await updateOrgProfile(page, orgs[i])
+    // }
+
     for (let i = 0; i < toCreate.length; i++) {
       await createOrg(page, toCreate[i])
     }
@@ -118,6 +124,31 @@ const toCreate = []
     await browser.close()
   }
 })()
+
+async function updateOrgProfile(page, suffix) {
+  console.log(`updating ${suffix} infos...`)
+  await page.goto(`https://github.com/organizations/KeyCode-${suffix}/settings/profile`)
+
+  const isLang = languages.includes(suffix)
+
+  await page.evaluate(() => {
+    document.querySelector('#organization_profile_bio').value = ''
+    document.querySelector('#organization_profile_blog').value = ''
+  })
+
+  await (await page.$('#organization_profile_bio')).type(
+    isLang ? `${suffix} KeyCode leaders` : `Score > ${suffix}`,
+  )
+
+  await (await page.$('#organization_profile_blog')).type(
+    isLang ? `https://keycode.sigsev.io/l/${suffix.toLowerCase()}` : 'https://keycode.sigsev.io',
+  )
+
+  await (await page.$('button.btn.btn-primary')).click()
+
+  await page.waitForNavigation()
+  console.log('done.')
+}
 
 // yes it's in the upload-logo script, fuck it
 async function createOrg(page, suffix) {
@@ -148,6 +179,7 @@ async function createOrg(page, suffix) {
   await submitTeam.click()
 
   await page.waitForNavigation()
+  await updateOrgProfile(page, suffix)
 }
 
 async function updateImg(page, suffix) {
