@@ -38,7 +38,12 @@ export default store => next => async action => {
   try {
     dispatch({ type: `${prefix}_START` })
     const payload = { method, headers, body }
-    const data = await fetch(url, payload).then(d => d.json())
+    const res = await fetch(url, payload)
+    const data = await res.json()
+    if (!res.ok) {
+      throw new Error(data.message || 'An error occured')
+    }
+
     dispatch({ type: `${prefix}_SUCCESS`, payload: { ...payload, query, data } })
     return data
   } catch (err) {
