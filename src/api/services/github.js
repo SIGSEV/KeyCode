@@ -1,24 +1,23 @@
 import q from 'q'
 import Github from 'github'
 
+import { languages } from 'helpers/text'
 import teamIds from 'api/team-ids'
 
 const github = new Github({ version: '3.0.0' })
 github.authenticate({ type: 'token', token: process.env.GITHUB_TOKEN })
 
-// const orgs = [...Array(40)].map((_, i) => i * 5 + 5)
-
-// languages.forEach(lang => {
-//   github.orgs.getTeams({ org: `KeyCode-${lang}` }, (err, res) => {
-//     console.log(`${lang}: ${res.data[0].id},`)
-//   })
-// })
-
+/**
+ * Get the fuck out of the current org
+ */
 const removeUserFromOrg = user =>
   q
     .nfcall(github.orgs.removeMember, { org: `KeyCode-${user.currentOrg}`, username: user.name })
     .catch(() => null)
 
+/**
+ * All the flow: add the team membership, accept the invite and publish org appartenance
+ */
 const addUserToOrg = async (user, org) => {
   if (org > 200) {
     throw new Error('Yes sure, not possible yet g0d/h4xxor')
@@ -42,6 +41,9 @@ const addUserToOrg = async (user, org) => {
   })
 }
 
+/**
+ * Self documenting function names are bad blablabla?? well fuck you.
+ */
 export const updateUserRank = async (user, score) => {
   const org = Math.floor(score / 5) * 5
 
@@ -56,6 +58,9 @@ export const updateUserRank = async (user, score) => {
   await addUserToOrg(user, org)
 }
 
+/**
+ * Because that's a good thing to know
+ */
 export const hasStarredShit = async token => {
   const userGithub = new Github({ version: '3.0.0' })
   userGithub.authenticate({ type: 'oauth', token })
@@ -70,4 +75,21 @@ export const hasStarredShit = async token => {
   } catch (e) {
     return false
   }
+}
+
+/**
+ * Utility function to print team ids for each of our orgs
+ */
+export const getTeams = () => {
+  const orgs = [...Array(40)].map((_, i) => i * 5 + 5)
+
+  languages.concat(orgs).forEach(suffix => {
+    github.orgs.getTeams({ org: `KeyCode-${suffix}` }, (err, res) => {
+      if (err) {
+        return console.log(err) // eslint-disable-line
+      }
+
+      console.log(`${suffix}: ${res.data[0].id},`) // eslint-disable-line
+    })
+  })
 }
