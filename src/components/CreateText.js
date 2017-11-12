@@ -137,7 +137,7 @@ class CreateText extends PureComponent {
 
                     <FormField name="language">
                       {({ field }) => (
-                        <FormSelect onChange={field.onChange}>
+                        <FormSelect name="language" onChange={field.onChange}>
                           <option value="">{'Select language...'}</option>
                           {languages.map(l => (
                             <option key={l} value={l}>
