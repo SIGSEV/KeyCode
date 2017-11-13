@@ -70,6 +70,10 @@ const Leaders = styled.div`
   justify-content: flex-end;
   min-width: 10rem;
   padding: 0 4rem;
+
+  > * + * {
+    margin-left: 0.5rem;
+  }
 `
 
 const Stars = styled.div`
