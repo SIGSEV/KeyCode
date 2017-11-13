@@ -58,10 +58,6 @@ export const updateUserRank = async (user, score) => {
     await removeUserFromOrg(user.name, user.currentOrg)
   }
 
-  if (org > 200) {
-    throw new Error('Yes sure, not possible yet g0d/h4xxor')
-  }
-
   await addUserToOrg(user, org)
 
   user.currentOrg = org

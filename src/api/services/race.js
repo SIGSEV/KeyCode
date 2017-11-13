@@ -108,6 +108,10 @@ export const saveRace = async (payload, user) => {
     throw new Error('Prevented saving noob score.')
   }
 
+  if (score > 200) {
+    throw new Error('Yes sure, not possible yet g0d/h4xxor')
+  }
+
   Object.keys(validKeys).forEach(k => (user.validKeys[k] += validKeys[k]))
   Object.keys(wrongKeys).forEach(k => (user.wrongKeys[k] += wrongKeys[k]))
 
