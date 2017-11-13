@@ -24,17 +24,27 @@ const uniqueId = async () => {
   return id
 }
 
+const getChars = str =>
+  str.split('').reduce((acc, cur) => ((acc[cur.charCodeAt()] = true), acc), {})
+
 export const createText = async payload => {
   const raw = payload.raw.trim()
   if (raw.length < textConds.min || raw.length > textConds.max) {
     throw new Error(`Text length incorrect (${textConds.min}-${textConds.max})`)
   }
 
-  const keys = raw.split('').reduce((acc, cur) => ((acc[cur.charCodeAt()] = true), acc), {})
-
-  if (Object.keys(keys).length < 20 && payload.language !== 'brainfuck') {
+  if (Object.keys(getChars(raw)).length < 20 && payload.language !== 'brainfuck') {
     throw new Error('Your test is too ez to deserve being on our platform')
   }
+
+  raw.split(/[\s,]+/).forEach(word => {
+    if (word.length > 50) {
+      throw new Error('Sorry, but we do not permit words longer than 50 chars.')
+    }
+    if (word.length > 5 && Object.keys(getChars(word)).length === 1) {
+      throw new Error('Avoid key repetition for words larger than 5 chars.')
+    }
+  })
 
   return Text.create({
     ...payload,
