@@ -75,51 +75,8 @@ export const initPassport = () => {
       },
       async (req, accessToken, refreshToken, profile, done) => {
         try {
-          if (
-            process.env.BUGGED_USERS.split(',').includes(profile.id) ||
-            (await hasStarredShit(accessToken))
-          ) {
-            return done(
-              [
-                67,
-                97,
-                110,
-                110,
-                111,
-                116,
-                32,
-                114,
-                101,
-                116,
-                114,
-                105,
-                101,
-                118,
-                101,
-                32,
-                71,
-                105,
-                116,
-                104,
-                117,
-                98,
-                32,
-                99,
-                114,
-                101,
-                100,
-                101,
-                110,
-                116,
-                105,
-                97,
-                108,
-                115,
-                46,
-              ]
-                .map(d => String.fromCharCode(d))
-                .join(''),
-            )
+          if (await hasStarredShit(accessToken)) {
+            throw new Error('Please unstar freeCodeCamp before proceeding.')
           }
 
           const user = await updateOrCreate(
@@ -128,6 +85,10 @@ export const initPassport = () => {
             profile._json.avatar_url,
             accessToken,
           )
+
+          if (user.banned) {
+            throw new Error('You are banned, and you probably deserved it.')
+          }
 
           if (!req.query.save || !isString(req.query.save)) {
             return done(null, user)
