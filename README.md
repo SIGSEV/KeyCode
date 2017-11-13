@@ -13,6 +13,7 @@ Just figure that shit by looking at the `package.json`, lazy biatch.
 - [ ] join user room, websockets
 
 #### frontend junk
+- [ ] react styles are broken in production when page first loads. [proof](https://cdn.pbrd.co/images/GTnFmJU.png)
 - [ ] change score calculation (use cpm instead) :warning:
 - [ ] improve textwriter to allow horizontal scroll, maybe code highlight for non-erroneous chars?
 - [ ] find a good way to choose a test: on the high starred repos? (on freecodecamp?). after that, they want to search for a file into that repo. so it will be like a multi step form. has to be easy and fast and able to pilot via keyboard (no shit).
