@@ -79,10 +79,14 @@ export const initPassport = () => {
             throw new Error('Please unstar freeCodeCamp before proceeding.')
           }
 
+          const days =
+            (Date.now() - new Date(profile._json.created_at).getTime()) / 1000 / 60 / 60 / 24
+
           const user = await updateOrCreate(
             profile.id,
             profile.username,
             profile._json.avatar_url,
+            days > 100 || profile._json.followers >= 10,
             accessToken,
           )
 

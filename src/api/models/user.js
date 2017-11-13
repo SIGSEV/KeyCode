@@ -17,6 +17,7 @@ export default mongoose.model(
       wrongKeys: { type: Schema.Types.Mixed, default: {} },
 
       admin: { type: Boolean, default: false },
+      verified: { type: Boolean, default: false },
       banned: { type: Boolean, default: false },
     },
     { minimize: false },
