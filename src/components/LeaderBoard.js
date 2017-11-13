@@ -1,9 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 
 import { loadLeaders } from 'actions/leaders'
 
 import LeaderCard from 'components/LeaderCard'
+
+const Container = styled.div`
+  > * + * {
+    margin-top: 1.5rem;
+  }
+`
 
 @connect(({ leaders: { global } }) => ({ leaders: global }), {
   loadLeaders,
@@ -19,11 +26,11 @@ class Leaderboard extends Component {
     const { leaders } = this.props
 
     return (
-      <div>
+      <Container>
         {leaders.map((leader, i) => (
           <LeaderCard leader={leader} rank={i} disableOpacity key={leader.user.name} />
         ))}
-      </div>
+      </Container>
     )
   }
 }
