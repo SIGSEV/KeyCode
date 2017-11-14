@@ -75,14 +75,14 @@ const handlers = {
     const jumps = countLinesOffset(chunks, wordIndex, nextWordIndex)
 
     if (jumps > 0) {
-      const scroll = p.get('scroll')
+      const scrollY = p.get('scrollY')
       const nextLine = p.get('line') + jumps
       const linesCount = state.getIn(['text', 'linesCount'])
       p = p.set('line', nextLine)
-      const isLowerThanMiddle = nextLine - scroll > DISPLAYED_LINES / 2 - 1
-      const isNotEndOfText = linesCount - scroll > DISPLAYED_LINES - 1
+      const isLowerThanMiddle = nextLine - scrollY > DISPLAYED_LINES / 2 - 1
+      const isNotEndOfText = linesCount - scrollY > DISPLAYED_LINES - 1
       if (isLowerThanMiddle && isNotEndOfText) {
-        p = p.set('scroll', scroll + 1)
+        p = p.set('scrollY', scrollY + 1)
       }
     }
 

@@ -6,7 +6,7 @@ export function initPlayer() {
     id: shortid.generate(),
     line: 0,
     cursor: 0,
-    scroll: 0,
+    scrollY: 0,
     wordIndex: 0,
     corrections: 0,
     typedWord: '',

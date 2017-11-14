@@ -164,7 +164,7 @@ class TypeWriter extends PureComponent {
     const { player, text, isStarted } = this.props
 
     const cursor = player.get('cursor')
-    const scroll = player.get('scroll')
+    const scrollY = player.get('scrollY')
     const wordIndex = player.get('wordIndex')
     const typedWord = player.get('typedWord')
 
@@ -213,7 +213,7 @@ class TypeWriter extends PureComponent {
                 ),
             )
             /* eslint-enable react/no-array-index-key */
-          } else if (curLine > scroll && curLine <= scroll + DISPLAYED_LINES) {
+          } else if (curLine > scrollY && curLine <= scrollY + DISPLAYED_LINES) {
             // render other words
             res = (
               <Text
