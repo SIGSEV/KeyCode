@@ -146,7 +146,8 @@ class Race extends PureComponent {
 
     const progress = totalWords ? typedWordsCount / totalWords : 0
     const hasStarred = userId && rates.get(userId)
-    const canEdit = userId === author.get('_id') || isAdmin
+    const authorID = author && author.get('_id')
+    const canEdit = userId === authorID || isAdmin
 
     return (
       <Wrapper>

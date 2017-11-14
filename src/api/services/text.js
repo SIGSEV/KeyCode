@@ -75,6 +75,9 @@ const populateText = async text => {
 
 export const getRandomText = async () => {
   const count = await Text.count()
+  if (!count) {
+    throw new Error('No text found')
+  }
   const random = Math.floor(Math.random() * count)
   const text = await Text.findOne().skip(random)
 
