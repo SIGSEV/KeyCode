@@ -1,6 +1,6 @@
 import React from 'react'
 import io from 'socket.io-client'
-import { hydrate } from 'react-dom'
+import { hydrate, render } from 'react-dom'
 import { ConnectedRouter } from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory'
 import { AppContainer } from 'react-hot-loader'
@@ -18,19 +18,19 @@ const store = createStore(history, state)
 
 handleSocket(socket, store)
 
-const render = Component => {
-  hydrate(
+const r = Component => {
+  ;(__DEV__ ? render : hydrate)(
     <AppContainer>{Component(store, ConnectedRouter, { history })}</AppContainer>,
     document.getElementById('root'),
   )
 }
 
-render(App)
+r(App)
 
 if (module.hot) {
   module.hot.accept('components/App', () => {
     const nextApp = require('components/App')
-    render(nextApp)
+    r(nextApp)
   })
 
   module.hot.accept('handle-socket', () => {
