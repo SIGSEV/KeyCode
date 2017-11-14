@@ -165,23 +165,30 @@ class TypeWriter extends PureComponent {
 
     const cursor = player.get('cursor')
     const scrollY = player.get('scrollY')
+    const scrollX = player.get('scrollX')
     const wordIndex = player.get('wordIndex')
     const typedWord = player.get('typedWord')
+    const chunks = text.get('chunks')
 
     let curLine = 1
 
     return (
       <Container onClick={this.handleClick} isFocused={isFocused}>
-        {text.get('chunks').map((word, i) => {
+        {chunks.map((word, i) => {
           const isCurrent = wordIndex === i
           let res = null
           const wordContent = word.get('content')
+          const indexInLine = word.get('indexInLine')
+          const scrollHide = scrollX > indexInLine
 
           // render current word
           if (isCurrent) {
             const relativeCursor = cursor - word.get('start')
 
             const wordChunks = wordContent.split('').reduce((acc, char, i) => {
+              if (scrollHide && i < scrollX - indexInLine) {
+                return acc
+              }
               const isCursor = i === relativeCursor
               const isWrong = !isCursor && wordContent[i] !== typedWord[i] && i < typedWord.length
               const last = acc[acc.length - 1]
@@ -215,13 +222,18 @@ class TypeWriter extends PureComponent {
             /* eslint-enable react/no-array-index-key */
           } else if (curLine > scrollY && curLine <= scrollY + DISPLAYED_LINES) {
             // render other words
+            const hasReturn = wordContent.endsWith('\n')
+            let toDisplay = scrollHide ? wordContent.substr(scrollX - indexInLine) : wordContent
+            if (hasReturn && !toDisplay.endsWith('\n')) {
+              toDisplay = `${toDisplay}\n`
+            }
             res = (
               <Text
                 key={word.get('id')}
                 isDisabled={!isFocused || i > wordIndex}
                 isWrong={word.get('isWrong')}
               >
-                {wordContent}
+                {toDisplay}
               </Text>
             )
           }

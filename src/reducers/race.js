@@ -17,6 +17,18 @@ const initialState = fromJS({
 })
 
 const DISPLAYED_LINES = 15
+const DISPLAYED_COLS = 80
+
+function adjustScrollX(p, chunks) {
+  const word = chunks.get(p.get('wordIndex'))
+  const cursorIndexInLine = p.get('cursor') - word.get('start') + word.get('indexInLine')
+  if (cursorIndexInLine > DISPLAYED_COLS / 2) {
+    p = p.set('scrollX', cursorIndexInLine - DISPLAYED_COLS / 2)
+  } else {
+    p = p.set('scrollX', 0)
+  }
+  return p
+}
 
 const handlers = {
   RACE_INIT: (state, { payload }) => {
@@ -55,6 +67,8 @@ const handlers = {
       .set('typedChar', char)
       .set('cursor', cursor + 1)
       .set('typedWord', newTypedWord)
+
+    p = adjustScrollX(p, state.getIn(['text', 'chunks']))
 
     return state.setIn(['players', 0], p).updateIn(['text'], text => {
       const word = text.getIn(['chunks', wordIndex])
@@ -105,6 +119,7 @@ const handlers = {
         .set('cursor', nextWord.get('start'))
         .set('typedWord', '')
     }
+    p = adjustScrollX(p, state.getIn(['text', 'chunks']))
 
     return state.setIn(['players', 0], p).setIn(['text', 'chunks'], chunks)
   },
@@ -123,6 +138,9 @@ const handlers = {
       .set('cursor', cursor - 1)
       .set('typedWord', newTypedWord)
       .set('corrections', p.get('corrections') + 1)
+
+    p = adjustScrollX(p, state.getIn(['text', 'chunks']))
+
     if (word.get('content').startsWith(newTypedWord)) {
       chunks = chunks.setIn([wordIndex, 'isWrong'], false)
     }

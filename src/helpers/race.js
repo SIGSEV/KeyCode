@@ -7,6 +7,7 @@ export function initPlayer() {
     line: 0,
     cursor: 0,
     scrollY: 0,
+    scrollX: 0,
     wordIndex: 0,
     corrections: 0,
     typedWord: '',

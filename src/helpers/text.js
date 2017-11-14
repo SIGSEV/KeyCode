@@ -40,6 +40,7 @@ export function countLinesOffset(chunks, start, end) {
 }
 
 export function computeText(text) {
+  let trickyPrevIndexInLine = 0
   const chunks = text
     .split('')
     .reduce((acc, char, i) => {
@@ -61,8 +62,19 @@ export function computeText(text) {
       acc = acc.set(acc.size - 1, word)
       return acc
     }, List())
-    .map(word => word.set('empty', !word.get('content').trim()).remove('done'))
+    .map((word, i, words) => {
+      const prev = i === 0 ? null : words.get(i - 1)
+      const isNewLine = prev && prev.get('content').includes('\n')
+      const indexInLine = prev
+        ? isNewLine ? 0 : trickyPrevIndexInLine + prev.get('content').length
+        : 0
+      word = word.set('indexInLine', indexInLine)
+      trickyPrevIndexInLine = indexInLine
+      word = word.set('empty', !word.get('content').trim()).remove('done')
+      return word
+    })
 
+  console.log(chunks)
   const wordsCount = chunks.filter(w => !w.get('empty')).size
   const linesCount = countLinesOffset(chunks, 0, chunks.size - 1)
 

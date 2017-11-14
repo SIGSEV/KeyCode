@@ -140,10 +140,6 @@ class Race extends PureComponent {
     const typedWordsCount = player.get('typedWordsCount')
     const totalWords = text.get('wordsCount')
 
-    // const accuracy = typedWords
-    //   ? ((1 - stats.get('wrongWords') / typedWords) * 100).toFixed(2)
-    //   : '100.00'
-
     const progress = totalWords ? typedWordsCount / totalWords : 0
     const hasStarred = userId && rates.get(userId)
     const authorID = author && author.get('_id')
@@ -155,6 +151,7 @@ class Race extends PureComponent {
           <GameLayer isFinished={isFinished}>
             <RaceTitle>
               <span>{title}</span>
+              <span>{player.get('scrollX')}</span>
               <LanguageDot type={language} size="1rem" />
               <div className="left">
                 <span>{stars}</span>
