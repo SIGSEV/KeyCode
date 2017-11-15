@@ -203,7 +203,7 @@ class TypeWriter extends PureComponent {
             const cursorIndexInWord = wordChunks.findIndex(c => c.isCursor)
 
             /* eslint-disable react/no-array-index-key */
-            return wordChunks.map(
+            res = wordChunks.map(
               (chunk, i) =>
                 chunk.isCursor ? (
                   <Cursor key={i} isBlinking={!isStarted && isFocused} isDisabled={!isFocused}>
