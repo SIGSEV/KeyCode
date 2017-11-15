@@ -26,7 +26,7 @@ export default [
     path: '/leaderboard',
     exact: true,
     component: LeaderBoard,
-    load: ({ dispatch }) => dispatch(loadLeaders())
+    load: ({ dispatch }) => dispatch(loadLeaders()),
   },
   {
     path: '/r/:id',
