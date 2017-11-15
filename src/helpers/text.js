@@ -74,7 +74,6 @@ export function computeText(text) {
       return word
     })
 
-  console.log(chunks)
   const wordsCount = chunks.filter(w => !w.get('empty')).size
   const linesCount = countLinesOffset(chunks, 0, chunks.size - 1)
 
