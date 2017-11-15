@@ -28,14 +28,22 @@ const checkJwt = expressJwt({
   getToken,
 })
 
+const banMsg = 'You are banned, get the fuck out.'
+
 export const setUser = () =>
   compose()
     .use((req, res, next) => checkJwt(req, res, () => next()))
     .use(async (req, res, next) => {
       try {
         req.user = await getUserById(req.user.id)
+        if (req.user.banned) {
+          throw new Error(banMsg)
+        }
         return next()
       } catch (e) {
+        if (e.message === banMsg) {
+          return next(e.message)
+        }
         return next()
       }
     })
@@ -50,6 +58,10 @@ export const isAuthenticated = () =>
         }
 
         req.user = await getUserById(req.user.id)
+        if (req.user.banned) {
+          throw new Error(banMsg)
+        }
+
         return next()
       } catch (e) {
         return next(e.message)
