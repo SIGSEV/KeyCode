@@ -20,7 +20,7 @@ Object.keys(globals).forEach(key => (global[key] = globals[key]))
 
 initPassport()
 
-if (__PROD__ && (process.env.NODE_APP_INSTANCE || 0) < 1) {
+if (__PROD__ && !__PREVIEW__ && (process.env.NODE_APP_INSTANCE || 0) < 1) {
   console.log('[cron]   started') // eslint-disable-line
   scheduleJob('42 * * * *', refreshLeaderOrgs)
 }
