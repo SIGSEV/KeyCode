@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import IconLoading from 'react-icons/lib/md/watch'
@@ -12,7 +13,9 @@ const BtnEl = ({ isLoading, isDisabled, ...props }) => (
 )
 
 /* eslint-disable no-unused-vars */
-const stylize = El => styled(({ accent, push, action, grey, ...props }) => <El {...props} />)`
+const stylize = El => styled(({ accent, push, action, grey, minWait, ...props }) => (
+  <El {...props} />
+))`
   position: relative;
   display: inline-flex;
   opacity: ${p => (p.isLoading || p.isDisabled ? 0.7 : 1)};
@@ -90,10 +93,22 @@ const springConfig = {
   damping: 25,
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 @connect(null, {
   push,
 })
 class Button extends PureComponent {
+  static propTypes = {
+    minWait: PropTypes.number,
+  }
+
+  static defaultProps = {
+    minWait: 500,
+  }
+
   state = {
     isLoading: false,
   }
@@ -115,12 +130,18 @@ class Button extends PureComponent {
   }
 
   handleAction = async () => {
-    const { action, to, push } = this.props
+    const { action, to, push, minWait } = this.props
     this.safeSetState({ isLoading: true })
     try {
+      const before = performance.now()
       await action()
+      const after = performance.now()
+      const elapsed = after - before
+      if (elapsed < minWait) {
+        await sleep(minWait - elapsed)
+      }
       this.safeSetState({ isLoading: false })
-      if (push) {
+      if (to) {
         push(to)
       }
     } catch (err) {
@@ -151,10 +172,13 @@ class Button extends PureComponent {
       <Motion
         style={{
           offset: spring(isLoading ? 100 : 0, springConfig),
+          opacity: spring(isLoading ? 0 : 1, springConfig),
         }}
       >
         {m => (
-          <Wrapper style={{ transform: `translate3d(${m.offset}%, 0, 0)` }}>{children}</Wrapper>
+          <Wrapper style={{ transform: `translate3d(${m.offset}%, 0, 0)`, opacity: m.opacity }}>
+            {children}
+          </Wrapper>
         )}
       </Motion>
     )
