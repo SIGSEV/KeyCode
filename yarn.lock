@@ -2645,12 +2645,14 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-github@^12.0.1:
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/github/-/github-12.0.1.tgz#4f7467434d8d01152782e669e925b3115aa0b219"
+github@^12.0.2:
+  version "12.0.2"
+  resolved "https://registry.yarnpkg.com/github/-/github-12.0.2.tgz#3ab9a67a35ab771cf1a6c1d1f28793509d5e13eb"
   dependencies:
+    dotenv "^4.0.0"
     follow-redirects "1.2.5"
     https-proxy-agent "^2.1.0"
+    lodash "^4.17.4"
     mime "^2.0.3"
     netrc "^0.1.4"
 
@@ -4730,9 +4732,9 @@ react-dom@^16.1.1:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-hot-loader@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-3.1.2.tgz#3d4a0f7fdeb5dce085767d751a683f979345557d"
+react-hot-loader@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-3.1.3.tgz#6f92877326958c7cb0134b512474517869126082"
   dependencies:
     global "^4.3.0"
     react-deep-force-update "^2.1.1"
