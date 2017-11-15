@@ -25,7 +25,7 @@ export const languages = [
 ]
 
 export const textConds = {
-  min: 300,
+  min: 140,
   max: 1000,
 }
 
