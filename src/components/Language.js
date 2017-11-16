@@ -37,6 +37,7 @@ const Leaders = styled.div`
   > * {
     min-width: 15rem;
     flex-grow: 1;
+    flex-basis: 0;
   }
 `
 
