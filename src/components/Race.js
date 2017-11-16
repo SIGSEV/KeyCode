@@ -151,7 +151,6 @@ class Race extends PureComponent {
           <GameLayer isFinished={isFinished}>
             <RaceTitle>
               <span>{title}</span>
-              <span>{player.get('scrollX')}</span>
               <LanguageDot type={language} size="1rem" />
               <div className="left">
                 <span>{stars}</span>
