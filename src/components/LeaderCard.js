@@ -53,6 +53,7 @@ const Main = styled.div`
   > div {
     padding: 0.5rem;
     margin: 0;
+    margin-left: auto;
     &:hover {
       color: ${p => p.theme.blue};
     }

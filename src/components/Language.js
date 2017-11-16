@@ -33,7 +33,11 @@ const SubTitle = styled.div`
 const Leaders = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+
+  > * {
+    min-width: 15rem;
+    flex-grow: 1;
+  }
 `
 
 @connect(
@@ -63,13 +67,10 @@ class Language extends PureComponent {
         <SubTitle>{'Leaderboard'}</SubTitle>
 
         <div>
-          <LeaderCard leader={leaders[0]} rank={0} />
           <Leaders>
-            {leaders
-              .filter((f, i) => i)
-              .map((leader, i) => (
-                <LeaderCard key={leader.user.name} leader={leader} rank={i + 1} />
-              ))}
+            {leaders.map((leader, i) => (
+              <LeaderCard key={leader.user.name} leader={leader} rank={i} />
+            ))}
           </Leaders>
         </div>
 
