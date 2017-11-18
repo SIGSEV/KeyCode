@@ -148,8 +148,10 @@ class TypeWriter extends PureComponent {
       return goNextWord()
     }
 
-    if (char === ' ' || !charToType.trim()) {
-      return goNextWord()
+    // we are at the end of the word
+    if (!charToType.trim()) {
+      const isCorrectTrigger = char === ' '
+      return goNextWord(isCorrectTrigger)
     }
 
     if (!isStarted) {

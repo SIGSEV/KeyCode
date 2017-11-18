@@ -78,7 +78,7 @@ const handlers = {
       return text
     })
   },
-  RACE_NEXT_WORD: state => {
+  RACE_NEXT_WORD: (state, { payload: isCorrectTrigger = true }) => {
     let chunks = state.getIn(['text', 'chunks'])
     let p = state.getIn(['players', 0])
     const wordIndex = p.get('wordIndex')
@@ -100,7 +100,7 @@ const handlers = {
       }
     }
 
-    if (!typedWord || typedWord.length !== word.get('content').trim().length) {
+    if (!isCorrectTrigger || !typedWord || typedWord.length !== word.get('content').trim().length) {
       chunks = chunks.setIn([wordIndex, 'isWrong'], true)
     }
 
