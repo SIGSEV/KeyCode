@@ -50,7 +50,7 @@ export function getStats(base) {
   const typedWords = base.get('typedWordsCount')
   const wrongWords = base.get('wrongWordsCount')
   const goodWords = typedWords - wrongWords
-  const accuracy = goodWords / typedWords
+  const accuracy = typedWords ? goodWords / typedWords : 0
   const wpm = minuteRatio <= 0 ? 0 : Math.round(goodWords * accuracy / minuteRatio) - corrections
 
   return {
