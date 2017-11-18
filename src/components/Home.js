@@ -62,7 +62,6 @@ const SectionTitleLink = styled.div`
 
 const ChallengesCollection = styled.div`
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   margin: 10px -10px -10px -10px;
 `
