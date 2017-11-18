@@ -105,7 +105,7 @@ class Race extends PureComponent {
     this.props.resetRace()
   }
 
-  handleStop = () => {
+  handleStop = async () => {
     const { isFinished, stopRace, saveRace } = this.props
     if (isFinished) {
       return
@@ -114,7 +114,9 @@ class Race extends PureComponent {
     const time = this._chronos.get()
     stopRace(time)
 
-    saveRace()
+    try {
+      await saveRace()
+    } catch (e) {} // eslint-disable-line
   }
 
   render() {

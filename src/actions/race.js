@@ -37,7 +37,7 @@ export function saveRace() {
       return
     }
 
-    dispatch({
+    return dispatch({
       type: 'API:SAVE_RACE',
       payload: {
         url: '/races',
