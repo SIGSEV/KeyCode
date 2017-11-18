@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 
+import { openModal } from 'reducers/modals'
+
+import Modal from 'components/Modal'
 import Button from 'components/Button'
 import Score from 'components/Score'
 
@@ -18,11 +21,6 @@ const Wrapper = styled.div`
   border-radius: 2px;
 `
 
-const animEnter = keyframes`
-  0% { transform: translate3d(0, 100%, 0); }
-  100% { transform: translate3d(0, 0, 0); }
-`
-
 const Container = styled.div`
   color: ${p => p.theme.lightgrey02};
   background: ${p => p.theme.darkGrey00};
@@ -33,8 +31,6 @@ const Container = styled.div`
   right: 0;
   bottom: 0;
   z-index: 3;
-  will-change: transform;
-  animation: ${animEnter} 700ms cubic-bezier(0.78, 0.01, 0.23, 0.97);
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -88,21 +84,24 @@ const StatLabel = styled.div`
   text-transform: uppercase;
 `
 
-@connect(state => ({
-  player: getPlayer(state),
-}))
+@connect(
+  state => ({
+    player: getPlayer(state),
+    isFinished: state.race.get('isFinished'),
+  }),
+  {
+    openModal,
+  },
+)
 class FinishBoard extends PureComponent {
   state = {
     showScore: false,
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      window.requestAnimationFrame(() => {
-        this._restartBtn.focus()
-        this.setState({ showScore: true })
-      })
-    }, 700)
+  componentDidUpdate(prevProps) {
+    if (this.props.isFinished && !prevProps.isFinished) {
+      this.props.openModal('finishBoard')
+    }
   }
 
   render() {
@@ -111,6 +110,7 @@ class FinishBoard extends PureComponent {
 
     const stats = getStats(player)
 
+    return <Modal name="finishBoard">hey</Modal>
     return (
       <Wrapper>
         <Container>

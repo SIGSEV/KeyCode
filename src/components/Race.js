@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import { connect } from 'react-redux'
 import Star from 'react-icons/lib/go/star'
 import Trash from 'react-icons/lib/go/trashcan'
@@ -31,17 +31,7 @@ const Container = styled.div`
   position: relative;
 `
 
-const animLeave = keyframes`
-  0% { transform: translate3d(0, 0, 0); opacity: 1; }
-  100% { transform: translate3d(0, -10%, 0); opacity: 0; }
-`
-
-const GameLayer = styled.div`
-  will-change: transform;
-  animation: ${p =>
-    p.isFinished ? `${animLeave} cubic-bezier(0.78, 0.01, 0.23, 0.97) 700ms` : undefined};
-  animation-fill-mode: forwards;
-`
+const GameLayer = styled.div``
 
 const GameHeader = styled.div`
   display: flex;
@@ -105,7 +95,7 @@ class Race extends PureComponent {
     this.props.resetRace()
   }
 
-  handleStop = async () => {
+  handleStop = () => {
     const { isFinished, stopRace, saveRace } = this.props
     if (isFinished) {
       return
@@ -114,9 +104,11 @@ class Race extends PureComponent {
     const time = this._chronos.get()
     stopRace(time)
 
-    try {
-      await saveRace()
-    } catch (e) {} // eslint-disable-line
+    window.requestAnimationFrame(async () => {
+      try {
+        await saveRace()
+      } catch (e) {} // eslint-disable-line
+    })
   }
 
   render() {
@@ -167,7 +159,7 @@ class Race extends PureComponent {
               <Typematrix activeChar={typedChar} />
               <GameHeaderRight>
                 <Chronos
-                  seconds={60}
+                  seconds={1}
                   isRunning={isStarted && !isFinished}
                   onFinish={this.handleStop}
                   ref={n => (this._chronos = n)}
@@ -180,7 +172,7 @@ class Race extends PureComponent {
             <TypeWriter isDisabled={isFinished} onStart={startRace} onFinish={this.handleStop} />
           </GameLayer>
 
-          {isFinished && <FinishBoard onRestart={this.handleReset} />}
+          <FinishBoard />
         </Container>
       </Wrapper>
     )
