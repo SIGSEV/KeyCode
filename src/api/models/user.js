@@ -20,6 +20,6 @@ export default mongoose.model(
       verified: { type: Boolean, default: false },
       banned: { type: Boolean, default: false },
     },
-    { minimize: false },
+    { minimize: false, timestamps: true },
   ),
 )

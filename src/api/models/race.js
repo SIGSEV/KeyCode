@@ -26,6 +26,6 @@ export default mongoose.model(
 
       language: String,
     },
-    { minimize: false },
+    { minimize: false, timestamps: true },
   ),
 )

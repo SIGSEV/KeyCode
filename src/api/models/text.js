@@ -17,6 +17,6 @@ export default mongoose.model(
         ref: 'User',
       },
     },
-    { minimize: false },
+    { minimize: false, timestamps: true },
   ),
 )
