@@ -19,17 +19,21 @@ import ProgressBar from 'components/ProgressBar'
 import FinishBoard from 'components/FinishBoard'
 
 const Container = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   color: ${p => p.theme.darkGrey00};
   background: ${p => p.theme.lightgrey02};
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  position: relative;
-  margin: -40px;
 `
 
 const RaceHeader = styled.div`
+  flex-shrink: 0;
   user-select: none;
   background: ${p => p.theme.darkGrey00};
   display: flex;

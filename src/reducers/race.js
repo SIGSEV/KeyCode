@@ -16,7 +16,6 @@ const initialState = fromJS({
   players: [],
 })
 
-const DISPLAYED_LINES = 15
 const DISPLAYED_COLS = 80
 
 function adjustScrollX(p, chunks) {
@@ -81,6 +80,7 @@ const handlers = {
   RACE_NEXT_WORD: (state, { payload: isCorrectTrigger = true }) => {
     let chunks = state.getIn(['text', 'chunks'])
     let p = state.getIn(['players', 0])
+    const maxDisplayedLines = p.get('maxDisplayedLines')
     const wordIndex = p.get('wordIndex')
     const typedWord = p.get('typedWord')
 
@@ -93,8 +93,8 @@ const handlers = {
       const nextLine = p.get('line') + jumps
       const linesCount = state.getIn(['text', 'linesCount'])
       p = p.set('line', nextLine)
-      const isLowerThanMiddle = nextLine - scrollY > DISPLAYED_LINES / 2 - 1
-      const isNotEndOfText = linesCount - scrollY > DISPLAYED_LINES - 1
+      const isLowerThanMiddle = nextLine - scrollY > maxDisplayedLines / 2 - 1
+      const isNotEndOfText = linesCount - scrollY > maxDisplayedLines - 1
       if (isLowerThanMiddle && isNotEndOfText) {
         p = p.set('scrollY', scrollY + 1)
       }
@@ -123,6 +123,8 @@ const handlers = {
 
     return state.setIn(['players', 0], p).setIn(['text', 'chunks'], chunks)
   },
+  RACE_SET_MAX_DISPLAYED_LINES: (state, { payload: maxDisplayedLines }) =>
+    state.setIn(['players', 0, 'maxDisplayedLines'], maxDisplayedLines),
   RACE_TYPE_BACKSPACE: state => {
     let chunks = state.getIn(['text', 'chunks'])
     let p = state.getIn(['players', 0])
@@ -167,6 +169,7 @@ export const typeBackspace = createAction('RACE_TYPE_BACKSPACE')
 export const startRace = createAction('RACE_START')
 export const stopRace = createAction('RACE_STOP')
 export const resetRace = createAction('RACE_RESET')
+export const setMaxDisplayedLines = createAction('RACE_SET_MAX_DISPLAYED_LINES')
 
 // Selectors
 

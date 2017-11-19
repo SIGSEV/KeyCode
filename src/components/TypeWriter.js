@@ -2,7 +2,16 @@ import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 
-import { getPlayer, getText, typeChar, goNextWord, typeBackspace } from 'reducers/race'
+import {
+  getPlayer,
+  getText,
+  typeChar,
+  goNextWord,
+  typeBackspace,
+  setMaxDisplayedLines,
+} from 'reducers/race'
+
+import StatusBar from 'components/StatusBar'
 
 const Container = styled.div`
   position: relative;
@@ -86,6 +95,7 @@ const Text = styled.span`
     typeChar,
     goNextWord,
     typeBackspace,
+    setMaxDisplayedLines,
   },
 )
 class TypeWriter extends PureComponent {
@@ -94,7 +104,11 @@ class TypeWriter extends PureComponent {
   }
 
   componentDidMount() {
-    window.requestAnimationFrame(() => this._input.focus())
+    window.addEventListener('resize', this.measureContainer)
+    window.requestAnimationFrame(() => {
+      this._input.focus()
+      this.measureContainer()
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -109,6 +123,17 @@ class TypeWriter extends PureComponent {
     if (wasFinished && !isFinished) {
       this.handleClick()
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.measureContainer)
+  }
+
+  measureContainer = () => {
+    const rect = this._container.getBoundingClientRect()
+    const { height } = rect
+    const maxDisplayedLines = Math.floor(height / 24) - 1
+    this.props.setMaxDisplayedLines(Math.max(maxDisplayedLines, 0))
   }
 
   handleFocus = () => this.setState({ isFocused: true })
@@ -173,82 +198,90 @@ class TypeWriter extends PureComponent {
     const scrollX = player.get('scrollX')
     const wordIndex = player.get('wordIndex')
     const typedWord = player.get('typedWord')
+    const maxDisplayedLines = player.get('maxDisplayedLines')
     const chunks = text.get('chunks')
 
     let curLine = 1
 
     return (
-      <Container onClick={this.handleClick} isFocused={isFocused}>
-        {chunks.map((word, i) => {
-          const isCurrent = wordIndex === i
-          let res = null
-          const wordContent = word.get('content')
-          const indexInLine = word.get('indexInLine')
-          const scrollHide = scrollX > indexInLine
+      <Container
+        onClick={this.handleClick}
+        isFocused={isFocused}
+        innerRef={n => (this._container = n)}
+      >
+        {maxDisplayedLines
+          ? chunks.map((word, i) => {
+              const isCurrent = wordIndex === i
+              let res = null
+              const wordContent = word.get('content')
+              const indexInLine = word.get('indexInLine')
+              const scrollHide = scrollX > indexInLine
 
-          // render current word
-          if (isCurrent) {
-            const relativeCursor = cursor - word.get('start')
+              // render current word
+              if (isCurrent) {
+                const relativeCursor = cursor - word.get('start')
 
-            const wordChunks = wordContent.split('').reduce((acc, char, i) => {
-              if (scrollHide && i < scrollX - indexInLine) {
-                return acc
-              }
-              const isCursor = i === relativeCursor
-              const isWrong = !isCursor && wordContent[i] !== typedWord[i] && i < typedWord.length
-              const last = acc[acc.length - 1]
-              if (isCursor || !last || last.isWrong !== isWrong || last.isCursor) {
-                acc.push({ isWrong, isCursor, content: char })
-              } else {
-                last.content += char
-              }
-              return acc
-            }, [])
+                const wordChunks = wordContent.split('').reduce((acc, char, i) => {
+                  if (scrollHide && i < scrollX - indexInLine) {
+                    return acc
+                  }
+                  const isCursor = i === relativeCursor
+                  const isWrong =
+                    !isCursor && wordContent[i] !== typedWord[i] && i < typedWord.length
+                  const last = acc[acc.length - 1]
+                  if (isCursor || !last || last.isWrong !== isWrong || last.isCursor) {
+                    acc.push({ isWrong, isCursor, content: char })
+                  } else {
+                    last.content += char
+                  }
+                  return acc
+                }, [])
 
-            const cursorIndexInWord = wordChunks.findIndex(c => c.isCursor)
+                const cursorIndexInWord = wordChunks.findIndex(c => c.isCursor)
 
-            /* eslint-disable react/no-array-index-key */
-            res = wordChunks.map(
-              (chunk, i) =>
-                chunk.isCursor ? (
-                  <Cursor key={i} isBlinking={!isStarted && isFocused} isDisabled={!isFocused}>
-                    {chunk.content}
-                  </Cursor>
-                ) : (
+                /* eslint-disable react/no-array-index-key */
+                res = wordChunks.map(
+                  (chunk, i) =>
+                    chunk.isCursor ? (
+                      <Cursor key={i} isBlinking={!isStarted && isFocused} isDisabled={!isFocused}>
+                        {chunk.content}
+                      </Cursor>
+                    ) : (
+                      <Text
+                        key={i}
+                        isHardWrong={chunk.isWrong}
+                        isDisabled={!isFocused || i > cursorIndexInWord}
+                      >
+                        {chunk.content}
+                      </Text>
+                    ),
+                )
+                /* eslint-enable react/no-array-index-key */
+              } else if (curLine > scrollY && curLine <= scrollY + maxDisplayedLines) {
+                // render other words
+                const hasReturn = wordContent.endsWith('\n')
+                let toDisplay = scrollHide ? wordContent.substr(scrollX - indexInLine) : wordContent
+                if (hasReturn && !toDisplay.endsWith('\n')) {
+                  toDisplay = `${toDisplay}\n`
+                }
+                res = (
                   <Text
-                    key={i}
-                    isHardWrong={chunk.isWrong}
-                    isDisabled={!isFocused || i > cursorIndexInWord}
+                    key={word.get('id')}
+                    isDisabled={!isFocused || i > wordIndex}
+                    isWrong={word.get('isWrong')}
                   >
-                    {chunk.content}
+                    {toDisplay}
                   </Text>
-                ),
-            )
-            /* eslint-enable react/no-array-index-key */
-          } else if (curLine > scrollY) {
-            // render other words
-            const hasReturn = wordContent.endsWith('\n')
-            let toDisplay = scrollHide ? wordContent.substr(scrollX - indexInLine) : wordContent
-            if (hasReturn && !toDisplay.endsWith('\n')) {
-              toDisplay = `${toDisplay}\n`
-            }
-            res = (
-              <Text
-                key={word.get('id')}
-                isDisabled={!isFocused || i > wordIndex}
-                isWrong={word.get('isWrong')}
-              >
-                {toDisplay}
-              </Text>
-            )
-          }
+                )
+              }
 
-          if (wordContent.includes('\n')) {
-            curLine++
-          }
+              if (wordContent.includes('\n')) {
+                curLine++
+              }
 
-          return res
-        })}
+              return res
+            })
+          : null}
 
         <HiddenInput
           onFocus={this.handleFocus}
@@ -258,6 +291,8 @@ class TypeWriter extends PureComponent {
           onChange={this.handleChange}
           value={''}
         />
+
+        <StatusBar />
       </Container>
     )
   }

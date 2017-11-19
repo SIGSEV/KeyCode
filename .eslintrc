@@ -12,5 +12,6 @@
   "rules": {
     "no-inline-comments": 0,
     "no-void": 0,
+    "id-length": 0,
   },
 }
