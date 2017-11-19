@@ -8,8 +8,6 @@ const Container = styled.div`
   color: ${p => p.theme.yellow};
 `
 
-const Seconds = styled.span``
-
 class Chronos extends PureComponent {
   state = {
     timeStart: 0,

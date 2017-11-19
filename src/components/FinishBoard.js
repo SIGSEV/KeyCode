@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 
-import { openModal } from 'reducers/modals'
+import { openModal, closeModal } from 'reducers/modals'
 
 import Modal from 'components/Modal'
 import Button from 'components/Button'
@@ -12,33 +12,11 @@ import { getPlayer } from 'reducers/race'
 import { getStats } from 'helpers/race'
 
 const Wrapper = styled.div`
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
-  overflow: hidden;
-  border-radius: 2px;
-`
-
-const Container = styled.div`
-  color: ${p => p.theme.lightgrey02};
-  background: ${p => p.theme.darkGrey00};
-  position: absolute;
-  border-radius: 2px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 3;
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-
   > * + * {
-    margin-top: 40px;
+    margin-top: 30px;
   }
 `
 
@@ -46,6 +24,10 @@ const StatsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`
+
+const ScoreContainer = styled.div`
+  text-align: center;
 `
 
 const statAnim = keyframes`
@@ -91,6 +73,7 @@ const StatLabel = styled.div`
   }),
   {
     openModal,
+    closeModal,
   },
 )
 class FinishBoard extends PureComponent {
@@ -100,7 +83,14 @@ class FinishBoard extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (this.props.isFinished && !prevProps.isFinished) {
-      this.props.openModal('finishBoard')
+      window.requestAnimationFrame(() => {
+        this.props.openModal('finishBoard')
+        this.setState({ showScore: true })
+        this._restartBtn.focus()
+      })
+    }
+    if (!this.props.isFinished && prevProps.isFinished) {
+      this.props.closeModal('finishBoard')
     }
   }
 
@@ -110,11 +100,12 @@ class FinishBoard extends PureComponent {
 
     const stats = getStats(player)
 
-    return <Modal name="finishBoard">hey</Modal>
     return (
-      <Wrapper>
-        <Container>
-          <div style={{ height: 70 }}>{showScore && <Score score={stats.score} />}</div>
+      <Modal name="finishBoard">
+        <Wrapper>
+          <ScoreContainer style={{ height: 70 }}>
+            {showScore && <Score score={stats.score} />}
+          </ScoreContainer>
 
           <StatsContainer>
             <Stat delay={0.6}>
@@ -136,8 +127,8 @@ class FinishBoard extends PureComponent {
           <Button accent setRef={n => (this._restartBtn = n)} onClick={onRestart}>
             {'Restart'}
           </Button>
-        </Container>
-      </Wrapper>
+        </Wrapper>
+      </Modal>
     )
   }
 }

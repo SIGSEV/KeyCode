@@ -122,6 +122,7 @@ class TypeWriter extends PureComponent {
     const { isFinished: wasFinished } = prevProps
     if (wasFinished && !isFinished) {
       this.handleClick()
+      this.measureContainer()
     }
   }
 
