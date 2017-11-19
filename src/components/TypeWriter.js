@@ -75,8 +75,6 @@ const Text = styled.span`
   color: ${p => (p.isWrong ? p.theme.red : p.isHardWrong ? 'white' : '')};
 `
 
-const DISPLAYED_LINES = 15
-
 @connect(
   state => ({
     player: getPlayer(state),
@@ -227,7 +225,7 @@ class TypeWriter extends PureComponent {
                 ),
             )
             /* eslint-enable react/no-array-index-key */
-          } else if (curLine > scrollY && curLine <= scrollY + DISPLAYED_LINES) {
+          } else if (curLine > scrollY) {
             // render other words
             const hasReturn = wordContent.endsWith('\n')
             let toDisplay = scrollHide ? wordContent.substr(scrollX - indexInLine) : wordContent
