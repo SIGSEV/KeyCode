@@ -41,9 +41,12 @@ export function countLinesOffset(chunks, start, end) {
 
 export function computeText(text) {
   let trickyPrevIndexInLine = 0
+  text = text.replace(/\t/g, '  ')
   const chunks = text
     .split('')
     .reduce((acc, char, i) => {
+      const nextChar = text[i + 1] || ''
+      const prevChar = text[i - 1] || ''
       let word = acc.last()
       if (!word || word.get('done')) {
         word = Map({ start: i, done: false, id: shortid.generate() })
@@ -54,7 +57,7 @@ export function computeText(text) {
         'content',
         text.substring(word.get('start'), word.get('end') + (i === text.length - 1 ? 2 : 1)),
       )
-      if (!char.trim()) {
+      if (!char.trim() && (char === '\n' || nextChar.trim() || prevChar.trim())) {
         word = word.set('done', true)
       } else {
         word = word.set('end', i)
