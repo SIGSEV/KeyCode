@@ -132,6 +132,15 @@ class Race extends PureComponent {
     const authorID = author && author.get('_id')
     const canEdit = userId === authorID || isAdmin
 
+    const chronos = (
+      <Chronos
+        seconds={5}
+        isRunning={isStarted && !isFinished}
+        onFinish={this.handleStop}
+        ref={n => (this._chronos = n)}
+      />
+    )
+
     return (
       <Container>
         <RaceHeader>
@@ -143,12 +152,14 @@ class Race extends PureComponent {
           <RaceTitle>{title}</RaceTitle>
         </RaceHeader>
         <RaceContent>
-          <TypeWriter isDisabled={isFinished} onStart={startRace} onFinish={this.handleStop} />
+          <TypeWriter onStart={startRace} onFinish={this.handleStop} chronos={chronos} />
           <RaceInfos>
             <span>{title}</span>
           </RaceInfos>
         </RaceContent>
+        {/*}
         <FinishBoard />
+        */}
       </Container>
     )
     return (

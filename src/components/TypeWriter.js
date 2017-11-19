@@ -141,9 +141,9 @@ class TypeWriter extends PureComponent {
   handleClick = () => this._input.focus()
 
   handleKeyDown = e => {
-    const { isDisabled, isStarted, onStart, goNextWord, typeBackspace } = this.props
+    const { isFinished, isStarted, onStart, goNextWord, typeBackspace } = this.props
 
-    if (isDisabled) {
+    if (isFinished) {
       return
     }
 
@@ -160,10 +160,10 @@ class TypeWriter extends PureComponent {
   }
 
   handleChange = e => {
-    const { typeChar, isStarted, isDisabled, text, player, onStart, goNextWord } = this.props
+    const { typeChar, isStarted, isFinished, text, player, onStart, goNextWord } = this.props
     const { value: char } = e.target
 
-    if (isDisabled) {
+    if (isFinished) {
       return
     }
 
@@ -191,7 +191,7 @@ class TypeWriter extends PureComponent {
 
   render() {
     const { isFocused } = this.state
-    const { player, text, isStarted } = this.props
+    const { player, text, isStarted, chronos } = this.props
 
     const cursor = player.get('cursor')
     const scrollY = player.get('scrollY')
@@ -292,7 +292,7 @@ class TypeWriter extends PureComponent {
           value={''}
         />
 
-        <StatusBar />
+        <StatusBar>{chronos}</StatusBar>
       </Container>
     )
   }

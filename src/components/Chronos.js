@@ -5,17 +5,10 @@ const Container = styled.div`
   font-family: monospace;
   display: inline-flex;
   align-items: center;
+  color: ${p => p.theme.yellow};
 `
 
-const Seconds = styled.span`
-  font-size: 50px;
-  line-height: 50px;
-`
-
-const Decimal = styled.span`
-  font-size: 20px;
-  margin-left: 5px;
-`
+const Seconds = styled.span``
 
 class Chronos extends PureComponent {
   state = {
@@ -84,12 +77,7 @@ class Chronos extends PureComponent {
 
     const dec = ((timeRemaining - Math.floor(timeRemaining)) * 10).toFixed(0)
 
-    return (
-      <Container>
-        <Seconds>{Math.floor(timeRemaining)}</Seconds>
-        <Decimal>{dec}</Decimal>
-      </Container>
-    )
+    return <Container>{`${Math.floor(timeRemaining)}.${dec}s`}</Container>
   }
 }
 

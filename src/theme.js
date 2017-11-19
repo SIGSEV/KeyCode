@@ -13,8 +13,10 @@ export default {
   red,
   blue,
   green,
+  yellow: '#fee009',
   accent: '#1687ee',
   link: '#1687ee',
+  orange: '#f28930',
   bg: 'white',
 
   toasts: {

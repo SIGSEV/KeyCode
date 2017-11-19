@@ -1,8 +1,13 @@
 import React, { PureComponent } from 'react'
 import IconRecord from 'react-icons/lib/md/adjust'
+import IconFinished from 'react-icons/lib/fa/flag-checkered'
 import IconWaiting from 'react-icons/lib/md/timer'
+import IconWrong from 'react-icons/lib/fa/close'
+import IconWarn from 'react-icons/lib/fa/exclamation-triangle'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+
+import { getPlayer, getText } from 'reducers/race'
 
 const statuses = {
   waiting: {
@@ -16,7 +21,7 @@ const statuses = {
     color: 'red',
   },
   finished: {
-    icon: <IconWaiting />,
+    icon: <IconFinished />,
     text: 'Finished',
     color: 'blue',
   },
@@ -35,37 +40,64 @@ const Container = styled.div`
   text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
 `
 
-const Info = styled.div`
-  padding: 0 10px;
-  text-transform: uppercase;
+const Right = styled.div`
+  margin-left: auto;
   display: flex;
-  align-items: center;
 `
 
-const Status = Info.extend`
-  background: ${p => p.theme[statuses[p.status].color]};
-  font-weight: bold;
+const Info = styled.div`
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  background-color: ${p => (p.dark ? 'rgba(0, 0, 0, 0.1)' : '')};
+  color: ${p => (p.color ? p.theme[p.color] : '')};
 
   > * + * {
     margin-left: 5px;
   }
 `
 
+const Status = Info.extend`
+  background: ${p => p.theme[statuses[p.status].color]};
+  text-transform: uppercase;
+  font-weight: bold;
+`
+
 @connect(state => ({
+  player: getPlayer(state),
+  text: getText(state),
   isStarted: state.race.get('isStarted'),
   isFinished: state.race.get('isFinished'),
 }))
 class StatusBar extends PureComponent {
   render() {
-    const { isStarted, isFinished } = this.props
-    const status = isStarted ? 'recording' : isFinished ? 'finished' : 'waiting'
+    const { children, isStarted, isFinished, player, text } = this.props
+    const wrongWordsCount = player.get('wrongWordsCount')
+    const correctionsCount = player.get('corrections')
+    const status = isFinished ? 'finished' : isStarted ? 'recording' : 'waiting'
     return (
       <Container>
         <Status status={status}>
           {statuses[status].icon}
           <span>{statuses[status].text}</span>
         </Status>
-        <Info>{'L5'}</Info>
+        <Info>{children}</Info>
+        <Info dark>{`L${player.get('line') + 1}/${text.get('linesCount')}`}</Info>
+        <Right>
+          {correctionsCount ? (
+            <Info color="orange">
+              <IconWarn />
+              <span>{correctionsCount}</span>
+            </Info>
+          ) : null}
+          {wrongWordsCount ? (
+            <Info color="red" dark>
+              <IconWrong />
+
+              <span>{wrongWordsCount}</span>
+            </Info>
+          ) : null}
+        </Right>
       </Container>
     )
   }
