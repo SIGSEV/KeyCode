@@ -1,13 +1,16 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import { goBack } from 'react-router-redux'
 import Star from 'react-icons/lib/go/star'
 import Trash from 'react-icons/lib/go/trashcan'
+import IconLeft from 'react-icons/lib/fa/angle-left'
 
 import { getPlayer, getText, startRace, stopRace, resetRace } from 'reducers/race'
 import { starText, deleteText } from 'actions/text'
 import { saveRace } from 'actions/race'
 
+import Button from 'components/Button'
 import LanguageDot from 'components/LanguageDot'
 import TypeWriter from 'components/TypeWriter'
 import Typematrix from 'components/Typematrix'
@@ -15,54 +18,39 @@ import Chronos from 'components/Chronos'
 import ProgressBar from 'components/ProgressBar'
 import FinishBoard from 'components/FinishBoard'
 
-const Wrapper = styled.div`
-  max-width: 860px;
-  margin: 0 auto;
-`
-
 const Container = styled.div`
   color: ${p => p.theme.darkGrey00};
-  font-size: 18px;
-  line-height: 24px;
+  background: ${p => p.theme.lightgrey02};
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  margin: 0 -2px;
-  padding: 0 2px;
   position: relative;
+  margin: -40px;
 `
 
-const GameLayer = styled.div``
-
-const GameHeader = styled.div`
+const RaceHeader = styled.div`
+  user-select: none;
+  background: ${p => p.theme.darkGrey00};
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  color: white;
+  text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
 `
 
-const GameHeaderRight = styled.div`
-  margin-left: auto;
+const RaceTitle = styled.h1`
+  padding-right: 10px;
 `
 
-const RaceTitle = styled.div`
+const RaceContent = styled.div`
+  flex-grow: 1;
   display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  font-size: 2rem;
-  svg {
-    cursor: pointer;
-  }
+`
 
-  .left {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    > * + * {
-      margin-left: 0.5rem;
-    }
-  }
-
-  > * + * {
-    margin-left: 1rem;
-  }
+const RaceInfos = styled.div`
+  flex-grow: 1;
+  padding: 20px;
 `
 
 @connect(
@@ -87,6 +75,7 @@ const RaceTitle = styled.div`
     stopRace,
     resetRace,
     saveRace,
+    goBack,
   },
 )
 class Race extends PureComponent {
@@ -128,9 +117,9 @@ class Race extends PureComponent {
       startRace,
       starText,
       deleteText,
+      goBack,
     } = this.props
 
-    const typedChar = player.get('typedChar')
     const typedWordsCount = player.get('typedWordsCount')
     const totalWords = text.get('wordsCount')
 
@@ -140,41 +129,55 @@ class Race extends PureComponent {
     const canEdit = userId === authorID || isAdmin
 
     return (
-      <Wrapper>
-        <Container>
-          <GameLayer isFinished={isFinished}>
-            <RaceTitle>
-              <span>{title}</span>
-              <LanguageDot type={language} size="1rem" />
-              <div className="left">
-                <span>{stars}</span>
-                <Star
-                  onClick={() => userId && starText(id)}
-                  style={{ color: hasStarred ? '#ffb401' : 'lightgrey' }}
-                />
-                {canEdit && <Trash onClick={() => deleteText(id)} />}
-              </div>
-            </RaceTitle>
-            <GameHeader>
-              <Typematrix activeChar={typedChar} />
-              <GameHeaderRight>
-                <Chronos
-                  seconds={1}
-                  isRunning={isStarted && !isFinished}
-                  onFinish={this.handleStop}
-                  ref={n => (this._chronos = n)}
-                />
-              </GameHeaderRight>
-            </GameHeader>
+      <Container>
+        <RaceHeader>
+          <Button smallPad onClick={goBack}>
+            <IconLeft />
+            {'Back'}
+          </Button>
 
-            <ProgressBar progress={progress} />
+          <RaceTitle>{title}</RaceTitle>
+        </RaceHeader>
+        <RaceContent>
+          <TypeWriter isDisabled={isFinished} onStart={startRace} onFinish={this.handleStop} />
+          <RaceInfos>
+            <span>{title}</span>
+          </RaceInfos>
+        </RaceContent>
+        <FinishBoard />
+      </Container>
+    )
+    return (
+      <Container>
+        <GameLayer isFinished={isFinished}>
+          <RaceTitle>
+            <span>{title}</span>
+            <LanguageDot type={language} size="1rem" />
+            <div className="left">
+              <span>{stars}</span>
+              <Star
+                onClick={() => (userId ? starText(id) : void 0)}
+                style={{ color: hasStarred ? '#ffb401' : 'lightgrey' }}
+              />
+            </div>
+          </RaceTitle>
 
-            <TypeWriter isDisabled={isFinished} onStart={startRace} onFinish={this.handleStop} />
-          </GameLayer>
+          <GameHeader>
+            <GameHeaderRight>
+              <Chronos
+                seconds={1}
+                isRunning={isStarted && !isFinished}
+                onFinish={this.handleStop}
+                ref={n => (this._chronos = n)}
+              />
+            </GameHeaderRight>
+          </GameHeader>
 
-          <FinishBoard />
-        </Container>
-      </Wrapper>
+          <TypeWriter isDisabled={isFinished} onStart={startRace} onFinish={this.handleStop} />
+        </GameLayer>
+
+        <FinishBoard />
+      </Container>
     )
   }
 }

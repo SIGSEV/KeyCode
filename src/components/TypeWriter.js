@@ -7,8 +7,13 @@ import { getPlayer, getText, typeChar, goNextWord, typeBackspace } from 'reducer
 const Container = styled.div`
   position: relative;
   font-family: monospace;
+  background: white;
+  padding: 0 3px;
+  font-size: 16px;
+  line-height: 24px;
   user-select: none;
-  min-height: 400px;
+  width: 600px;
+  overflow: hidden;
 
   &:hover {
     cursor: ${p => (p.isFocused ? 'default' : 'text')};

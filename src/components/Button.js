@@ -61,7 +61,7 @@ const Link = stylize(RouterLink)
 const Wrapper = styled.div`
   display: flex;
   height: 40px;
-  padding: 0 20px;
+  padding: ${p => (p.smallPad ? '0 5px' : '0 20px')};
   align-items: center;
   border: 1px dashed transparent;
   font-weight: bold;
@@ -159,6 +159,7 @@ class Button extends PureComponent {
       onClick,
       action,
       isLoading: propsIsLoading,
+      smallPad,
       ...props
     } = this.props
 
@@ -176,7 +177,10 @@ class Button extends PureComponent {
         }}
       >
         {m => (
-          <Wrapper style={{ transform: `translate3d(${m.offset}%, 0, 0)`, opacity: m.opacity }}>
+          <Wrapper
+            smallPad={smallPad}
+            style={{ transform: `translate3d(${m.offset}%, 0, 0)`, opacity: m.opacity }}
+          >
             {children}
           </Wrapper>
         )}

@@ -33,6 +33,8 @@ const AppContainer = styled.div`
 const Main = styled.div`
   padding: 40px;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
   position: relative;
 `
 
@@ -40,7 +42,8 @@ const Main = styled.div`
 @connect(
   (state, props) => ({
     hasModal: hasModal(state),
-    showFooter: !props.location.pathname.startsWith('/race/'),
+    showHeader: !props.location.pathname.startsWith('/r/'),
+    showFooter: !props.location.pathname.startsWith('/r/'),
   }),
   null,
   null,
@@ -50,7 +53,7 @@ const Main = styled.div`
 )
 class App extends Component {
   render() {
-    const { hasModal, showFooter } = this.props
+    const { hasModal, showFooter, showHeader } = this.props
     return (
       <Motion
         style={{
@@ -67,7 +70,7 @@ class App extends Component {
             }}
           >
             <PreventRetardedSize />
-            <Header />
+            {showHeader && <Header />}
             <Main>
               <Switch>{routes.map(route => <Route key={route.path} {...route} />)}</Switch>
             </Main>
