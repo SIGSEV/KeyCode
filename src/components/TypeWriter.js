@@ -168,6 +168,10 @@ class TypeWriter extends PureComponent {
       return
     }
 
+    if (!isStarted) {
+      onStart()
+    }
+
     const rawText = text.get('raw')
     const charToType = rawText[player.get('cursor')] || ''
     const cursor = player.get('cursor')
@@ -177,14 +181,15 @@ class TypeWriter extends PureComponent {
       return goNextWord()
     }
 
-    // we are at the end of the word
-    if (!charToType.trim()) {
-      const isCorrectTrigger = char === ' '
-      return goNextWord(isCorrectTrigger)
+    const isEndOfWord = !charToType.trim()
+    const hasTypedSpace = char === ' '
+
+    if (isEndOfWord) {
+      return goNextWord(hasTypedSpace)
     }
 
-    if (!isStarted) {
-      onStart()
+    if (hasTypedSpace && !isEndOfWord) {
+      return goNextWord(false)
     }
 
     typeChar(char)
