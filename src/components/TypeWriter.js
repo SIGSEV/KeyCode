@@ -149,10 +149,13 @@ class TypeWriter extends PureComponent {
     }
 
     if (e.which === 13) {
-      if (!isStarted) {
-        onStart()
+      const charToType = this.getCharToType().trim()
+      if (!charToType) {
+        if (!isStarted) {
+          onStart()
+        }
+        goNextWord()
       }
-      goNextWord()
     }
 
     if (e.which === 8) {
@@ -173,7 +176,7 @@ class TypeWriter extends PureComponent {
     }
 
     const rawText = text.get('raw')
-    const charToType = rawText[player.get('cursor')] || ''
+    const charToType = this.getCharToType()
     const cursor = player.get('cursor')
 
     if (cursor === rawText.length - 1) {
@@ -188,11 +191,13 @@ class TypeWriter extends PureComponent {
       return goNextWord(hasTypedSpace)
     }
 
-    if (hasTypedSpace && !isEndOfWord) {
-      return goNextWord(false)
-    }
-
     typeChar(char)
+  }
+
+  getCharToType = () => {
+    const { text, player } = this.props
+    const rawText = text.get('raw')
+    return rawText[player.get('cursor')] || ''
   }
 
   render() {
