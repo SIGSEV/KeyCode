@@ -6,6 +6,7 @@ import compression from 'compression'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 import { scheduleJob } from 'node-schedule'
+import notifier from 'node-notifier'
 
 import 'api/init'
 
@@ -52,6 +53,9 @@ app.use(setUser(), render(stats))
 
 server.listen(port, 'localhost', () => {
   console.log(`[server] listening on port ${port} - ${__ENV__}`) // eslint-disable-line no-console
+  if (__DEV__) {
+    notifier.notify({ title: 'Keycode', message: 'Server started' })
+  }
 })
 
 handleIO(io)
