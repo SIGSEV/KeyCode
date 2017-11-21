@@ -17,7 +17,7 @@ const Container = styled.div`
   position: relative;
   font-family: monospace;
   background: white;
-  padding: 0 3px;
+  padding: 10px;
   font-size: 16px;
   line-height: 24px;
   user-select: none;
