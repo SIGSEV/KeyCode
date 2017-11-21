@@ -171,7 +171,7 @@ function LeaderEntry({ leader, num }) {
     <LeaderEntryContainer>
       <NumContainer>{num}</NumContainer>
       <img src={leader.getIn(['user', 'avatar'])} width={30} />
-      <Z style={{ marginLeft: 'auto' }}>{leader.get('wpm')}</Z>
+      <Z style={{ marginLeft: 'auto', width: 60 }}>{leader.get('score')}</Z>
     </LeaderEntryContainer>
   )
 }
