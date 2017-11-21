@@ -112,6 +112,13 @@ class TypeWriter extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { isFinished: willFinish } = nextProps
+    const { isFinished } = this.props
+
+    if (!isFinished && willFinish) {
+      this._recording = false
+    }
+
     if (nextProps.player.get('typedWordsCount') === nextProps.text.get('wordsCount')) {
       this.props.onFinish()
     }
@@ -154,6 +161,7 @@ class TypeWriter extends PureComponent {
         if (!isStarted) {
           onStart()
         }
+        this.logChar('\n')
         goNextWord()
       }
     }
@@ -180,6 +188,7 @@ class TypeWriter extends PureComponent {
     const cursor = player.get('cursor')
 
     if (cursor === rawText.length - 1) {
+      this.logChar(char)
       typeChar(char)
       return goNextWord()
     }
@@ -188,10 +197,25 @@ class TypeWriter extends PureComponent {
     const hasTypedSpace = char === ' '
 
     if (isEndOfWord) {
+      this.logChar(' ')
       return goNextWord(hasTypedSpace)
     }
 
+    this.logChar(char)
     typeChar(char)
+  }
+
+  logChar(char) {
+    if (!this._recording) {
+      this._recording = true
+      this._logStart = Date.now()
+      this._log = []
+    }
+    this._log.push([char.charCodeAt(0), Date.now() - this._logStart])
+  }
+
+  getCompressedLog() {
+    return this._log.map(e => e.join('|')).join(' ')
   }
 
   getCharToType = () => {
@@ -202,7 +226,9 @@ class TypeWriter extends PureComponent {
 
   render() {
     const { isFocused } = this.state
-    const { player, text, isStarted, chronos } = this.props
+    const { player, text, isStarted, chronos, innerRef } = this.props
+
+    innerRef(this)
 
     const cursor = player.get('cursor')
     const scrollY = player.get('scrollY')
