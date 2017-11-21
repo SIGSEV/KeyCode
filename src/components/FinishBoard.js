@@ -86,7 +86,6 @@ class FinishBoard extends PureComponent {
       window.requestAnimationFrame(() => {
         this.props.openModal('finishBoard')
         this.setState({ showScore: true })
-        this._restartBtn.focus()
       })
     }
     if (!this.props.isFinished && prevProps.isFinished) {
@@ -124,7 +123,7 @@ class FinishBoard extends PureComponent {
             </Stat>
           </StatsContainer>
 
-          <Button accent setRef={n => (this._restartBtn = n)} onClick={onRestart}>
+          <Button accent onClick={onRestart}>
             {'Restart'}
           </Button>
         </Wrapper>
