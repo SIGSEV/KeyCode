@@ -25,7 +25,7 @@ const RaceTitle = styled.h1`
   align-items: center;
 
   > * + * {
-    margin-left: 5px;
+    margin-left: 10px;
   }
 `
 
@@ -33,6 +33,12 @@ const RaceMetas = styled.div`
   font-size: 12px;
   display: flex;
   margin-left: -5px;
+
+  > *:first-child,
+  > *:last-child {
+    cursor: pointer;
+  }
+
   > * + * {
     margin-left: 5px;
   }
@@ -106,7 +112,7 @@ class RaceInfos extends PureComponent {
         <div>
           <RaceTitle>
             <span>{race.get('title')}</span>
-            <LanguageDot type={language} style={{ marginTop: 3 }} />
+            <LanguageDot type={language} size="15px" style={{ marginTop: 3 }} />
           </RaceTitle>
 
           <RaceMetas>

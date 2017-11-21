@@ -234,3 +234,5 @@ export const getTextColor = hex => {
   const [r, g, b] = [...Array(3).keys()].map(i => parseInt(c.substr(i * 2, 2), 16))
   return 0.2126 * r + 0.7152 * g + 0.0722 * b >= 165 ? 'black' : 'white'
 }
+
+export const getTextRGB = hex => (getTextColor(hex) === 'black' ? '0, 0, 0' : '255, 255, 255')
