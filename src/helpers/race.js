@@ -18,6 +18,7 @@ export function initPlayer() {
     time: 0,
     validKeys: {},
     wrongKeys: {},
+    history: '',
   })
 }
 

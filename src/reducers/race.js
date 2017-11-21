@@ -13,6 +13,7 @@ const initialState = fromJS({
   rates: {},
   isStarted: false,
   isFinished: false,
+  startAt: null,
   players: [],
 })
 
@@ -41,7 +42,7 @@ const handlers = {
       }),
     )
   },
-  RACE_START: state => state.set('isStarted', true),
+  RACE_START: state => state.set('isStarted', true).set('startAt', Date.now()),
   RACE_STOP: (state, { payload: time }) =>
     state.set('isFinished', true).setIn(['players', 0, 'time'], time),
   RACE_RESET: state =>
@@ -58,11 +59,14 @@ const handlers = {
     const typedWord = p.get('typedWord')
     const newTypedWord = `${typedWord}${char}`
     const charToType = state.getIn(['text', 'raw'])[cursor]
+    const charCode = char.charCodeAt()
+    const charTime = Date.now() - state.get('startAt')
 
     p = p
       .update(charToType === char ? 'validKeys' : 'wrongKeys', keys =>
-        keys.set(char.charCodeAt(), keys.get(char.charCodeAt(), 0) + 1),
+        keys.set(charCode, keys.get(charCode, 0) + 1),
       )
+      .update('history', h => `${h ? `${h},` : ''}${charTime}|${charCode}`)
       .set('typedChar', char)
       .set('cursor', cursor + 1)
       .set('typedWord', newTypedWord)
@@ -78,8 +82,10 @@ const handlers = {
     })
   },
   RACE_NEXT_WORD: (state, { payload: isCorrectTrigger = true }) => {
+    const charTime = Date.now() - state.get('startAt')
     let chunks = state.getIn(['text', 'chunks'])
-    let p = state.getIn(['players', 0])
+    let p = state.getIn(['players', 0]).update('history', h => `${h ? `${h},` : ''}${charTime}|0`)
+
     const maxDisplayedLines = p.get('maxDisplayedLines')
     const wordIndex = p.get('wordIndex')
     const typedWord = p.get('typedWord')
@@ -134,12 +140,16 @@ const handlers = {
     if (cursor === word.get('start')) {
       return state
     }
+
     const typedWord = p.get('typedWord')
     const newTypedWord = typedWord.substr(0, typedWord.length - 1)
+    const charTime = Date.now() - state.get('startAt')
+
     p = p
       .set('cursor', cursor - 1)
       .set('typedWord', newTypedWord)
       .set('corrections', p.get('corrections') + 1)
+      .update('history', h => `${h ? `${h},` : ''}${charTime}|-1`)
 
     p = adjustScrollX(p, state.getIn(['text', 'chunks']))
 
