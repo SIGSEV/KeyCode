@@ -162,8 +162,8 @@ class TypeWriter extends PureComponent {
         if (!isStarted) {
           onStart()
         }
-        this.logChar('\n')
-        // TODO can we remove this?
+
+        this.logChar(0)
         goNextWord()
       }
     }
