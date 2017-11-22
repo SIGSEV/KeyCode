@@ -94,19 +94,19 @@ class StatusBar extends PureComponent {
         <Info>{children}</Info>
         <Info dark>{`L${player.get('line') + 1}/${text.get('linesCount')}`}</Info>
         <Right>
-          {correctionsCount ? (
+          {!!correctionsCount && (
             <Info color="orange">
               <IconWarn />
               <span>{correctionsCount}</span>
             </Info>
-          ) : null}
-          {wrongWordsCount ? (
+          )}
+
+          {!!wrongWordsCount && (
             <Info color="red" dark>
               <IconWrong />
-
               <span>{wrongWordsCount}</span>
             </Info>
-          ) : null}
+          )}
         </Right>
       </Container>
     )
