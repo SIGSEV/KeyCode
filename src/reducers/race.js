@@ -20,7 +20,7 @@ const initialState = fromJS({
   isGhosting: false,
 })
 
-const DISPLAYED_COLS = 80
+const DISPLAYED_COLS = 120
 
 function adjustScrollX(p, chunks) {
   const word = chunks.get(p.get('wordIndex'))
