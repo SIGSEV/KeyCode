@@ -8,6 +8,8 @@ import { AppContainer } from 'react-hot-loader'
 import createStore from 'store'
 import immutablifyState from 'immutablify-state'
 import handleSocket from 'handle-socket'
+import { ghostBuster } from 'actions/race'
+import { resetRace } from 'reducers/race'
 
 import App from 'components/App'
 
@@ -15,6 +17,11 @@ const history = createHistory()
 let socket = io.connect(__URL__)
 const state = immutablifyState(window.__INITIAL_STATE__)
 const store = createStore(history, state)
+
+history.listen(() => {
+  ghostBuster()
+  store.dispatch(resetRace())
+})
 
 handleSocket(socket, store)
 

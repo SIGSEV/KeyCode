@@ -59,6 +59,10 @@ export function saveRace() {
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms))
 
+let ghostBustered = false
+
+export const ghostBuster = () => (ghostBustered = true)
+
 export function ghostRace(log) {
   return async (dispatch, getState) => {
     const { race } = getState()
@@ -66,11 +70,17 @@ export function ghostRace(log) {
       return
     }
 
+    ghostBustered = false
+
     dispatch(setGhost(true))
 
     const splits = log.split(' ')
 
     for (let i = 0; i < splits.length; ++i) {
+      if (ghostBustered) {
+        break
+      }
+
       const [charCode, time] = splits[i].split('|').map(o => Number(o))
       if (charCode === -1) {
         dispatch(typeBackspace())
@@ -81,6 +91,10 @@ export function ghostRace(log) {
       }
 
       await wait(time)
+    }
+
+    if (ghostBustered) {
+      return
     }
 
     dispatch(setFinished())
