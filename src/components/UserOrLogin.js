@@ -6,10 +6,11 @@ import { getPayload } from 'helpers/race'
 import Button from 'components/Button'
 import UserPic from 'components/UserPic'
 
-@connect(({ user, race, router: { location: { pathname } } }) => ({ user, race, pathname }))
+@connect(({ user, race, router: { location } }) => ({ user, race, location }))
 class UserOrLogin extends Component {
   login = () => {
-    const { race, pathname } = this.props
+    const { race, location } = this.props
+    const pathname = location ? location.pathname : '/'
     const redirect = encodeURIComponent(pathname)
     const save = getPayload(race)
     const savePayload = save.time ? `&save=${JSON.stringify(save)}` : ''
