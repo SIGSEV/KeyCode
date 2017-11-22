@@ -31,9 +31,10 @@ const stylize = El => styled(({ accent, push, action, grey, minWait, ...props })
   position: relative;
   user-select: none;
   text-decoration: none;
+  cursor: pointer;
 
   &:focus > div {
-    border-color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.7);
   }
 
   &:after {
@@ -46,11 +47,11 @@ const stylize = El => styled(({ accent, push, action, grey, minWait, ...props })
   }
 
   &:hover:not(:disabled):after {
-    background: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.05);
   }
 
   &:active:not(:disabled):after {
-    background: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `
 /* eslint-enable no-unused-vars */
@@ -60,7 +61,7 @@ const Link = stylize(RouterLink)
 
 const Wrapper = styled.div`
   display: flex;
-  height: 40px;
+  height: ${p => (p.noHeight ? 'initial' : '40px')};
   padding: ${p => (p.smallPad ? '0 5px' : '0 20px')};
   align-items: center;
   border: 1px dashed transparent;
@@ -107,6 +108,7 @@ class Button extends PureComponent {
 
   static defaultProps = {
     minWait: 500,
+    hasloader: 1,
   }
 
   state = {
@@ -130,8 +132,11 @@ class Button extends PureComponent {
   }
 
   handleAction = async () => {
-    const { action, to, push, minWait } = this.props
-    this.safeSetState({ isLoading: true })
+    const { action, to, push, hasloader, minWait } = this.props
+    if (hasloader) {
+      this.safeSetState({ isLoading: true })
+    }
+
     try {
       const before = performance.now()
       await action()
@@ -160,6 +165,7 @@ class Button extends PureComponent {
       action,
       isLoading: propsIsLoading,
       smallPad,
+      noHeight,
       ...props
     } = this.props
 
@@ -179,6 +185,7 @@ class Button extends PureComponent {
         {m => (
           <Wrapper
             smallPad={smallPad}
+            noHeight={noHeight}
             style={{ transform: `translate3d(${m.offset}%, 0, 0)`, opacity: m.opacity }}
           >
             {children}
