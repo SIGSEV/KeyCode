@@ -304,7 +304,7 @@ class TypeWriter extends PureComponent {
                     chunk.isCursor ? (
                       <Cursor
                         key={i}
-                        isBlinking={!isStarted && isFocused}
+                        isBlinking={!isStarted && isFocused && !isGhosting}
                         isDisabled={!isFocused && !isGhosting}
                       >
                         {chunk.content}
