@@ -132,6 +132,10 @@ class Pricing extends PureComponent {
                 <IconCheck />
                 <span>{'Ability to remove results'}</span>
               </Feature>
+              <Feature>
+                <IconCheck />
+                <span>{'2 concurrent screens'}</span>
+              </Feature>
             </ChoiceContent>
             <ChoiceFooter>
               <Button accent>{'Upgrade'}</Button>
@@ -157,6 +161,10 @@ class Pricing extends PureComponent {
               <Feature>
                 <IconCheck />
                 <span>{'Gold badges'}</span>
+              </Feature>
+              <Feature>
+                <IconCheck />
+                <span>{'4 concurrent screens'}</span>
               </Feature>
             </ChoiceContent>
             <ChoiceFooter>
