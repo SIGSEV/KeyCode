@@ -6,7 +6,7 @@ import { push } from 'react-router-redux'
 import { getPlayer, getText, startRace, stopRace, resetRace } from 'reducers/race'
 import { saveRace } from 'actions/race'
 
-import UserPic from 'components/UserPic'
+import UserOrLogin from 'components/UserOrLogin'
 import Button from 'components/Button'
 import TypeWriter from 'components/TypeWriter'
 import Chronos from 'components/Chronos'
@@ -49,9 +49,6 @@ const RaceContent = styled.div`
 
 @connect(
   state => ({
-    user: state.user,
-    userId: state.user && state.user._id,
-    isAdmin: state.user && state.user.admin,
     player: getPlayer(state),
     text: getText(state),
     language: state.race.get('language').toLowerCase(),
@@ -92,7 +89,7 @@ class Race extends PureComponent {
   }
 
   render() {
-    const { isStarted, isFinished, startRace, language, title, user, push } = this.props
+    const { isStarted, isFinished, startRace, language, title, push } = this.props
 
     const chronos = (
       <Chronos
@@ -111,7 +108,7 @@ class Race extends PureComponent {
             <Button onClick={() => push(`/l/${language}`)}>{language}</Button>
           </div>
           <span className="title">{title}</span>
-          <UserPic to="/u/toto" pic={user.avatar} fuckradius="yes" />
+          <UserOrLogin fuckradius="definitely" />
         </RaceHeader>
 
         <RaceContent>

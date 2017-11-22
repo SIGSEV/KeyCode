@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react'
-import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 
-import { getPayload } from 'helpers/race'
-import Button from 'components/Button'
 import Link from 'components/Link'
-import UserPic from 'components/UserPic'
+import UserOrLogin from 'components/UserOrLogin'
 
 const Container = styled.div`
   display: flex;
@@ -46,21 +43,8 @@ const Bold = styled.div`
 `
 
 @withRouter
-@connect(({ user, race }) => ({ user, race }))
 class Header extends PureComponent {
-  login = () => {
-    const { race, location: { pathname } } = this.props
-    const redirect = encodeURIComponent(pathname)
-    const save = getPayload(race)
-    const savePayload = save.time ? `&save=${JSON.stringify(save)}` : ''
-
-    window.location.href = `${__APIURL__}/auth?redirect=${redirect}${savePayload}`
-    return new Promise(resolve => setTimeout(resolve, 10e3))
-  }
-
   render() {
-    const { user } = this.props
-
     return (
       <Container>
         <Link to="/">
@@ -69,11 +53,7 @@ class Header extends PureComponent {
         <HeaderRight>
           <Link to="/leaderboard">{'LeaderBoard'}</Link>
           <Link to="/pricing">{'Pricing'}</Link>
-          {user ? (
-            <UserPic to="/u/toto" pic={user.avatar} />
-          ) : (
-            <Button action={this.login}>{'Login with GitHub'}</Button>
-          )}
+          <UserOrLogin />
         </HeaderRight>
       </Container>
     )
