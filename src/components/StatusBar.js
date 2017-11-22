@@ -8,6 +8,7 @@ import IconGhost from 'react-icons/lib/md/airplay'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 
+import { getTextColor } from 'helpers/colors'
 import { getPlayer, getText } from 'reducers/race'
 
 const statuses = {
@@ -64,7 +65,8 @@ const Info = styled.div`
 `
 
 const Status = Info.extend`
-  background: ${p => p.theme[statuses[p.status].color]};
+  background-color: ${p => p.theme[statuses[p.status].color]};
+  color: ${p => getTextColor(p.theme[statuses[p.status].color])};
   text-transform: uppercase;
   font-weight: bold;
 `
