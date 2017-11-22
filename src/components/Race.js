@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { goBack } from 'react-router-redux'
-import IconLeft from 'react-icons/lib/fa/angle-left'
+import { push } from 'react-router-redux'
 
 import { getPlayer, getText, startRace, stopRace, resetRace } from 'reducers/race'
 import { saveRace } from 'actions/race'
 
+import UserPic from 'components/UserPic'
 import Button from 'components/Button'
 import TypeWriter from 'components/TypeWriter'
 import Chronos from 'components/Chronos'
@@ -35,6 +35,11 @@ const RaceHeader = styled.div`
   justify-content: space-between;
   color: white;
   text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
+
+  .title {
+    text-transform: uppercase;
+    font-size: 10px;
+  }
 `
 
 const RaceContent = styled.div`
@@ -44,10 +49,13 @@ const RaceContent = styled.div`
 
 @connect(
   state => ({
+    user: state.user,
     userId: state.user && state.user._id,
     isAdmin: state.user && state.user.admin,
     player: getPlayer(state),
     text: getText(state),
+    language: state.race.get('language').toLowerCase(),
+    title: state.race.get('title'),
     isStarted: state.race.get('isStarted'),
     isFinished: state.race.get('isFinished'),
   }),
@@ -56,7 +64,7 @@ const RaceContent = styled.div`
     stopRace,
     resetRace,
     saveRace,
-    goBack,
+    push,
   },
 )
 class Race extends PureComponent {
@@ -84,7 +92,7 @@ class Race extends PureComponent {
   }
 
   render() {
-    const { isStarted, isFinished, startRace, goBack } = this.props
+    const { isStarted, isFinished, startRace, language, title, user, push } = this.props
 
     const chronos = (
       <Chronos
@@ -98,10 +106,12 @@ class Race extends PureComponent {
     return (
       <Container>
         <RaceHeader>
-          <Button smallPad onClick={goBack}>
-            <IconLeft />
-            {'Back'}
-          </Button>
+          <div>
+            <Button onClick={() => push('/')}>{'/'}</Button>
+            <Button onClick={() => push(`/l/${language}`)}>{language}</Button>
+          </div>
+          <span className="title">{title}</span>
+          <UserPic to="/u/toto" pic={user.avatar} fuckradius="yes" />
         </RaceHeader>
 
         <RaceContent>

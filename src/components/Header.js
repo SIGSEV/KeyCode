@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { Link as RouterLink, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 import { getPayload } from 'helpers/race'
 import Button from 'components/Button'
 import Link from 'components/Link'
+import UserPic from 'components/UserPic'
 
 const Container = styled.div`
   display: flex;
@@ -42,20 +43,6 @@ const Bold = styled.div`
   font-size: 20px;
   color: ${p => p.theme.darkGrey00};
   user-select: none;
-`
-
-const UserPic = styled(RouterLink)`
-  background-image: url(${p => p.pic});
-  background-size: cover;
-  width: 46px;
-  height: 46px;
-  border-radius: 5px;
-  cursor: pointer;
-  color: ${p => p.theme.link};
-
-  &:focus {
-    outline: 1px dashed;
-  }
 `
 
 @withRouter
