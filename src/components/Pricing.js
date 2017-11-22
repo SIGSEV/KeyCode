@@ -28,7 +28,7 @@ const Choices = styled.div`
 `
 
 const Choice = styled.div`
-  height: 330px;
+  height: 400px;
   width: ${p => (p.isBig ? 300 : 250)}px;
   border-radius: 8px;
   border: 3px solid ${p => p.theme.darkGrey02};
