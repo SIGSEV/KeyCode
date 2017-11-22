@@ -58,7 +58,9 @@ export const updateUserRank = async (user, score) => {
     await removeUserFromOrg(user.name, user.currentOrg)
   }
 
-  await addUserToOrg(user, org)
+  if (__PROD__) {
+    await addUserToOrg(user, org)
+  }
 
   user.currentOrg = org
   await user.save()
