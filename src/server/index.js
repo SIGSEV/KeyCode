@@ -54,7 +54,7 @@ app.use(setUser(), render(stats))
 server.listen(port, 'localhost', () => {
   console.log(`[server] listening on port ${port} - ${__ENV__}`) // eslint-disable-line no-console
   if (__DEV__) {
-    notifier.notify({ title: 'Keycode', message: 'Server started' })
+    notifier.notify({ title: 'KeyCode', message: 'Server started' })
   }
 })
 
