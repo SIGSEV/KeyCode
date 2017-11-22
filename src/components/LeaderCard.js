@@ -114,7 +114,7 @@ class LeaderCard extends Component {
         lang={lowerMap[leader.language]}
         rank={rank}
         disableOpacity={disableOpacity}
-      >
+      >,
         <div className="rank">
           <span>{rank + 1}</span>
           <img src={leader.user.avatar} width={30} />

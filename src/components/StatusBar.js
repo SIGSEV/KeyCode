@@ -4,6 +4,7 @@ import IconFinished from 'react-icons/lib/fa/flag-checkered'
 import IconWaiting from 'react-icons/lib/md/timer'
 import IconWrong from 'react-icons/lib/fa/close'
 import IconWarn from 'react-icons/lib/fa/exclamation-triangle'
+import IconGhost from 'react-icons/lib/md/airplay'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 
@@ -24,6 +25,11 @@ const statuses = {
     icon: <IconFinished />,
     text: 'Finished',
     color: 'blue',
+  },
+  ghosting: {
+    icon: <IconGhost />,
+    text: 'Ghosting',
+    color: 'green',
   },
 }
 
@@ -68,13 +74,17 @@ const Status = Info.extend`
   text: getText(state),
   isStarted: state.race.get('isStarted'),
   isFinished: state.race.get('isFinished'),
+  isGhosting: state.race.get('isGhosting'),
 }))
 class StatusBar extends PureComponent {
   render() {
-    const { children, isStarted, isFinished, player, text } = this.props
+    const { children, isStarted, isFinished, isGhosting, player, text } = this.props
     const wrongWordsCount = player.get('wrongWordsCount')
     const correctionsCount = player.get('corrections')
-    const status = isFinished ? 'finished' : isStarted ? 'recording' : 'waiting'
+    const status = isFinished
+      ? 'finished'
+      : isGhosting ? 'ghosting' : isStarted ? 'recording' : 'waiting'
+
     return (
       <Container>
         <Status status={status}>

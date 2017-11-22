@@ -18,6 +18,7 @@ export function initPlayer() {
     time: 0,
     validKeys: {},
     wrongKeys: {},
+    log: '',
   })
 }
 
@@ -30,12 +31,13 @@ export const getPayload = race => {
   // Assuming p[0] is always logged user
   const {
     id: textId,
-    players: [{ time, corrections, typedWordsCount, validKeys, wrongKeys, wrongWordsCount }],
+    players: [{ time, log, corrections, typedWordsCount, validKeys, wrongKeys, wrongWordsCount }],
   } = normal
 
   return {
     textId,
     time,
+    log,
     corrections,
     typedWordsCount,
     validKeys,

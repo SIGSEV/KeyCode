@@ -67,8 +67,13 @@ class Modal extends PureComponent {
   }
 
   handleClose = () => {
-    if (this.props.name) {
-      this.props.closeModal(this.props.name)
+    const { name, closeModal, onClose } = this.props
+    if (name) {
+      closeModal(name)
+    }
+
+    if (onClose) {
+      onClose()
     }
   }
 
@@ -79,6 +84,7 @@ class Modal extends PureComponent {
 
   render() {
     const { isOpened, title, children } = this.props
+
     return (
       <Mortal
         isOpened={isOpened}

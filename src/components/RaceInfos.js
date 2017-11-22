@@ -2,9 +2,12 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import IconStar from 'react-icons/lib/md/star'
+import IconReplay from 'react-icons/lib/md/replay'
 
 import { starText, deleteText } from 'actions/text'
+import { ghostRace } from 'actions/race'
 
+import Button from 'components/Button'
 import LanguageDot from 'components/LanguageDot'
 
 const Container = styled.div`
@@ -83,6 +86,7 @@ const RaceLeaderboard = styled.div``
   {
     starText,
     deleteText,
+    ghostRace,
   },
 )
 class RaceInfos extends PureComponent {
@@ -95,7 +99,7 @@ class RaceInfos extends PureComponent {
     }
   }
   render() {
-    const { userId, isAdmin, starText, race } = this.props
+    const { userId, isAdmin, starText, race, ghostRace } = this.props
 
     const author = race.get('author')
     const rates = race.get('rates')
@@ -142,7 +146,12 @@ class RaceInfos extends PureComponent {
         {leaders.size ? (
           <RaceLeaderboard>
             {leaders.map((leader, i) => (
-              <LeaderEntry key={leader.get('_id')} num={i + 1} leader={leader} />
+              <LeaderEntry
+                key={leader.get('_id')}
+                num={i + 1}
+                leader={leader}
+                ghostRace={ghostRace}
+              />
             ))}
           </RaceLeaderboard>
         ) : (
@@ -158,6 +167,10 @@ const LeaderEntryContainer = styled.div`
   align-items: center;
   background: white;
   padding: 5px;
+
+  > img + * {
+    margin-left: 1rem;
+  }
 `
 
 const Z = styled.div`
@@ -172,11 +185,16 @@ const NumContainer = Z.extend`
   font-weight: bolder;
 `
 
-function LeaderEntry({ leader, num }) {
+function LeaderEntry({ ghostRace, leader, num }) {
   return (
     <LeaderEntryContainer>
       <NumContainer>{num}</NumContainer>
       <img src={leader.getIn(['user', 'avatar'])} width={30} />
+      {leader.get('log') && (
+        <Button action={() => ghostRace(leader.get('log'))} smallPad noHeight hasloader={0}>
+          <IconReplay />
+        </Button>
+      )}
       <Z style={{ marginLeft: 'auto', width: 60 }}>{leader.get('score')}</Z>
     </LeaderEntryContainer>
   )

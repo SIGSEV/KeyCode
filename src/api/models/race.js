@@ -16,6 +16,7 @@ export default mongoose.model(
       time: Number,
       wpm: Number,
       score: Number,
+      log: String,
 
       corrections: Number,
       wrongWordsCount: Number,

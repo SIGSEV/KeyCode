@@ -95,6 +95,7 @@ export const saveRace = async (payload, user) => {
   const {
     textId,
     time,
+    log,
     corrections,
     typedWordsCount,
     validKeys,
@@ -121,6 +122,7 @@ export const saveRace = async (payload, user) => {
     text: text._id,
     user: user._id,
     time,
+    log,
     wpm,
     score,
     corrections,

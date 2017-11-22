@@ -21,7 +21,7 @@ const Container = styled.div`
   font-size: 16px;
   line-height: 24px;
   user-select: none;
-  width: 600px;
+  width: 800px;
   overflow: hidden;
 
   &:hover {
@@ -90,6 +90,7 @@ const Text = styled.span`
     text: getText(state),
     isStarted: state.race.get('isStarted'),
     isFinished: state.race.get('isFinished'),
+    isGhosting: state.race.get('isGhosting'),
   }),
   {
     typeChar,
@@ -149,9 +150,9 @@ class TypeWriter extends PureComponent {
   handleClick = () => this._input.focus()
 
   handleKeyDown = e => {
-    const { isFinished, isStarted, onStart, goNextWord, typeBackspace } = this.props
+    const { isFinished, isStarted, isGhosting, onStart, goNextWord, typeBackspace } = this.props
 
-    if (isFinished) {
+    if (isFinished || isGhosting) {
       return
     }
 
@@ -162,20 +163,32 @@ class TypeWriter extends PureComponent {
           onStart()
         }
         this.logChar('\n')
+        // TODO can we remove this?
         goNextWord()
       }
     }
 
     if (e.which === 8) {
+      this.logChar(-1)
       typeBackspace()
     }
   }
 
   handleChange = e => {
-    const { typeChar, isStarted, isFinished, text, player, onStart, goNextWord } = this.props
+    const {
+      typeChar,
+      isStarted,
+      isGhosting,
+      isFinished,
+      text,
+      player,
+      onStart,
+      goNextWord,
+    } = this.props
+
     const { value: char } = e.target
 
-    if (isFinished) {
+    if (isFinished || isGhosting) {
       return
     }
 
@@ -197,7 +210,7 @@ class TypeWriter extends PureComponent {
     const hasTypedSpace = char === ' '
 
     if (isEndOfWord) {
-      this.logChar(' ')
+      this.logChar(0)
       return goNextWord(hasTypedSpace)
     }
 
@@ -205,13 +218,22 @@ class TypeWriter extends PureComponent {
     typeChar(char)
   }
 
-  logChar(char) {
+  logChar = char => {
+    const { isGhosting } = this.props
+    if (isGhosting) {
+      return
+    }
+
     if (!this._recording) {
       this._recording = true
-      this._logStart = Date.now()
+      this._lastLog = null
       this._log = []
     }
-    this._log.push([char.charCodeAt(0), Date.now() - this._logStart])
+
+    const now = Date.now()
+    const spe = typeof char === 'number'
+    this._log.push([spe ? char : char.charCodeAt(0), this._lastLog ? now - this._lastLog : 0])
+    this._lastLog = now
   }
 
   getCompressedLog() {
@@ -226,7 +248,7 @@ class TypeWriter extends PureComponent {
 
   render() {
     const { isFocused } = this.state
-    const { player, text, isStarted, chronos, innerRef } = this.props
+    const { player, text, isGhosting, isStarted, chronos, innerRef } = this.props
 
     innerRef(this)
 
@@ -243,7 +265,7 @@ class TypeWriter extends PureComponent {
     return (
       <Container
         onClick={this.handleClick}
-        isFocused={isFocused}
+        isFocused={isFocused || isGhosting}
         innerRef={n => (this._container = n)}
       >
         {maxDisplayedLines
@@ -280,14 +302,18 @@ class TypeWriter extends PureComponent {
                 res = wordChunks.map(
                   (chunk, i) =>
                     chunk.isCursor ? (
-                      <Cursor key={i} isBlinking={!isStarted && isFocused} isDisabled={!isFocused}>
+                      <Cursor
+                        key={i}
+                        isBlinking={!isStarted && isFocused}
+                        isDisabled={!isFocused && !isGhosting}
+                      >
                         {chunk.content}
                       </Cursor>
                     ) : (
                       <Text
                         key={i}
                         isHardWrong={chunk.isWrong}
-                        isDisabled={!isFocused || i > cursorIndexInWord}
+                        isDisabled={(!isFocused && !isGhosting) || i > cursorIndexInWord}
                       >
                         {chunk.content}
                       </Text>
@@ -304,7 +330,7 @@ class TypeWriter extends PureComponent {
                 res = (
                   <Text
                     key={word.get('id')}
-                    isDisabled={!isFocused || i > wordIndex}
+                    isDisabled={(!isFocused && !isGhosting) || i > wordIndex}
                     isWrong={word.get('isWrong')}
                   >
                     {toDisplay}

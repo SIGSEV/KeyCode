@@ -69,7 +69,7 @@ const StatLabel = styled.div`
 @connect(
   state => ({
     player: getPlayer(state),
-    isFinished: state.race.get('isFinished'),
+    isFinished: !state.race.get('isGhosting') && state.race.get('isFinished'),
   }),
   {
     openModal,
@@ -82,14 +82,16 @@ class FinishBoard extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.isFinished && !prevProps.isFinished) {
+    const { isFinished, openModal, closeModal } = this.props
+    if (isFinished && !prevProps.isFinished) {
       window.requestAnimationFrame(() => {
-        this.props.openModal('finishBoard')
+        openModal('finishBoard')
         this.setState({ showScore: true })
       })
     }
-    if (!this.props.isFinished && prevProps.isFinished) {
-      this.props.closeModal('finishBoard')
+
+    if (!isFinished && prevProps.isFinished) {
+      closeModal('finishBoard')
     }
   }
 
@@ -100,7 +102,7 @@ class FinishBoard extends PureComponent {
     const stats = getStats(player)
 
     return (
-      <Modal name="finishBoard">
+      <Modal name="finishBoard" onClose={onRestart}>
         <Wrapper>
           <ScoreContainer style={{ height: 70 }}>
             {showScore && <Score score={stats.score} />}

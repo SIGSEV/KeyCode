@@ -11,10 +11,13 @@ const initialState = fromJS({
   author: null,
   stars: 0,
   rates: {},
-  isStarted: false,
-  isFinished: false,
   startAt: null,
   players: [],
+
+  // TODO tbh we should use a single "status" string, no?
+  isStarted: false,
+  isFinished: false,
+  isGhosting: false,
 })
 
 const DISPLAYED_COLS = 80
@@ -31,6 +34,7 @@ function adjustScrollX(p, chunks) {
 }
 
 const handlers = {
+  RACE_GHOST: state => state.set('isGhosting', true),
   RACE_INIT: (state, { payload }) => {
     const { raw, ...rest } = payload
 
@@ -43,14 +47,20 @@ const handlers = {
     )
   },
   RACE_START: state => state.set('isStarted', true).set('startAt', Date.now()),
-  RACE_STOP: (state, { payload: time }) =>
-    state.set('isFinished', true).setIn(['players', 0, 'time'], time),
+  RACE_SET_FINISHED: state => state.set('isFinished', true),
+  RACE_STOP: (state, { payload: { time, log } }) =>
+    state
+      .set('isFinished', true)
+      .setIn(['players', 0, 'time'], time)
+      .setIn(['players', 0, 'log'], log),
   RACE_RESET: state =>
     state
       .set('isStarted', false)
       .set('isFinished', false)
+      .set('isGhosting', false)
       .set('text', computeText(state.getIn(['text', 'raw'])))
-      .set('players', List([initPlayer()])),
+      .set('players', List([initPlayer()]))
+      .setIn(['players', 0, 'maxDisplayedLines'], state.getIn(['players', 0, 'maxDisplayedLines'])),
   RACE_TYPE_CHAR: (state, { payload: char }) => {
     let p = state.getIn(['players', 0])
 
@@ -167,6 +177,8 @@ export default handleActions(handlers, initialState)
 
 // Actions
 
+export const setFinished = createAction('RACE_SET_FINISHED')
+export const setGhost = createAction('RACE_GHOST')
 export const initRace = createAction('RACE_INIT')
 export const typeChar = createAction('RACE_TYPE_CHAR')
 export const goNextWord = createAction('RACE_NEXT_WORD')

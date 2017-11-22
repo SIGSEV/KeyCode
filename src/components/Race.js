@@ -72,12 +72,9 @@ class Race extends PureComponent {
     }
 
     const time = this._chronos.get()
+    const log = this._typeWriter.getCompressedLog()
 
-    // @TODO pass log to `stopRace` to set history (rename to log? shorter)
-    // when it will be to the correct format
-    // const log = this._typeWriter.getCompressedLog()
-
-    stopRace(time)
+    stopRace({ time, log })
 
     window.requestAnimationFrame(async () => {
       try {
@@ -91,7 +88,7 @@ class Race extends PureComponent {
 
     const chronos = (
       <Chronos
-        seconds={60}
+        seconds={5}
         isRunning={isStarted && !isFinished}
         onFinish={this.handleStop}
         ref={n => (this._chronos = n)}
