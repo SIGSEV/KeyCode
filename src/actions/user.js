@@ -1,6 +1,7 @@
 import { push } from 'react-router-redux'
 
 import { logout as rawLogout } from 'reducers/user'
+import { removeCookie } from 'helpers/user'
 
 export function getMe() {
   return {
@@ -13,8 +14,8 @@ export function getMe() {
 
 export function logout() {
   return dispatch => {
-    document.cookie = 'token=; Max-Age=0'
     dispatch(rawLogout())
     dispatch(push('/'))
+    removeCookie('token')
   }
 }

@@ -155,18 +155,27 @@ api.get('/auth', (req, res, next) => {
   const redirect = encodeURIComponent(req.query.redirect)
   const params = {
     state: req.query.data,
+    failureFlash: true,
     callbackURL: `${__APIURL__}/auth/callback?redirect=${redirect}${
       req.query.save ? `&save=${req.query.save}` : ''
     }`,
   }
+
   passport.authenticate('github', params)(req, res, next)
 })
 
 api.get(
   '/auth/callback',
-  passport.authenticate('github', {
-    session: false,
-  }),
+  (req, res, next) => {
+    passport.authenticate('github', {
+      session: false,
+    })(req, res, e => {
+      res.cookie('SIGERR', e.message)
+      res.redirect(__URL__)
+      next()
+    })
+  },
+
   setToken,
 )
 

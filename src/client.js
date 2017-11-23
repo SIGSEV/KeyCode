@@ -10,6 +10,8 @@ import immutablifyState from 'immutablify-state'
 import handleSocket from 'handle-socket'
 import { ghostBuster } from 'actions/race'
 import { resetRace } from 'reducers/race'
+import { getCookie, removeCookie } from 'helpers/user'
+import { addToast } from 'reducers/toasts'
 
 import App from 'components/App'
 
@@ -22,6 +24,12 @@ history.listen(() => {
   ghostBuster()
   store.dispatch(resetRace())
 })
+
+const err = getCookie('SIGERR')
+if (err) {
+  store.dispatch(addToast(decodeURIComponent(err), 'error'))
+  removeCookie('SIGERR')
+}
 
 handleSocket(socket, store)
 
