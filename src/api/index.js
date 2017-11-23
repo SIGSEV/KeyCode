@@ -170,6 +170,10 @@ api.get(
     passport.authenticate('github', {
       session: false,
     })(req, res, e => {
+      if (!e) {
+        return next()
+      }
+
       res.cookie('SIGERR', e.message)
       res.redirect(__URL__)
       next()
