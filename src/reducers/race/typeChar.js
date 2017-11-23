@@ -1,6 +1,6 @@
-const DISPLAYED_COLS = 120
-
 import { countLinesOffset } from 'helpers/text'
+
+const DISPLAYED_COLS = 120
 
 function adjustScrollX(p, chunks) {
   const word = chunks.get(p.get('wordIndex'))
@@ -106,7 +106,7 @@ function typeRegular(state, char) {
   // end of text
   if (cursor === raw.length - 1) {
     state = nextWord(state)
-  } else if (!charToType.trim()) {
+  } else if (!charToType || !charToType.trim()) {
     // end of word
     const hasTypedSpace = char === ' '
     state = nextWord(state, { isCorrectTrigger: hasTypedSpace })
@@ -116,9 +116,39 @@ function typeRegular(state, char) {
 }
 
 function typeEnter(state) {
+  const p = state.getIn(['players', 0])
+  const text = state.get('text')
+  const raw = text.get('raw')
+  const cursor = p.get('cursor')
+  const charToType = raw[cursor]
+  if (!charToType || !charToType.trim()) {
+    return nextWord(state)
+  }
   return state
 }
 
 function typeBackspace(state) {
-  return state
+  let chunks = state.getIn(['text', 'chunks'])
+  let p = state.getIn(['players', 0])
+  const cursor = p.get('cursor')
+  const wordIndex = p.get('wordIndex')
+  const word = chunks.get(wordIndex)
+  if (cursor === word.get('start')) {
+    return state
+  }
+
+  const typedWord = p.get('typedWord')
+  const newTypedWord = typedWord.substr(0, typedWord.length - 1)
+
+  p = p
+    .set('cursor', cursor - 1)
+    .set('typedWord', newTypedWord)
+    .set('corrections', p.get('corrections') + 1)
+
+  p = adjustScrollX(p, state.getIn(['text', 'chunks']))
+
+  if (word.get('content').startsWith(newTypedWord)) {
+    chunks = chunks.setIn([wordIndex, 'isWrong'], false)
+  }
+  return state.setIn(['players', 0], p).setIn(['text', 'chunks'], chunks)
 }

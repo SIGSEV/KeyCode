@@ -9,14 +9,7 @@ export default function getStatsFromLog(text, log) {
 
   log.split(' ').forEach(couple => {
     const key = Number(couple.split('|')[0])
-    switch (key) {
-      case 0:
-        break
-      case -1:
-        break
-      default:
-        store.dispatch(typeChar(key))
-    }
+    store.dispatch(typeChar(key))
   })
 
   const state = store.getState()
