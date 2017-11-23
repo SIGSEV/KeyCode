@@ -6,7 +6,11 @@ import { getPayload } from 'helpers/race'
 import Button from 'components/Button'
 import UserPic from 'components/UserPic'
 
-@connect(({ user, race, router: { location } }) => ({ user, race, location }))
+@connect(({ user, race, router: { location } }) => ({
+  user,
+  race: race.get('lastRace'),
+  location,
+}))
 class UserOrLogin extends Component {
   login = () => {
     const { race, location } = this.props

@@ -13,6 +13,7 @@ const initialState = fromJS({
   rates: {},
   startAt: null,
   players: [],
+  lastRace: null,
 
   // TODO tbh we should use a single "status" string, no?
   isStarted: false,
@@ -55,6 +56,7 @@ const handlers = {
       .setIn(['players', 0, 'log'], log),
   RACE_RESET: state =>
     state
+      .set('lastRace', state.get('isStarted') && !state.get('isGhosting') ? state : null)
       .set('isStarted', false)
       .set('isFinished', false)
       .set('isGhosting', false)

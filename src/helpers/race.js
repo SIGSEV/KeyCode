@@ -23,6 +23,10 @@ export function initPlayer() {
 }
 
 export const getPayload = race => {
+  if (!race) {
+    return {}
+  }
+
   const normal = race.toJS()
   if (!normal.players || !normal.players[0]) {
     return {}

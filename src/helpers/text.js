@@ -40,6 +40,10 @@ export function countLinesOffset(chunks, start, end) {
 }
 
 export function computeText(text) {
+  if (!text) {
+    return null
+  }
+
   let trickyPrevIndexInLine = 0
   text = text.replace(/\t/g, '  ')
   const chunks = text
