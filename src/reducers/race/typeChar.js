@@ -24,6 +24,7 @@ export default function typeChar(state, { payload: charCode }) {
 
 function typeRegular(state, char) {
   let p = state.getIn(['players', 0])
+  let text = state.get('text')
 
   const cursor = p.get('cursor')
   const wordIndex = p.get('wordIndex')
@@ -42,13 +43,16 @@ function typeRegular(state, char) {
 
   p = adjustScrollX(p, state.getIn(['text', 'chunks']))
 
-  return state.setIn(['players', 0], p).updateIn(['text'], text => {
-    const word = text.getIn(['chunks', wordIndex])
-    if (!word.get('content').startsWith(newTypedWord)) {
-      text = text.setIn(['chunks', wordIndex, 'isWrong'], true)
-    }
-    return text
-  })
+  const word = text.getIn(['chunks', wordIndex])
+
+  if (!word.get('content').startsWith(newTypedWord)) {
+    text = text.setIn(['chunks', wordIndex, 'isWrong'], true)
+  }
+
+  state = state.setIn(['players', 0], p)
+  state = state.setIn('text', text)
+
+  return state
 }
 
 function typeEnter(state) {
