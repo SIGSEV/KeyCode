@@ -150,7 +150,7 @@ class TypeWriter extends PureComponent {
   handleClick = () => this._input.focus()
 
   handleKeyDown = e => {
-    const { isFinished, isStarted, isGhosting, onStart, goNextWord, typeBackspace } = this.props
+    const { isFinished, typeChar, isStarted, isGhosting, onStart } = this.props
 
     if (isFinished || isGhosting) {
       return
@@ -164,13 +164,13 @@ class TypeWriter extends PureComponent {
         }
 
         this.logChar(0)
-        goNextWord()
+        typeChar(0)
       }
     }
 
     if (e.which === 8) {
       this.logChar(-1)
-      typeBackspace()
+      typeChar(-1)
     }
   }
 
@@ -196,13 +196,19 @@ class TypeWriter extends PureComponent {
       onStart()
     }
 
+    const charCode = char.charCodeAt()
+    this.logChar(charCode)
+    typeChar(charCode)
+    return
+
     const rawText = text.get('raw')
     const charToType = this.getCharToType()
     const cursor = player.get('cursor')
+    // const charCode = char.charCodeAt()
 
     if (cursor === rawText.length - 1) {
-      this.logChar(char)
-      typeChar(char)
+      this.logChar(charCode)
+      typeChar(charCode)
       return goNextWord()
     }
 
@@ -210,12 +216,13 @@ class TypeWriter extends PureComponent {
     const hasTypedSpace = char === ' '
 
     if (isEndOfWord) {
-      this.logChar(0)
+      return
+      this.logChar(hasTypedSpace ? 0 : charCode)
       return goNextWord(hasTypedSpace)
     }
 
-    this.logChar(char)
-    typeChar(char)
+    this.logChar(charCode)
+    typeChar(charCode)
   }
 
   logChar = char => {

@@ -3,6 +3,7 @@ import { fromJS, List } from 'immutable'
 
 import { initPlayer } from 'helpers/race'
 import { computeText, countLinesOffset } from 'helpers/text'
+import typeCharFn from './typeChar'
 
 const initialState = fromJS({
   id: null,
@@ -63,34 +64,7 @@ const handlers = {
       .set('text', computeText(state.getIn(['text', 'raw'])))
       .set('players', List([initPlayer()]))
       .setIn(['players', 0, 'maxDisplayedLines'], state.getIn(['players', 0, 'maxDisplayedLines'])),
-  RACE_TYPE_CHAR: (state, { payload: char }) => {
-    let p = state.getIn(['players', 0])
-
-    const cursor = p.get('cursor')
-    const wordIndex = p.get('wordIndex')
-    const typedWord = p.get('typedWord')
-    const newTypedWord = `${typedWord}${char}`
-    const charToType = state.getIn(['text', 'raw'])[cursor]
-    const charCode = char.charCodeAt()
-
-    p = p
-      .update(charToType === char ? 'validKeys' : 'wrongKeys', keys =>
-        keys.set(charCode, keys.get(charCode, 0) + 1),
-      )
-      .set('typedChar', char)
-      .set('cursor', cursor + 1)
-      .set('typedWord', newTypedWord)
-
-    p = adjustScrollX(p, state.getIn(['text', 'chunks']))
-
-    return state.setIn(['players', 0], p).updateIn(['text'], text => {
-      const word = text.getIn(['chunks', wordIndex])
-      if (!word.get('content').startsWith(newTypedWord)) {
-        text = text.setIn(['chunks', wordIndex, 'isWrong'], true)
-      }
-      return text
-    })
-  },
+  RACE_TYPE_CHAR: typeCharFn,
   RACE_NEXT_WORD: (state, { payload: isCorrectTrigger = true }) => {
     let chunks = state.getIn(['text', 'chunks'])
     let p = state.getIn(['players', 0])
