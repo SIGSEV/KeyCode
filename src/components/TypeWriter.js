@@ -105,13 +105,15 @@ class TypeWriter extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     const { isFinished: willFinish } = nextProps
-    const { isFinished } = this.props
+    const { isFinished, isGhosting } = this.props
 
     if (!isFinished && willFinish) {
       this._recording = false
     }
 
-    if (nextProps.player.get('typedWordsCount') === nextProps.text.get('wordsCount')) {
+    const hasTypedAllWords =
+      nextProps.player.get('typedWordsCount') === nextProps.text.get('wordsCount')
+    if (hasTypedAllWords && !isGhosting) {
       this.props.onFinish()
     }
   }
