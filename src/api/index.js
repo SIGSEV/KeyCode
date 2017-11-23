@@ -155,7 +155,6 @@ api.get('/auth', (req, res, next) => {
   const redirect = encodeURIComponent(req.query.redirect)
   const params = {
     state: req.query.data,
-    failureFlash: true,
     callbackURL: `${__APIURL__}/auth/callback?redirect=${redirect}${
       req.query.save ? `&save=${req.query.save}` : ''
     }`,
