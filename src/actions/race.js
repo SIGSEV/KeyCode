@@ -1,14 +1,6 @@
 import { push } from 'react-router-redux'
 
-import {
-  initRace,
-  setFinished,
-  resetRace,
-  setGhost,
-  typeChar,
-  goNextWord,
-  typeBackspace,
-} from 'reducers/race'
+import { initRace, setFinished, resetRace, setGhost, typeChar } from 'reducers/race'
 
 import { getPayload } from 'helpers/race'
 
@@ -82,13 +74,7 @@ export function ghostRace(log) {
       }
 
       const [charCode, time] = splits[i].split('|').map(o => Number(o))
-      if (charCode === -1) {
-        dispatch(typeBackspace())
-      } else if (charCode === 0) {
-        dispatch(goNextWord())
-      } else {
-        dispatch(typeChar(String.fromCharCode(charCode)))
-      }
+      dispatch(typeChar(charCode))
 
       await wait(time)
     }
