@@ -1,5 +1,7 @@
 const DISPLAYED_COLS = 120
 
+import { countLinesOffset } from 'helpers/text'
+
 function adjustScrollX(p, chunks) {
   const word = chunks.get(p.get('wordIndex'))
   const cursorIndexInLine = p.get('cursor') - word.get('start') + word.get('indexInLine')
@@ -11,7 +13,7 @@ function adjustScrollX(p, chunks) {
   return p
 }
 
-export default function typeChar(state, { payload: charCode }) {
+export default function typeChar(state, charCode) {
   switch (charCode) {
     case 0:
       return typeEnter(state)
@@ -22,15 +24,64 @@ export default function typeChar(state, { payload: charCode }) {
   }
 }
 
+function nextWord(state, { isCorrectTrigger = true } = {}) {
+  let chunks = state.getIn(['text', 'chunks'])
+  let p = state.getIn(['players', 0])
+
+  const maxDisplayedLines = p.get('maxDisplayedLines')
+  const wordIndex = p.get('wordIndex')
+  const typedWord = p.get('typedWord')
+
+  const nextWordIndex = chunks.findIndex((w, i) => i > wordIndex && !w.get('empty'))
+  const word = chunks.get(wordIndex)
+  const jumps = countLinesOffset(chunks, wordIndex, nextWordIndex)
+
+  if (jumps > 0) {
+    const scrollY = p.get('scrollY')
+    const nextLine = p.get('line') + jumps
+    const linesCount = state.getIn(['text', 'linesCount'])
+    p = p.set('line', nextLine)
+    const isLowerThanMiddle = nextLine - scrollY > maxDisplayedLines / 2 - 1
+    const isNotEndOfText = linesCount - scrollY > maxDisplayedLines - 1
+    if (isLowerThanMiddle && isNotEndOfText) {
+      p = p.set('scrollY', scrollY + 1)
+    }
+  }
+
+  if (!isCorrectTrigger || !typedWord || typedWord.trim() !== word.get('content').trim()) {
+    chunks = chunks.setIn([wordIndex, 'isWrong'], true)
+  }
+
+  if (chunks.getIn([wordIndex, 'isWrong'])) {
+    p = p.set('wrongWordsCount', p.get('wrongWordsCount', 0) + 1)
+  }
+
+  p = p.set('typedWordsCount', p.get('typedWordsCount') + 1)
+
+  if (nextWordIndex === -1) {
+    p = p.set('cursor', word.get('end') + 1)
+  } else {
+    const nextWord = chunks.get(nextWordIndex)
+    p = p
+      .set('wordIndex', nextWordIndex)
+      .set('cursor', nextWord.get('start'))
+      .set('typedWord', '')
+  }
+  p = adjustScrollX(p, state.getIn(['text', 'chunks']))
+
+  return state.setIn(['players', 0], p).setIn(['text', 'chunks'], chunks)
+}
+
 function typeRegular(state, char) {
   let p = state.getIn(['players', 0])
   let text = state.get('text')
 
+  const raw = text.get('raw')
   const cursor = p.get('cursor')
   const wordIndex = p.get('wordIndex')
   const typedWord = p.get('typedWord')
   const newTypedWord = `${typedWord}${char}`
-  const charToType = state.getIn(['text', 'raw'])[cursor]
+  const charToType = raw[cursor]
   const charCode = char.charCodeAt()
 
   p = p
@@ -51,6 +102,15 @@ function typeRegular(state, char) {
 
   state = state.setIn(['players', 0], p)
   state = state.setIn('text', text)
+
+  // end of text
+  if (cursor === raw.length - 1) {
+    state = nextWord(state)
+  } else if (!charToType.trim()) {
+    // end of word
+    const hasTypedSpace = char === ' '
+    state = nextWord(state, { isCorrectTrigger: hasTypedSpace })
+  }
 
   return state
 }

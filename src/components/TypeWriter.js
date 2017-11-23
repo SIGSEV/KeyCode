@@ -2,14 +2,7 @@ import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 
-import {
-  getPlayer,
-  getText,
-  typeChar,
-  goNextWord,
-  typeBackspace,
-  setMaxDisplayedLines,
-} from 'reducers/race'
+import { getPlayer, getText, typeChar, setMaxDisplayedLines } from 'reducers/race'
 
 import StatusBar from 'components/StatusBar'
 
@@ -94,8 +87,6 @@ const Text = styled.span`
   }),
   {
     typeChar,
-    goNextWord,
-    typeBackspace,
     setMaxDisplayedLines,
   },
 )
@@ -175,17 +166,7 @@ class TypeWriter extends PureComponent {
   }
 
   handleChange = e => {
-    const {
-      typeChar,
-      isStarted,
-      isGhosting,
-      isFinished,
-      text,
-      player,
-      onStart,
-      goNextWord,
-    } = this.props
-
+    const { typeChar, isStarted, isGhosting, isFinished, onStart } = this.props
     const { value: char } = e.target
 
     if (isFinished || isGhosting) {
@@ -197,30 +178,6 @@ class TypeWriter extends PureComponent {
     }
 
     const charCode = char.charCodeAt()
-    this.logChar(charCode)
-    typeChar(charCode)
-    return
-
-    const rawText = text.get('raw')
-    const charToType = this.getCharToType()
-    const cursor = player.get('cursor')
-    // const charCode = char.charCodeAt()
-
-    if (cursor === rawText.length - 1) {
-      this.logChar(charCode)
-      typeChar(charCode)
-      return goNextWord()
-    }
-
-    const isEndOfWord = !charToType.trim()
-    const hasTypedSpace = char === ' '
-
-    if (isEndOfWord) {
-      return
-      this.logChar(hasTypedSpace ? 0 : charCode)
-      return goNextWord(hasTypedSpace)
-    }
-
     this.logChar(charCode)
     typeChar(charCode)
   }

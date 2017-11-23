@@ -64,7 +64,7 @@ const handlers = {
       .set('text', computeText(state.getIn(['text', 'raw'])))
       .set('players', List([initPlayer()]))
       .setIn(['players', 0, 'maxDisplayedLines'], state.getIn(['players', 0, 'maxDisplayedLines'])),
-  RACE_TYPE_CHAR: typeCharFn,
+  RACE_TYPE_CHAR: (state, { payload: charCode }) => typeCharFn(state, charCode),
   RACE_NEXT_WORD: (state, { payload: isCorrectTrigger = true }) => {
     let chunks = state.getIn(['text', 'chunks'])
     let p = state.getIn(['players', 0])

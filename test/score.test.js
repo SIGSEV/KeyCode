@@ -33,11 +33,11 @@ function expectStats(text, input, expected) {
 }
 
 test('should calculate correct stats with a dumby sample', () => {
-  expectStats('aaa', 'aaa', {
+  expectStats('aaa aaa', 'aaa aaa', {
     corrections: 0,
-    typedWordsCount: 1,
+    typedWordsCount: 2,
     wrongWordsCount: 0,
-    validKeys: { '97': 3 },
+    validKeys: { '97': 6, '32': 1 },
     wrongKeys: {},
   })
 })
