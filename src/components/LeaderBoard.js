@@ -19,6 +19,7 @@ const BoardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 1rem;
 
   .title {
     text-transform: uppercase;

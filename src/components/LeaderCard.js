@@ -10,7 +10,7 @@ import { getColor, getTextColor, hexToRGB } from 'helpers/colors'
 
 const Container = styled.div`
   display: flex;
-  min-width: 10rem;
+  width: 100%;
   margin: 0.5rem;
 
   cursor: pointer;
