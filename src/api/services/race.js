@@ -23,7 +23,6 @@ const getLeaderboard = language =>
         $group: {
           _id: '$user',
           user: { $first: '$user' },
-          wpm: { $first: '$wpm' },
           score: { $first: '$score' },
           language: { $first: '$language' },
           text: { $first: '$text' },
@@ -51,7 +50,6 @@ const getLeaderboard = language =>
       {
         $project: {
           _id: 0,
-          wpm: 1,
           score: 1,
           language: 1,
           'text.id': 1,
