@@ -32,7 +32,12 @@ const Board = ({ name, leaders }) =>
     <BoardContainer>
       <div className="title">{name}</div>
       {leaders.map((leader, i) => (
-        <LeaderCard leader={leader} rank={i} disableOpacity key={leader.user.name} />
+        <LeaderCard
+          leader={leader}
+          rank={i}
+          disableOpacity={name === 'Global'}
+          key={leader.user.name}
+        />
       ))}
     </BoardContainer>
   )
