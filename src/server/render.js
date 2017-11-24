@@ -25,10 +25,10 @@ export default stats => async (req, res) => {
     const promises = []
 
     routes.some(route => {
-      const match = matchPath(req.url, route)
+      const match = matchPath(req.url.replace(/\?.*/, ''), route)
       if (match && route.load) {
         const { dispatch } = store
-        promises.push(route.load({ dispatch, ...match }))
+        promises.push(route.load({ dispatch, query: req.query, ...match }))
       }
       return match
     })

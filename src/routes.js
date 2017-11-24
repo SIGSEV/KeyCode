@@ -1,11 +1,14 @@
 import Home from 'components/Home'
 import Race from 'components/Race'
 import Pricing from 'components/Pricing'
-import Language from 'components/Language'
 import User from 'components/User'
 import CreateText from 'components/CreateText'
 import LeaderBoard from 'components/LeaderBoard'
+<<<<<<< HEAD
 import Eval from 'components/pages/Eval'
+=======
+import Browse from 'components/Browse'
+>>>>>>> setup new browse page for my wonderful frlend
 
 import { loadUser } from 'actions/user'
 import { loadRace } from 'actions/race'
@@ -36,9 +39,9 @@ export default [
     load: ({ dispatch, params: { id } }) => dispatch(loadRace(id)),
   },
   {
-    path: '/l/:id',
-    component: Language,
-    load: ({ dispatch, params: { id } }) => dispatch(loadTexts(id)),
+    path: '/browse',
+    component: Browse,
+    load: ({ dispatch, query }) => dispatch(loadTexts(query)),
   },
   {
     path: '/u/:name',

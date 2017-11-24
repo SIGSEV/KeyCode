@@ -76,7 +76,7 @@ const Title = styled.h1`
   font-size: 36px;
 `
 
-@connect(({ texts }) => ({ texts }), {
+@connect(({ texts }) => ({ texts: texts.get('home') }), {
   push,
   loadRandom,
   loadTexts,
@@ -92,7 +92,13 @@ class Home extends PureComponent {
   }
 
   renderLanguage = l => (
-    <Challenge action={() => this.props.loadTexts(l)} to={`/l/${l.toLowerCase()}`} lang={l} key={l}>
+    <Challenge
+      action={() => this.props.loadTexts({ language: l })}
+      to={`/browse?language=${l.toLowerCase()}`}
+      lang={l}
+      key={l}
+      indent="bitch"
+    >
       {l}
     </Challenge>
   )
@@ -148,9 +154,7 @@ class Home extends PureComponent {
           </Section>
 
           <SectionTitle>{'Top rated'}</SectionTitle>
-          <div>
-            {texts.get('global').map(text => <TextCard text={text} key={text.get('id')} />)}
-          </div>
+          <div>{texts.map(text => <TextCard text={text} key={text.get('id')} />)}</div>
         </Narrow>
       </Box>
     )

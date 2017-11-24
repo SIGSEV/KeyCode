@@ -106,10 +106,12 @@ export const deleteText = async (id, user) => {
   throw new Error('Unauthorized.')
 }
 
-export const getTexts = async language => {
-  const texts = await Text.find(language ? { language } : {})
-    .sort('-stars')
-    .limit(language ? 100 : 10)
+export const getTexts = async params => {
+  const { limit = 10, sort = 'stars', ...searchParams } = params
+
+  const texts = await Text.find(searchParams)
+    .sort([[sort, -1]])
+    .limit(limit)
     .exec()
 
   return Promise.all(texts.map(populateText))

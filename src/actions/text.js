@@ -11,14 +11,12 @@ export function createText(body) {
   }
 }
 
-export function loadTexts(language) {
+export function loadTexts(query = {}) {
   return {
     type: 'API:LOAD_TEXTS',
     payload: {
       url: '/texts',
-      query: {
-        language,
-      },
+      query,
     },
   }
 }
