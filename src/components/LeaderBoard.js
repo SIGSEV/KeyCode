@@ -3,23 +3,52 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { loadLeaders } from 'actions/leaders'
+import { lowerMap } from 'helpers/text'
 
 import LeaderCard from 'components/LeaderCard'
 
 const Container = styled.div`
-  > * + * {
-    margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  > * {
+    margin-top: 1rem;
   }
 `
 
-@connect(({ leaders: { global } }) => ({ leaders: global }), {
-  loadLeaders,
-})
+const BoardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .title {
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+`
+
+const Board = ({ name, leaders }) =>
+  !!leaders && (
+    <BoardContainer>
+      <div className="title">{name}</div>
+      {leaders.map((leader, i) => (
+        <LeaderCard leader={leader} rank={i} disableOpacity key={leader.user.name} />
+      ))}
+    </BoardContainer>
+  )
+
+@connect(
+  ({ leaders }) => ({
+    leaders: Object.keys(leaders)
+      .filter(k => leaders[k].length)
+      .reduce((acc, k) => ((acc[k] = leaders[k]), acc), {}),
+  }),
+  {
+    loadLeaders,
+  },
+)
 class Leaderboard extends Component {
   componentDidMount() {
-    if (!this.props.leaders.length) {
-      this.props.loadLeaders()
-    }
+    this.props.loadLeaders()
   }
 
   render() {
@@ -27,9 +56,11 @@ class Leaderboard extends Component {
 
     return (
       <Container>
-        {leaders.map((leader, i) => (
-          <LeaderCard leader={leader} rank={i} disableOpacity key={leader.user.name} />
-        ))}
+        <Board name="Global" leaders={leaders.global} />
+
+        {Object.keys(leaders)
+          .filter(k => k !== 'global')
+          .map(l => <Board key={l} name={lowerMap[l]} leaders={leaders[l]} />)}
       </Container>
     )
   }

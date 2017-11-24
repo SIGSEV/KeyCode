@@ -1,11 +1,8 @@
-export function loadLeaders(language) {
+export function loadLeaders() {
   return {
     type: 'API:LOAD_LEADERS',
     payload: {
       url: '/leaderboard',
-      query: {
-        language,
-      },
     },
   }
 }

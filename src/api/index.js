@@ -9,7 +9,7 @@ import 'api/init'
 import writeLogo from 'logos/write-logo'
 import { getAllUsers } from 'api/services/user'
 import { setUser, setToken, isAuthenticated } from 'api/services/auth'
-import { saveRace, getLeaderboard } from 'api/services/race'
+import { saveRace, getLeaderboards } from 'api/services/race'
 import {
   deleteText,
   getText,
@@ -141,7 +141,7 @@ api.get('/texts', async (req, res) => {
 
 api.get('/leaderboard', async (req, res) => {
   try {
-    res.send(await getLeaderboard((req.query.language || '').toLowerCase()))
+    res.send(await getLeaderboards())
   } catch ({ message }) {
     res.status(500).send({ message })
   }

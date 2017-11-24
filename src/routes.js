@@ -36,8 +36,7 @@ export default [
   {
     path: '/l/:id',
     component: Language,
-    load: ({ dispatch, params: { id } }) =>
-      Promise.all([dispatch(loadTexts(id)), dispatch(loadLeaders(id))]),
+    load: ({ dispatch, params: { id } }) => Promise.all([dispatch(loadTexts(id))]),
   },
   {
     path: '/u/:id',

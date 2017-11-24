@@ -1,10 +1,11 @@
 import { Map } from 'immutable'
+import cache from 'memory-cache'
 
 import User from 'api/models/user'
 import Text from 'api/models/text'
 import Race from 'api/models/race'
 
-import { languages } from 'helpers/text'
+import { languages, lowerArr } from 'helpers/text'
 import { getStats } from 'helpers/race'
 import {
   getTeamMembers,
@@ -13,7 +14,7 @@ import {
   updateUserRank,
 } from 'api/services/github'
 
-export const getLeaderboard = language =>
+const getLeaderboard = language =>
   Race.aggregate(
     [
       language && { $match: { language } },
@@ -62,6 +63,21 @@ export const getLeaderboard = language =>
       { $sort: { score: -1 } },
     ].filter(f => f),
   )
+
+export const getLeaderboards = async () => {
+  const cached = cache.get('leaderboards')
+  if (cached) {
+    return cached
+  }
+
+  const res = (await Promise.all(lowerArr.concat([null]).map(getLeaderboard))).reduce(
+    (acc, cur, i) => ((acc[lowerArr[i] || 'global'] = cur), acc),
+    {},
+  )
+
+  cache.put('leaderboards', res, 60e3 * 10)
+  return res
+}
 
 export const refreshLeaderOrgs = () => {
   languages.forEach(async language => {

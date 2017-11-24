@@ -30,6 +30,7 @@ export const textConds = {
 }
 
 export const lowerMap = languages.reduce((acc, l) => ((acc[l.toLowerCase()] = l), acc), {})
+export const lowerArr = Object.keys(lowerMap)
 
 export const promotedLanguages = ['JavaScript', 'Python', 'Go', 'Ruby']
 
