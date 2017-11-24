@@ -3,6 +3,10 @@ import { List, Map } from 'immutable'
 
 export const languages = [
   'JavaScript',
+  'Go',
+  'Python',
+  'Ruby',
+
   'Ada',
   'Brainfuck',
   'C',
@@ -10,10 +14,7 @@ export const languages = [
   'Clojure',
   'CSS',
   'Elm',
-  'Go',
   'HTML',
-  'Python',
-  'Ruby',
   'Rust',
   'Shell',
   'Swift',
