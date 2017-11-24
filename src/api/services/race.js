@@ -28,6 +28,7 @@ const getLeaderboard = language =>
           text: { $first: '$text' },
         },
       },
+      { $sort: { score: -1 } },
       { $limit: 10 },
       {
         $lookup: {
@@ -58,7 +59,6 @@ const getLeaderboard = language =>
           'user.avatar': 1,
         },
       },
-      { $sort: { score: -1 } },
     ].filter(f => f),
   )
 
