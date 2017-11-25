@@ -69,6 +69,10 @@ export const isAuthenticated = () =>
     })
 
 export const setToken = (req, res) => {
+  if (!req.user) {
+    return
+  }
+
   const { id } = req.user
   const token = jwt.sign({ id }, secret, { expiresIn: 60 * 60 * 48 })
   res.cookie('token', token)
