@@ -74,9 +74,11 @@ export function ghostRace(log) {
       }
 
       const [charCode, time] = splits[i].split('|').map(o => Number(o))
+      const beforeDispatch = Date.now()
       dispatch(typeChar(charCode))
+      const delta = Date.now() - beforeDispatch
 
-      await wait(time)
+      await wait(time - delta)
     }
 
     if (ghostBustered) {

@@ -321,7 +321,7 @@ class TypeWriter extends PureComponent {
           value={''}
         />
 
-        <StatusBar>{chronos}</StatusBar>
+        <StatusBar>{isGhosting ? null : chronos}</StatusBar>
       </Container>
     )
   }

@@ -73,14 +73,13 @@ const Status = Info.extend`
 
 @connect(state => ({
   player: getPlayer(state),
-  text: getText(state),
   isStarted: state.race.get('isStarted'),
   isFinished: state.race.get('isFinished'),
   isGhosting: state.race.get('isGhosting'),
 }))
 class StatusBar extends PureComponent {
   render() {
-    const { children, isStarted, isFinished, isGhosting, player, text } = this.props
+    const { children, isStarted, isFinished, isGhosting, player } = this.props
     const wrongWordsCount = player.get('wrongWordsCount')
     const correctionsCount = player.get('corrections')
     const status = isFinished
@@ -93,8 +92,7 @@ class StatusBar extends PureComponent {
           {statuses[status].icon}
           <span>{statuses[status].text}</span>
         </Status>
-        <Info>{children}</Info>
-        <Info dark>{`L${player.get('line') + 1}/${text.get('linesCount')}`}</Info>
+        {children && <Info>{children}</Info>}
         <Right>
           {!!correctionsCount && (
             <Info color="orange">
