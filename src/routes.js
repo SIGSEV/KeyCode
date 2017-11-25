@@ -5,6 +5,7 @@ import Language from 'components/Language'
 import User from 'components/User'
 import CreateText from 'components/CreateText'
 import LeaderBoard from 'components/LeaderBoard'
+import Eval from 'components/pages/Eval'
 
 import { loadUser } from 'actions/user'
 import { loadRace } from 'actions/race'
@@ -43,6 +44,10 @@ export default [
     path: '/u/:name',
     component: User,
     load: ({ dispatch, params: { name } }) => dispatch(loadUser(name)),
+  },
+  {
+    path: '/eval',
+    component: Eval,
   },
   {
     path: '/pricing',

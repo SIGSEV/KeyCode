@@ -7,7 +7,6 @@ import Link from 'components/Link'
 const Container = styled.div`
   background: ${p => p.theme.lightgrey02};
   color: ${p => p.theme.darkGrey03};
-  margin-top: 100px;
   padding: 100px;
   text-align: center;
   font-size: 12px;

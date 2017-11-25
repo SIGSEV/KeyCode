@@ -15,7 +15,6 @@ import ScrollTop from 'components/ScrollTop'
 
 const AppContainer = styled.div`
   font-family: Inter, sans-serif;
-  min-height: 100vh;
   background: ${p => p.theme.bg};
   color: ${p => p.theme.darkGrey00};
   display: flex;
@@ -24,6 +23,11 @@ const AppContainer = styled.div`
   b {
     font-weight: bolder;
   }
+`
+
+const Full = styled.div`
+  min-height: 100vh;
+  padding-bottom: 100px;
 `
 
 const Main = styled.div`
@@ -52,10 +56,12 @@ class App extends Component {
     return (
       <AppContainer>
         <PreventRetardedSize />
-        {showHeader && <Header />}
-        <Main>
-          <Switch>{routes.map(route => <Route key={route.path} {...route} />)}</Switch>
-        </Main>
+        <Full>
+          {showHeader && <Header />}
+          <Main>
+            <Switch>{routes.map(route => <Route key={route.path} {...route} />)}</Switch>
+          </Main>
+        </Full>
         {showFooter && <Footer />}
       </AppContainer>
     )
