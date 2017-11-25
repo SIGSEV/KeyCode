@@ -10,24 +10,11 @@ import { loadRandom } from 'actions/race'
 import { loadTexts } from 'actions/text'
 import { getColor, getTextColor } from 'helpers/colors'
 
+import Container from 'components/base/Container'
 import TextCard from 'components/TextCard'
 import Button from 'components/Button'
 import Link from 'components/Link'
 import { AutoTypematrix } from 'components/TypeMatrix'
-
-const Container = styled.div`
-  > * + * {
-    margin-top: 50px;
-  }
-`
-
-const Narrow = styled.div`
-  max-width: 860px;
-  margin: 0 auto;
-  > * + * {
-    margin-top: 50px;
-  }
-`
 
 const Hero = styled.div`
   display: flex;
@@ -142,7 +129,7 @@ class Home extends PureComponent {
           </div>
         </Hero>
 
-        <Narrow>
+        <Container narrow flow={50}>
           <Section>
             <SectionTitle>
               {'Challenges by language'}
@@ -163,7 +150,7 @@ class Home extends PureComponent {
           <div>
             {texts.get('global').map(text => <TextCard text={text} key={text.get('id')} />)}
           </div>
-        </Narrow>
+        </Container>
       </Container>
     )
   }
