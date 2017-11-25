@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import IconCheck from 'react-icons/lib/md/check'
+
+import { addToast } from 'reducers/toasts'
 
 import Button from 'components/Button'
 
@@ -82,7 +85,17 @@ const ChoiceFooter = styled.div`
   border-bottom-right-radius: 5px;
 `
 
+@connect(null, { addToast })
 class Pricing extends PureComponent {
+  upgrade = plan => () => {
+    this.props.addToast(
+      `The ${
+        plan
+      } plan is out of stock. You can still send 1 BTC to our address in order to get priority.`,
+      'info',
+    )
+  }
+
   render() {
     return (
       <Container>
@@ -99,11 +112,11 @@ class Pricing extends PureComponent {
               </Feature>
               <Feature>
                 <IconCheck />
-                <span>{'Statistics'}</span>
+                <span>{'Basic statistics'}</span>
               </Feature>
               <Feature>
                 <IconCheck />
-                <span>{'GitHub badge'}</span>
+                <span>{'GitHub badges'}</span>
               </Feature>
             </ChoiceContent>
           </Choice>
@@ -124,8 +137,8 @@ class Pricing extends PureComponent {
               <Feature>
                 <IconCheck />
                 <span>
-                  <b>{'+5 WPM'}</b>
-                  {' by test'}
+                  <b>{'+5 points'}</b>
+                  {' for each test'}
                 </span>
               </Feature>
               <Feature>
@@ -138,7 +151,9 @@ class Pricing extends PureComponent {
               </Feature>
             </ChoiceContent>
             <ChoiceFooter>
-              <Button accent>{'Upgrade'}</Button>
+              <Button onClick={this.upgrade('standard')} accent>
+                {'Upgrade'}
+              </Button>
             </ChoiceFooter>
           </Choice>
           <Choice>
@@ -154,8 +169,8 @@ class Pricing extends PureComponent {
               <Feature>
                 <IconCheck />
                 <span>
-                  <b>{'+25 WPM'}</b>
-                  {' by test'}
+                  <b>{'+20 points'}</b>
+                  {' for each test'}
                 </span>
               </Feature>
               <Feature>
@@ -166,9 +181,15 @@ class Pricing extends PureComponent {
                 <IconCheck />
                 <span>{'4 concurrent screens'}</span>
               </Feature>
+              <Feature>
+                <IconCheck />
+                <span>{"Delete other's scores"}</span>
+              </Feature>
             </ChoiceContent>
             <ChoiceFooter>
-              <Button accent>{'Upgrade'}</Button>
+              <Button onClick={this.upgrade('standard')} accent>
+                {'Upgrade'}
+              </Button>
             </ChoiceFooter>
           </Choice>
         </Choices>

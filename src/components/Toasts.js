@@ -19,7 +19,7 @@ const Toast = styled.div`
   margin-top: 0.5rem;
   cursor: pointer;
   font-family: monospace;
-  white-space: nowrap;
+  min-width: 15rem;
   background-color: ${p => p.theme.toasts[p.type]};
   color: white;
 `
