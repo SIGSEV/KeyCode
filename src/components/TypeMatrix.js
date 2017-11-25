@@ -150,7 +150,7 @@ class Typematrix extends PureComponent {
   }
 
   render() {
-    const { layout, staggered } = this.props
+    const { layout, staggered, wrongKeys } = this.props
     const { activeKey } = this.state
 
     /* eslint-disable react/no-array-index-key */
@@ -164,7 +164,7 @@ class Typematrix extends PureComponent {
               const k = (
                 <Key
                   key={j}
-                  data-balloon={`${key.join(' ')} (${count} typos)`}
+                  {...(wrongKeys ? { 'data-balloon': `${key.join(' ')} (${count} typos)` } : {})}
                   data-balloon-pos="up"
                   keyColor={color}
                   isActive={activeKey === index}
