@@ -98,18 +98,21 @@ class Modal extends PureComponent {
         {(m, isVisible) => (
           <Container noEvents={!isVisible}>
             <Overlay onClick={this.handleClose} />
-            <ModalBox
-              tabIndex={0}
-              innerRef={n => (this._modal = n)}
-              onClick={this.preventDefault}
+            <div
               style={{
                 opacity: m.opacity,
                 transform: `scale(${m.scale}) translate3d(0, ${m.offset}px, 0)`,
               }}
             >
-              {title && <Title>{title}</Title>}
-              {children}
-            </ModalBox>
+              <ModalBox
+                tabIndex={0}
+                innerRef={n => (this._modal = n)}
+                onClick={this.preventDefault}
+              >
+                {title && <Title>{title}</Title>}
+                {children}
+              </ModalBox>
+            </div>
           </Container>
         )}
       </Mortal>

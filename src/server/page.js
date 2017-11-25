@@ -48,6 +48,16 @@ export default ({ styles, state, html, main }) => `<!doctype html>
         border: none;
         background: transparent;
       }
+
+      img {
+        display: block;
+      }
+
+      [data-balloon]:after, [data-balloon]:before {
+        pointer-events: none !important;
+        transition: none !important;
+      }
+
     </style>
     ${styles}
     <script>
