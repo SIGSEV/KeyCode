@@ -7,6 +7,7 @@ import IconReplay from 'react-icons/lib/md/replay'
 import { starText, deleteText } from 'actions/text'
 import { ghostRace } from 'actions/race'
 
+import Link from 'components/Link'
 import Button from 'components/Button'
 import LanguageDot from 'components/LanguageDot'
 
@@ -168,7 +169,7 @@ const LeaderEntryContainer = styled.div`
   background: white;
   padding: 5px;
 
-  > img + * {
+  > a + * {
     margin-left: 1rem;
   }
 `
@@ -189,7 +190,9 @@ function LeaderEntry({ ghostRace, leader, num }) {
   return (
     <LeaderEntryContainer>
       <NumContainer>{num}</NumContainer>
-      <img src={leader.getIn(['user', 'avatar'])} width={30} />
+      <Link to={`/u/${leader.getIn(['user', 'name'])}`}>
+        <img src={leader.getIn(['user', 'avatar'])} width={30} />
+      </Link>
       {leader.get('log') && (
         <Button action={() => ghostRace(leader.get('log'))} smallPad noHeight hasloader={0}>
           <IconReplay />
