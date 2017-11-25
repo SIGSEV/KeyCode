@@ -1,5 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 
+import ridiculusType from 'api/models/ridiculusType'
+
 export default mongoose.model(
   'Race',
   new Schema(
@@ -22,8 +24,8 @@ export default mongoose.model(
       wrongWordsCount: Number,
       typedWordsCount: Number,
 
-      validKeys: { type: Schema.Types.Mixed, default: {} },
-      wrongKeys: { type: Schema.Types.Mixed, default: {} },
+      validKeys: ridiculusType,
+      wrongKeys: ridiculusType,
 
       language: String,
     },

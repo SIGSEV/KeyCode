@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser'
 import 'api/init'
 
 import writeLogo from 'logos/write-logo'
-import { getAllUsers } from 'api/services/user'
+import { getUser } from 'api/services/user'
 import { setUser, setToken, isAuthenticated } from 'api/services/auth'
 import { saveRace, getLeaderboards } from 'api/services/race'
 import {
@@ -48,15 +48,13 @@ api.post('/graphql', async (req, res) => {
  * Users
  */
 
-api.get('/users', async (req, res) => {
+api.get('/users/:name', async (req, res) => {
   try {
-    res.send(await getAllUsers())
+    res.send(await getUser(req.params.name))
   } catch ({ message }) {
     res.status(500).send({ message })
   }
 })
-
-api.get('/users/me', isAuthenticated(), (req, res) => res.send(req.user))
 
 /**
  * Races

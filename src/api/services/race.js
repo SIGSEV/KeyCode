@@ -127,8 +127,14 @@ export const saveRace = async (payload, user) => {
     throw new Error('Yes sure, not possible yet g0d/h4xxor')
   }
 
-  Object.keys(validKeys).forEach(k => (user.validKeys[k] += validKeys[k]))
-  Object.keys(wrongKeys).forEach(k => (user.wrongKeys[k] += wrongKeys[k]))
+  const newValid = user.validKeys
+  const newWrong = user.wrongKeys
+
+  Object.keys(validKeys).forEach(k => (newValid[k] = (newValid[k] || 0) + validKeys[k]))
+  Object.keys(wrongKeys).forEach(k => (newWrong[k] = (newWrong[k] || 0) + wrongKeys[k]))
+
+  user.validKeys = newValid
+  user.wrongKeys = newWrong
 
   const text = await Text.findOne({ id: textId })
 

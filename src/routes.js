@@ -6,6 +6,7 @@ import User from 'components/User'
 import CreateText from 'components/CreateText'
 import LeaderBoard from 'components/LeaderBoard'
 
+import { loadUser } from 'actions/user'
 import { loadRace } from 'actions/race'
 import { loadTexts } from 'actions/text'
 import { loadLeaders } from 'actions/leaders'
@@ -36,11 +37,12 @@ export default [
   {
     path: '/l/:id',
     component: Language,
-    load: ({ dispatch, params: { id } }) => Promise.all([dispatch(loadTexts(id))]),
+    load: ({ dispatch, params: { id } }) => dispatch(loadTexts(id)),
   },
   {
-    path: '/u/:id',
+    path: '/u/:name',
     component: User,
+    load: ({ dispatch, params: { name } }) => dispatch(loadUser(name)),
   },
   {
     path: '/pricing',

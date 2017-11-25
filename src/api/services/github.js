@@ -1,5 +1,6 @@
 import q from 'q'
 import Github from 'github'
+import cache from 'memory-cache'
 
 import { languages } from 'helpers/text'
 import teamIds from 'api/team-ids'
@@ -18,6 +19,44 @@ export const getTeamMembers = org =>
  */
 export const isUserInOrg = (username, org) =>
   q.nfcall(github.orgs.getOrgMembership, { org: `KeyCode-${org}`, username })
+
+/**
+ * Get user orgs
+ */
+export const getOrgs = async name => {
+  const cached = cache.get(`${name}-orgs`)
+  if (cached) {
+    return cached
+  }
+
+  const r = await fetch(`https://api.github.com/users/${name}/orgs`, {
+    headers: {
+      Authorization: `bearer ${process.env.GITHUB_TOKEN}`,
+    },
+  })
+
+  const orgs = await r.json()
+
+  if (orgs.message) {
+    return []
+  }
+
+  const out = orgs
+    .filter(o => o.login.startsWith('KeyCode-'))
+    .map(({ login, avatar_url: avatar }) => {
+      const suffix = login.replace('KeyCode-', '')
+      const type = isNaN(suffix) ? 'leader' : 'score'
+
+      return {
+        login,
+        avatar,
+        placeholder: type === 'score' ? `Scored at least ${suffix}` : `${suffix} leader`,
+      }
+    })
+
+  cache.put(`${name}-orgs`, out, 60e3 * 60)
+  return out
+}
 
 /**
  * Get the fuck out

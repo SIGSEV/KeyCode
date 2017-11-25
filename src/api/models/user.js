@@ -1,5 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 
+import ridiculusType from 'api/models/ridiculusType'
+
 export default mongoose.model(
   'User',
   new Schema(
@@ -12,9 +14,8 @@ export default mongoose.model(
 
       token: String,
       currentOrg: Number,
-
-      validKeys: { type: Schema.Types.Mixed, default: {} },
-      wrongKeys: { type: Schema.Types.Mixed, default: {} },
+      validKeys: ridiculusType,
+      wrongKeys: ridiculusType,
 
       admin: { type: Boolean, default: false },
       verified: { type: Boolean, default: false },

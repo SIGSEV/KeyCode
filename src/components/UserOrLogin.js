@@ -27,7 +27,7 @@ class UserOrLogin extends Component {
     const { user, fuckradius } = this.props
 
     return user ? (
-      <UserPic to="/u/toto" pic={user.avatar} fuckradius={fuckradius} />
+      <UserPic to={`/u/${user.name}`} pic={user.avatar} fuckradius={fuckradius} />
     ) : (
       <Button action={this.login}>
         <GithubIcon style={{ marginRight: '0.5rem' }} />

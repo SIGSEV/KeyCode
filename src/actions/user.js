@@ -3,11 +3,11 @@ import { push } from 'react-router-redux'
 import { logout as rawLogout } from 'reducers/user'
 import { removeCookie } from 'helpers/user'
 
-export function getMe() {
+export function loadUser(name) {
   return {
-    type: 'API:ME',
+    type: 'API:LOAD_USER',
     payload: {
-      url: '/users/me',
+      url: `/users/${name}`,
     },
   }
 }
