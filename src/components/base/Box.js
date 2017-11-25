@@ -1,11 +1,10 @@
 import styled from 'styled-components'
 
 export default styled.div`
-  flex-grow: 1;
+  flex-grow: ${p => (p.grow ? 1 : 0)};
   display: flex;
-  flex-direction: column;
-  max-width: ${p => (p.narrow ? '860px' : 'unset')};
-  margin: ${p => (p.narrow ? '0 auto' : 'unset')};
+  flex-direction: ${p => (p.horizontal ? 'row' : 'column')};
+  align-items: ${p => (p.align === 'center' ? 'center' : null)};
   overflow: ${p => (p.scrollable ? 'auto' : 'unset')};
   position: ${p => (p.relative ? 'relative' : p.sticky ? 'absolute' : 'static')};
   ${p =>
@@ -16,6 +15,7 @@ export default styled.div`
     right: 0;
     bottom: 0;
   `} > * + * {
-    margin-top: ${p => (p.flow ? `${p.flow}px` : 'unset')};
+    margin-top: ${p => (!p.horizontal && p.flow ? `${p.flow}px` : null)};
+    margin-left: ${p => (p.horizontal && p.flow ? `${p.flow}px` : null)};
   }
 `

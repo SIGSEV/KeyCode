@@ -10,7 +10,7 @@ import { loadRandom } from 'actions/race'
 import { loadTexts } from 'actions/text'
 import { getColor, getTextColor } from 'helpers/colors'
 
-import Container from 'components/base/Container'
+import Box from 'components/base/Box'
 import TextCard from 'components/TextCard'
 import Button from 'components/Button'
 import Link from 'components/Link'
@@ -101,7 +101,7 @@ class Home extends PureComponent {
     const { texts, loadRandom } = this.props
 
     return (
-      <Container>
+      <Box>
         <Hero>
           <Title>
             <ReactRotatingText
@@ -129,7 +129,7 @@ class Home extends PureComponent {
           </div>
         </Hero>
 
-        <Container narrow flow={50}>
+        <Box narrow flow={50}>
           <Section>
             <SectionTitle>
               {'Challenges by language'}
@@ -150,8 +150,8 @@ class Home extends PureComponent {
           <div>
             {texts.get('global').map(text => <TextCard text={text} key={text.get('id')} />)}
           </div>
-        </Container>
-      </Container>
+        </Box>
+      </Box>
     )
   }
 }

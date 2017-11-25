@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 
-import Container from 'components/base/Container'
+import Box from 'components/base/Box'
 import TextList from 'components/TextList'
 import Button from 'components/Button'
 
@@ -26,39 +26,31 @@ const EvalActions = styled.div`
   }
 `
 
+const actions = ['1 - Baby text', '2 - Easy', '3 - Medium', '4 - Hard', '5 - Hardcore']
+
 class Eval extends PureComponent {
   render() {
     return (
-      <Container>
+      <Box grow>
         <EvalBox>
           <TextList width={250} />
-          <Container>
+          <Box grow>
             <EvalActions>
               <b>{'Evaluate:'}</b>
-              <Button smallPad noHeight>
-                {'1 - Baby text'}
-              </Button>
-              <Button smallPad noHeight>
-                {'2 - Easy'}
-              </Button>
-              <Button smallPad noHeight>
-                {'3 - Medium'}
-              </Button>
-              <Button smallPad noHeight>
-                {'4 - Hard'}
-              </Button>
-              <Button smallPad noHeight>
-                {'5 - Hardcore'}
-              </Button>
+              {actions.map(a => (
+                <Button key={a} smallPad noHeight>
+                  {a}
+                </Button>
+              ))}
             </EvalActions>
-            <Container relative>
-              <Container sticky scrollable>
+            <Box relative>
+              <Box sticky scrollable>
                 <div>onetuhoenth</div>
-              </Container>
-            </Container>
-          </Container>
+              </Box>
+            </Box>
+          </Box>
         </EvalBox>
-      </Container>
+      </Box>
     )
   }
 }

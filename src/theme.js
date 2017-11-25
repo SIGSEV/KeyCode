@@ -10,6 +10,7 @@ export default {
   lightgrey00: '#a1a1a1',
   lightgrey01: '#d1d1d1',
   lightgrey02: '#f1f1f1',
+  lightgrey03: '#f9f9f9',
   red,
   blue,
   green,
