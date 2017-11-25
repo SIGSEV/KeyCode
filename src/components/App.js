@@ -16,7 +16,6 @@ import ScrollTop from 'components/ScrollTop'
 const AppContainer = styled.div`
   font-family: Inter, sans-serif;
   min-height: 100vh;
-  will-change: transform;
   background: ${p => p.theme.bg};
   color: ${p => p.theme.darkGrey00};
   display: flex;
