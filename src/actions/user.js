@@ -12,6 +12,17 @@ export function loadUser(name) {
   }
 }
 
+export function updateUser(body) {
+  return {
+    type: 'API:UPDATE_USER',
+    payload: {
+      url: '/users/me',
+      method: 'PUT',
+      body,
+    },
+  }
+}
+
 export function logout() {
   return dispatch => {
     dispatch(rawLogout())

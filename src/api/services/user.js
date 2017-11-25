@@ -20,6 +20,22 @@ export const updateOrCreate = async (githubId, name, avatar, verified, token) =>
   return user.save()
 }
 
+export const updateUser = (user, body) => {
+  if (body.staggered) {
+    user.staggered = body.staggered
+  }
+
+  if (body.layout) {
+    user.layout = body.layout
+  }
+
+  if (user.layout === 'qwerty') {
+    user.staggered = true
+  }
+
+  return user.save()
+}
+
 export const getUser = async name => {
   const user = (await getByName(name)).toObject()
   user.validKeys = JSON.parse(user.validKeys)

@@ -20,6 +20,7 @@
     "composable-middleware": "^0.3.0",
     "compression": "^1.6.2",
     "cookie-parser": "^1.4.3",
+    "d3-scale": "^1.0.7",
     "date-fns": "^1.29.0",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",

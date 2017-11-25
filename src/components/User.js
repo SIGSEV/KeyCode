@@ -17,11 +17,13 @@ import {
   Tooltip,
 } from 'recharts'
 
-import { logout, loadUser } from 'actions/user'
+import { logout, updateUser, loadUser } from 'actions/user'
 import { lowerMap, languages } from 'helpers/text'
 import { getColor } from 'helpers/colors'
 import theme from 'theme'
 
+import Select from 'components/base/Select'
+import TypeMatrix from 'components/TypeMatrix'
 import LanguageDot from 'components/LanguageDot'
 import Button from 'components/Button'
 
@@ -66,6 +68,14 @@ const Orgs = styled.div`
 const Main = styled.div`
   flex-grow: 1;
 
+  > div:first-child {
+    display: flex;
+    align-items: center;
+    > * + * {
+      margin-left: 3rem;
+    }
+  }
+
   > * + * {
     margin-top: 2rem;
   }
@@ -89,6 +99,38 @@ const Tip = styled.div`
     font-size: 2rem;
   }
 `
+
+const Settings = styled.div`
+  margin-top: 2rem;
+  > * + * {
+    margin-top: 1rem;
+  }
+`
+
+const Z = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`
+
+const SubTitle = styled.div`
+  text-transform: uppercase;
+  font-size: 0.7rem;
+`
+
+const keyLayouts = [
+  {
+    value: 'qwerty',
+    label: 'Qwerty',
+  },
+  {
+    value: 'programmerDvorak',
+    label: 'Programmer Dvorak',
+  },
+]
+
+const staggeredOpts = [{ value: true, label: 'Staggered' }, { value: false, label: 'Orthogonal' }]
 
 const getRadarData = user => {
   if (!user || !user.races) {
@@ -131,11 +173,12 @@ const renderTooltip = v => {
   ({ users, user }, { match: { params: { name } } }) => ({
     name,
     users,
-    loggedId: user && user._id,
+    loggedUser: user || {},
   }),
   {
     logout,
     loadUser,
+    updateUser,
   },
 )
 class User extends PureComponent {
@@ -158,8 +201,9 @@ class User extends PureComponent {
   }
 
   render() {
-    const { users, name, loggedId } = this.props
+    const { users, name, loggedUser, updateUser } = this.props
     const user = users[name] || { name: 'Anon', avatar: 'http://via.placeholder.com/200x200' }
+    const isMe = user._id === loggedUser._id
     const radarData = getRadarData(user)
 
     return (
@@ -195,39 +239,67 @@ class User extends PureComponent {
             </Orgs>
           )}
 
-          {loggedId === user._id && (
-            <Button action={() => this.props.logout()} smallPad>
-              <OffIcon style={{ marginRight: '0.5rem' }} />
-              {'Logout'}
-            </Button>
+          {isMe && (
+            <Settings>
+              <Select
+                options={keyLayouts}
+                value={loggedUser.layout}
+                onChange={e => updateUser({ layout: e.target.value })}
+              />
+              {loggedUser.layout === 'programmerDvorak' && (
+                <Select
+                  value={loggedUser.staggered}
+                  options={staggeredOpts}
+                  onChange={e => updateUser({ staggered: e.target.value })}
+                />
+              )}
+              <Button action={() => this.props.logout()} smallPad>
+                <OffIcon style={{ marginRight: '0.5rem' }} />
+                {'Logout'}
+              </Button>
+            </Settings>
           )}
         </Profile>
 
         <Main>
-          <div style={{ height: radarHeight }}>
-            {radarData && (
-              <RadarChart
-                outerRadius={80}
-                cx={radarWidth / 2}
-                cy={radarHeight / 2}
-                width={radarWidth}
-                height={radarHeight}
-                data={radarData}
-              >
-                <PolarGrid />
-                <Tooltip />
-                <PolarAngleAxis
-                  dataKey="language"
-                  tick={v => <circle cx={v.x} cy={v.y} r="3" fill={getColor(v.payload.value)} />}
+          <div>
+            <Z>
+              {radarData && (
+                <RadarChart
+                  outerRadius={80}
+                  cx={radarWidth / 2}
+                  cy={radarHeight / 2}
+                  width={radarWidth}
+                  height={radarHeight}
+                  data={radarData}
+                >
+                  <PolarGrid />
+                  <Tooltip />
+                  <PolarAngleAxis
+                    dataKey="language"
+                    tick={v => <circle cx={v.x} cy={v.y} r="3" fill={getColor(v.payload.value)} />}
+                  />
+                  <Radar
+                    dataKey="score"
+                    stroke={theme.darkGrey03}
+                    fill={theme.lightgrey01}
+                    fillOpacity={0.5}
+                  />
+                </RadarChart>
+              )}
+              <SubTitle>{'Language skill'}</SubTitle>
+            </Z>
+
+            <Z>
+              <Z style={{ height: radarHeight }}>
+                <TypeMatrix
+                  wrongKeys={user.wrongKeys}
+                  layout={isMe ? loggedUser.layout : user.layout}
+                  staggered={isMe ? loggedUser.staggered : user.staggered}
                 />
-                <Radar
-                  dataKey="score"
-                  stroke={theme.darkGrey03}
-                  fill={theme.lightgrey01}
-                  fillOpacity={0.5}
-                />
-              </RadarChart>
-            )}
+              </Z>
+              <SubTitle>{'Typos heatmap'}</SubTitle>
+            </Z>
           </div>
 
           <AutoSizer disableHeight>

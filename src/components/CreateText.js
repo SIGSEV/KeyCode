@@ -8,6 +8,7 @@ import { languages, textConds } from 'helpers/text'
 import { createText } from 'actions/text'
 import { loadRace } from 'actions/race'
 
+import Select from 'components/base/Select'
 import Button from 'components/Button'
 
 const Narrow = styled.div`
@@ -22,23 +23,6 @@ const Form = styled(FormikForm)`
 `
 
 const Field = styled(FormField)`
-  border: 1px solid ${p => p.theme.lightgrey01};
-  height: 40px;
-  min-width: 300px;
-  padding: 0 10px;
-
-  &::placeholder {
-    color: ${p => p.theme.lightgrey01};
-  }
-
-  &:focus {
-    outline: none;
-    border-color: ${p => p.theme.accent};
-    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px;
-  }
-`
-
-const FormSelect = styled.select`
   border: 1px solid ${p => p.theme.lightgrey01};
   height: 40px;
   min-width: 300px;
@@ -137,14 +121,13 @@ class CreateText extends PureComponent {
 
                     <FormField name="language">
                       {({ field }) => (
-                        <FormSelect name="language" onChange={field.onChange}>
-                          <option value="">{'Select language...'}</option>
-                          {languages.map(l => (
-                            <option key={l} value={l}>
-                              {l}
-                            </option>
-                          ))}
-                        </FormSelect>
+                        <Select
+                          options={[{ value: '', label: 'Select a language' }].concat(
+                            languages.map(value => ({ value })),
+                          )}
+                          name="language"
+                          onChange={field.onChange}
+                        />
                       )}
                     </FormField>
                   </FormGroup>

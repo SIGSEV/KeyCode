@@ -82,7 +82,7 @@ function typeRegular(state, char) {
   const typedWord = p.get('typedWord')
   const newTypedWord = `${typedWord}${char}`
   const charToType = raw[cursor]
-  const charCode = char.charCodeAt()
+  const charCode = charToType.charCodeAt()
 
   p = p
     .update(charToType === char ? 'validKeys' : 'wrongKeys', keys =>

@@ -13,7 +13,7 @@ import { getColor, getTextColor } from 'helpers/colors'
 import TextCard from 'components/TextCard'
 import Button from 'components/Button'
 import Link from 'components/Link'
-import { AutoTypematrix } from 'components/Typematrix'
+import { AutoTypematrix } from 'components/TypeMatrix'
 
 const Container = styled.div`
   > * + * {
@@ -131,7 +131,7 @@ class Home extends PureComponent {
             />
             {' your coding speed.'}
           </Title>
-          <AutoTypematrix text="Welcome to KeyCode!" />
+          <AutoTypematrix text="Welcome to KeyCode!" staggered={false} />
           <Button accent action={() => loadRandom()}>
             {'Random race'}
             <IconNext style={{ marginLeft: 10 }} />
