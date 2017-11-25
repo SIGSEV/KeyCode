@@ -7,7 +7,6 @@ import UserOrLogin from 'components/UserOrLogin'
 
 const Container = styled.div`
   display: flex;
-  padding: 40px;
   align-items: center;
   > * + * {
     margin-left: 40px;
@@ -30,6 +29,7 @@ const HeaderRight = styled.div`
   > * + * {
     margin-left: 40px;
   }
+
   @media (max-width: 500px) {
     margin-left: initial;
   }

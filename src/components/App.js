@@ -26,12 +26,17 @@ const AppContainer = styled.div`
 `
 
 const Full = styled.div`
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  padding-bottom: 100px;
+  padding: 40px;
+
+  > * + * {
+    margin-top: 40px;
+  }
 `
 
 const Main = styled.div`
-  padding: 40px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;

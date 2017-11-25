@@ -9,6 +9,9 @@ export default mongoose.model(
       language: String,
       raw: String,
 
+      // 0 if not set, 1-5 scale when set
+      difficulty: { type: Number, default: 0 },
+
       stars: { type: Number, default: 0 },
       rates: { type: Schema.Types.Mixed, default: {} },
 

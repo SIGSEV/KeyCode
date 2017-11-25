@@ -32,6 +32,8 @@ const stylize = El => styled(({ accent, push, action, grey, minWait, ...props })
   user-select: none;
   text-decoration: none;
   cursor: pointer;
+  flex-shrink: 0;
+  white-space: no-wrap;
 
   &:focus > div {
     border-color: rgba(255, 255, 255, 0.7);
