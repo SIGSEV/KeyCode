@@ -187,7 +187,7 @@ class Pricing extends PureComponent {
               </Feature>
             </ChoiceContent>
             <ChoiceFooter>
-              <Button onClick={this.upgrade('standard')} accent>
+              <Button onClick={this.upgrade('expert')} accent>
                 {'Upgrade'}
               </Button>
             </ChoiceFooter>
