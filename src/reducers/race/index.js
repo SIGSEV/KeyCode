@@ -54,6 +54,8 @@ const handlers = {
   RACE_TYPE_CHAR: (state, { payload: charCode }) => typeCharFn(state, charCode),
   RACE_SET_MAX_DISPLAYED_LINES: (state, { payload: maxDisplayedLines }) =>
     state.setIn(['players', 0, 'maxDisplayedLines'], maxDisplayedLines),
+  SAVE_RACE_SUCCESS: (state, { payload: { data: { leaders } } }) =>
+    state.set('leaders', fromJS(leaders)),
   STAR_TEXT_SUCCESS: (state, { payload: { data } }) => {
     const { id, rates, stars } = data
     if (state.get('id') !== id) {

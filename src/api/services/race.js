@@ -7,6 +7,7 @@ import Race from 'api/models/race'
 
 import { languages, lowerArr } from 'helpers/text'
 import { getStats } from 'helpers/race'
+import { getText } from 'api/services/text'
 import {
   getTeamMembers,
   addUserToOrg,
@@ -160,8 +161,10 @@ export const saveRace = async (payload, user) => {
   await user.save()
 
   if (score < user.currentOrg) {
-    return
+    return getText(text.id)
   }
 
-  return updateUserRank(user, score)
+  await updateUserRank(user, score)
+
+  return getText(text.id)
 }
