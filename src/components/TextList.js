@@ -24,50 +24,26 @@ const Text = styled.div`
   }
 `
 
+const Item = ({ isActive, level, label }) => (
+  <Text tabIndex={0}>
+    <Box horizontal flow={5} align="center">
+      <Ellipsis>{isActive ? <b>{label}</b> : label}</Ellipsis>
+      <DifficultyBadge level={level} />
+    </Box>
+  </Text>
+)
+
 class TextList extends PureComponent {
   render() {
     const { width } = this.props
     return (
       <Container relative style={{ width }}>
         <Box sticky scrollable>
-          <Text tabIndex={0}>
-            <Box horizontal flow={5} align="center">
-              <Ellipsis>
-                <b>first attempt</b>
-              </Ellipsis>
-              <DifficultyBadge level={3} />
-            </Box>
-          </Text>
-          <Text>
-            <Box horizontal flow={5} align="center">
-              <Ellipsis>very long title of the week thing thing</Ellipsis>
-              <DifficultyBadge level={2} />
-            </Box>
-          </Text>
-          <Text>
-            <Box horizontal flow={5} align="center">
-              <Ellipsis>very long title of the week thing thing</Ellipsis>
-              <DifficultyBadge level={2} />
-            </Box>
-          </Text>
-          <Text>
-            <Box horizontal flow={5} align="center">
-              <Ellipsis>very long title of the week thing thing</Ellipsis>
-              <DifficultyBadge level={2} />
-            </Box>
-          </Text>
-          <Text>
-            <Box horizontal flow={5} align="center">
-              <Ellipsis>very long title of the week thing thing</Ellipsis>
-              <DifficultyBadge level={2} />
-            </Box>
-          </Text>
-          <Text>
-            <Box horizontal flow={5} align="center">
-              <Ellipsis>very long title of the week thing thing</Ellipsis>
-              <DifficultyBadge level={2} />
-            </Box>
-          </Text>
+          <Item level={3} label="first attempt" />
+          <Item isActive level={2} label="very long title of the week thing thing" />
+          <Item level={4} label="osa snoth sanot" />
+          <Item level={5} label="asn taaantuh  noath" />
+          <Item level={0} label="noob" />
         </Box>
       </Container>
     )
