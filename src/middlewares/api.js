@@ -14,7 +14,8 @@ export default store => next => async action => {
   const prefix = action.type.split(':')[1]
   const state = getState()
 
-  let { url = '', body, method = 'GET' } = action.payload
+  const { body } = action.payload
+  let { url = '', method = 'GET' } = action.payload
   const { query } = action.payload
 
   if (isGraphql) {
@@ -33,20 +34,19 @@ export default store => next => async action => {
     headers.SIGSEV = state.user.jwt
   }
 
-  if (body) {
-    body = JSON.stringify(body)
-  }
-
   try {
     dispatch({ type: `${prefix}_START` })
-    const payload = { method, headers, body }
+    const payload = { method, headers, body: JSON.stringify(body) }
     const res = await fetch(url, payload)
     const data = await res.json()
     if (!res.ok) {
       throw new Error(data.message || 'An error occured')
     }
 
-    dispatch({ type: `${prefix}_SUCCESS`, payload: { ...payload, query, data } })
+    dispatch({
+      type: `${prefix}_SUCCESS`,
+      payload: { ...payload, body: action.payload.body, query, data },
+    })
     return data
   } catch (err) {
     if (err.message) {
