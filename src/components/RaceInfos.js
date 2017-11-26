@@ -109,6 +109,7 @@ class RaceInfos extends PureComponent {
     const hasStarred = userId && rates.get(userId)
     const text = race.get('text')
     const leaders = race.get('leaders')
+    const difficulty = race.get('difficulty')
 
     return (
       <Container>
@@ -131,10 +132,14 @@ class RaceInfos extends PureComponent {
               <b>{text.get('wordsCount')}</b>
               &nbsp;{'words'}
             </Meta>
-            <Meta>
-              {'Difficulty:'}&nbsp;
-              <b>{difficultyMap[race.get('difficulty')]}</b>
-            </Meta>
+            {difficulty ? (
+              <Meta>
+                {'Difficulty:'}&nbsp;
+                <b>{difficultyMap[difficulty]}</b>
+              </Meta>
+            ) : (
+              <Meta>{'Awaiting review'}</Meta>
+            )}
             {isAdmin && (
               <Meta interactive tabIndex={0} danger onClick={this.handleDelete}>
                 {'Delete'}
