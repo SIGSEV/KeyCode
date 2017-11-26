@@ -31,6 +31,19 @@ export function starText(id) {
   }
 }
 
+export function gradeText(id, grade) {
+  return {
+    type: 'API:GRADE_TEXT',
+    payload: {
+      url: `/texts/${id}/grade`,
+      method: 'PUT',
+      body: {
+        grade,
+      },
+    },
+  }
+}
+
 export function deleteText(id) {
   return async dispatch => {
     await dispatch({

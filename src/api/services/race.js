@@ -138,6 +138,10 @@ export const saveRace = async (payload, user) => {
 
   const text = await Text.findOne({ id: textId })
 
+  if (text.difficulty === 0) {
+    throw new Error('This text is not verified, cannot score on it yet.')
+  }
+
   await Race.create({
     text: text._id,
     user: user._id,

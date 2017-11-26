@@ -15,8 +15,9 @@ import {
   getText,
   getTexts,
   getRandomText,
-  voteText,
+  starText,
   createText,
+  gradeText,
 } from 'api/services/text'
 
 global.fetch = fetch
@@ -101,9 +102,17 @@ api.post('/texts', setUser(), async (req, res) => {
   }
 })
 
+api.put('/texts/:id/grade', isAuthenticated(), async (req, res) => {
+  try {
+    res.send(await gradeText(req.params.id, req.body.grade, req.user))
+  } catch ({ message }) {
+    res.status(500).send({ message })
+  }
+})
+
 api.put('/texts/:id/star', isAuthenticated(), async (req, res) => {
   try {
-    res.send(await voteText(req.params.id, req.user._id.toString()))
+    res.send(await starText(req.params.id, req.user._id.toString()))
   } catch ({ message }) {
     res.status(500).send({ message })
   }
@@ -133,9 +142,9 @@ api.delete('/texts/:id', isAuthenticated(), async (req, res) => {
   }
 })
 
-api.get('/texts', async (req, res) => {
+api.get('/texts', setUser(), async (req, res) => {
   try {
-    res.send(await getTexts(req.query))
+    res.send(await getTexts(req.query, req.user))
   } catch ({ message }) {
     res.status(500).send({ message })
   }

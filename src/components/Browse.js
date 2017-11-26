@@ -15,7 +15,7 @@ class Browse extends Component {
 
     const query = new URLSearchParams(location.search)
     const language = query.get('language')
-    loadTexts({ language })
+    loadTexts({ language, limit: 100 })
   }
 
   render() {

@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 
 import { getTextColor } from 'helpers/colors'
-import { getPlayer, getText } from 'reducers/race'
+import { getPlayer } from 'reducers/race'
 
 const statuses = {
   waiting: {

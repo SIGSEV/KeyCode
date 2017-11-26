@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
 
 import Box from 'components/base/Box'
 import TextList from 'components/TextList'
 import Button from 'components/Button'
+
+import { gradeText, loadTexts } from 'actions/text'
 
 const EvalBox = styled.div`
   flex-grow: 1;
@@ -32,36 +35,72 @@ const TextContent = styled.div`
   white-space: pre;
 `
 
-const actions = ['1 - Baby text', '2 - Easy', '3 - Medium', '4 - Hard', '5 - Hardcore']
+const actions = ['0 - Shit', '1 - Baby text', '2 - Easy', '3 - Medium', '4 - Hard', '5 - Hardcore']
 
+@connect(({ user, texts }) => ({ user, texts: texts.get('eval') }), {
+  loadTexts,
+  gradeText,
+})
 class Eval extends PureComponent {
-  handleDelete = () => alert('deleting')
-  handleEval = level => alert(`evaluating ${level}`)
+  state = {
+    focusedText: null,
+  }
+
+  componentDidMount() {
+    const { texts, loadTexts } = this.props
+
+    if (texts.size) {
+      return
+    }
+
+    loadTexts({ evalMode: true, limit: 100 })
+  }
+
+  handleEval = grade => {
+    const { gradeText } = this.props
+    const { focusedText } = this.state
+
+    if (!focusedText) {
+      return
+    }
+
+    const id = focusedText.get('id')
+    gradeText(id, grade)
+    this.setState({ focusedText: null })
+  }
 
   render() {
+    const { texts, user } = this.props
+    const { focusedText } = this.state
+
     return (
       <Box grow>
         <EvalBox>
-          <TextList width={250} />
+          <TextList
+            onClick={focusedText => this.setState({ focusedText })}
+            texts={texts}
+            focusedText={focusedText}
+            width={250}
+          />
           <Box grow>
-            <EvalActions>
-              <b>{'Evaluate:'}</b>
-              <Button smallPad noHeight onClick={this.handleDelete}>
-                {'0 - Shit'}
-              </Button>
-              {actions.map((a, i) => (
-                <Button key={a} smallPad noHeight onClick={() => this.handleEval(i + 1)}>
-                  {a}
-                </Button>
-              ))}
-            </EvalActions>
+            {user && (
+              <EvalActions>
+                <b>{'Evaluate:'}</b>
+                {actions.map((a, i) => (
+                  <Button
+                    key={a}
+                    smallPad
+                    noHeight
+                    onClick={() => this.handleEval(i === 0 ? -1 : i)}
+                  >
+                    {a}
+                  </Button>
+                ))}
+              </EvalActions>
+            )}
             <Box grow relative>
               <Box sticky scrollable>
-                <TextContent>
-                  {
-                    'this is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\n'
-                  }
-                </TextContent>
+                <TextContent>{focusedText && focusedText.get('raw')}</TextContent>
               </Box>
             </Box>
           </Box>

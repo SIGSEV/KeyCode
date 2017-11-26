@@ -74,12 +74,13 @@ const populateText = async text => {
 }
 
 export const getRandomText = async () => {
-  const count = await Text.count()
+  const count = await Text.count({ difficulty: { $ne: 0 } })
   if (!count) {
     throw new Error('No text found')
   }
+
   const random = Math.floor(Math.random() * count)
-  const text = await Text.findOne().skip(random)
+  const text = await Text.findOne({ difficulty: { $ne: 0 } }).skip(random)
 
   return populateText(text)
 }
@@ -89,12 +90,37 @@ export const getText = async id => {
   return populateText(text)
 }
 
-export const voteText = async (id, userId) => {
+export const starText = async (id, userId) => {
   const text = await Text.findOne({ id })
   const stars = text.stars + (text.rates[userId] ? -1 : 1)
   await text.update({ $set: { stars, [`rates.${userId}`]: !text.rates[userId] } })
 
   return getText(id)
+}
+
+export const gradeText = async (id, grade, user) => {
+  const text = await Text.findOne({ id })
+  const alreadyGraded = text.grades.some(g => g.user.equals(user._id))
+
+  if (isNaN(grade) || grade > 5 || text.difficulty !== 0 || alreadyGraded) {
+    throw new Error('👏👏👏👏 Fucking CUNT!')
+  }
+
+  text.grades.push({ value: grade, user: user._id })
+
+  if (user.admin) {
+    text.difficulty = grade
+  } else if (text.grades.length >= 3) {
+    text.difficulty =
+      text.grades.filter(g => g.value === -1).length > 1
+        ? -1
+        : Math.max(
+            Math.floor(text.grades.reduce((acc, cur) => acc + cur.value, 0) / text.grades.length),
+            1,
+          )
+  }
+
+  return text.save()
 }
 
 export const deleteText = async (id, user) => {
@@ -106,12 +132,18 @@ export const deleteText = async (id, user) => {
   throw new Error('Unauthorized.')
 }
 
-export const getTexts = async params => {
-  const { limit = 10, sort = 'stars', ...searchParams } = params
+export const getTexts = async (params, user) => {
+  const { limit = 10, sort = 'stars', evalMode = false, ...searchParams } = params
 
-  const texts = await Text.find(searchParams)
+  const payload = {
+    ...searchParams,
+    difficulty: evalMode ? 0 : { $gt: 0 },
+    ...(evalMode && user ? { 'grades.user': { $nin: [user._id] } } : {}),
+  }
+
+  const texts = await Text.find(payload)
     .sort([[sort, -1]])
-    .limit(limit)
+    .limit(Number(limit))
     .exec()
 
   return Promise.all(texts.map(populateText))

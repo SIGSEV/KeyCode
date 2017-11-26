@@ -4,11 +4,8 @@ import Pricing from 'components/Pricing'
 import User from 'components/User'
 import CreateText from 'components/CreateText'
 import LeaderBoard from 'components/LeaderBoard'
-<<<<<<< HEAD
-import Eval from 'components/pages/Eval'
-=======
 import Browse from 'components/Browse'
->>>>>>> setup new browse page for my wonderful frlend
+import Eval from 'components/pages/Eval'
 
 import { loadUser } from 'actions/user'
 import { loadRace } from 'actions/race'
@@ -41,7 +38,7 @@ export default [
   {
     path: '/browse',
     component: Browse,
-    load: ({ dispatch, query }) => dispatch(loadTexts(query)),
+    load: ({ dispatch, query }) => dispatch(loadTexts({ ...query, limit: 100 })),
   },
   {
     path: '/u/:name',
@@ -51,6 +48,7 @@ export default [
   {
     path: '/eval',
     component: Eval,
+    load: ({ dispatch }) => dispatch(loadTexts({ limit: 100, evalMode: true })),
   },
   {
     path: '/pricing',

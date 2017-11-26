@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import Box from 'components/base/Box'
 import Ellipsis from 'components/base/Ellipsis'
-import DifficultyBadge from 'components/DifficultyBadge'
 
 const Container = styled(Box)`
   border-right: 1px solid ${p => p.theme.lightgrey01};
@@ -12,7 +11,8 @@ const Container = styled(Box)`
 const Text = styled.div`
   padding: 10px;
   border-bottom: 1px solid ${p => p.theme.lightgrey01};
-  cursor: default;
+  cursor: pointer;
+
   &:hover {
     background: ${p => p.theme.lightgrey03};
   }
@@ -24,26 +24,46 @@ const Text = styled.div`
   }
 `
 
-const Item = ({ isActive, level, label }) => (
-  <Text tabIndex={0}>
+const Dots = styled.div`
+  margin-right: 0.5rem;
+  > * + * {
+    margin-top: 0.2rem;
+  }
+`
+
+const Dot = styled.div`
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: ${p =>
+    p.grade === -1 ? p.theme.red : p.grade > 2 ? p.theme.green : p.theme.yellow};
+`
+
+const Item = ({ onClick, grades, isActive, label }) => (
+  <Text onClick={onClick} tabIndex={0}>
     <Box horizontal flow={5} align="center">
+      <Dots>{grades.map(grade => <Dot key={grade.get('user')} grade={grade.get('value')} />)}</Dots>
       <Ellipsis>{isActive ? <b>{label}</b> : label}</Ellipsis>
-      <DifficultyBadge level={level} />
     </Box>
   </Text>
 )
 
 class TextList extends PureComponent {
   render() {
-    const { width } = this.props
+    const { width, texts, onClick, focusedText } = this.props
+
     return (
       <Container relative style={{ width }}>
         <Box sticky scrollable>
-          <Item level={3} label="first attempt" />
-          <Item isActive level={2} label="very long title of the week thing thing" />
-          <Item level={4} label="osa snoth sanot" />
-          <Item level={5} label="asn taaantuh  noath" />
-          <Item level={0} label="noob" />
+          {texts.map(text => (
+            <Item
+              grades={text.get('grades')}
+              onClick={() => onClick(text)}
+              isActive={text.get('id') === focusedText}
+              label={text.get('title')}
+              key={text.get('id')}
+            />
+          ))}
         </Box>
       </Container>
     )
