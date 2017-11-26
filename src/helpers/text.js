@@ -30,6 +30,14 @@ export const textConds = {
   max: 1000,
 }
 
+export const difficultyMap = {
+  1: 'baby',
+  2: 'easy',
+  3: 'medium',
+  4: 'hard',
+  5: 'hardcore',
+}
+
 export const lowerMap = languages.reduce((acc, l) => ((acc[l.toLowerCase()] = l), acc), {})
 export const lowerArr = Object.keys(lowerMap)
 

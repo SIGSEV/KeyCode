@@ -35,7 +35,7 @@ const TextContent = styled.div`
   white-space: pre;
 `
 
-const actions = ['0 - Shit', '1 - Baby text', '2 - Easy', '3 - Medium', '4 - Hard', '5 - Hardcore']
+const actions = ['0 - Shit', '1 - Baby', '2 - Easy', '3 - Medium', '4 - Hard', '5 - Hardcore']
 
 @connect(({ user, texts }) => ({ user, texts: texts.get('eval') }), {
   loadTexts,

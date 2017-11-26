@@ -6,6 +6,7 @@ import IconReplay from 'react-icons/lib/md/replay'
 
 import { starText, deleteText } from 'actions/text'
 import { ghostRace } from 'actions/race'
+import { difficultyMap } from 'helpers/text'
 
 import Link from 'components/Link'
 import Button from 'components/Button'
@@ -132,7 +133,7 @@ class RaceInfos extends PureComponent {
             </Meta>
             <Meta>
               {'Difficulty:'}&nbsp;
-              <b>{'medium'}</b>
+              <b>{difficultyMap[race.get('difficulty')]}</b>
             </Meta>
             {isAdmin && (
               <Meta interactive tabIndex={0} danger onClick={this.handleDelete}>
