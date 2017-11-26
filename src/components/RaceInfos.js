@@ -102,13 +102,10 @@ class RaceInfos extends PureComponent {
   render() {
     const { userId, isAdmin, starText, race, ghostRace } = this.props
 
-    const author = race.get('author')
     const rates = race.get('rates')
     const language = race.get('language')
     const stars = race.get('stars')
     const hasStarred = userId && rates.get(userId)
-    const authorID = author && author.get('_id')
-    const canEdit = userId === authorID || isAdmin
     const text = race.get('text')
     const leaders = race.get('leaders')
 
@@ -137,7 +134,7 @@ class RaceInfos extends PureComponent {
               {'Difficulty:'}&nbsp;
               <b>{'medium'}</b>
             </Meta>
-            {canEdit && (
+            {isAdmin && (
               <Meta interactive tabIndex={0} danger onClick={this.handleDelete}>
                 {'Delete'}
               </Meta>

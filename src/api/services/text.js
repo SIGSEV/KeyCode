@@ -125,11 +125,11 @@ export const gradeText = async (id, grade, user) => {
 
 export const deleteText = async (id, user) => {
   const text = await Text.findOne({ id })
-  if (user.admin || user._id.equals(text.author)) {
+  if (user.admin) {
     return text.remove()
   }
 
-  throw new Error('Unauthorized.')
+  throw new Error('Unauthorized, bitch.')
 }
 
 export const getTexts = async (params, user) => {
