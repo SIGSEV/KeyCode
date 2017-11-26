@@ -26,9 +26,18 @@ const EvalActions = styled.div`
   }
 `
 
+const TextContent = styled.div`
+  font-family: monospace;
+  padding: 10px;
+  white-space: pre;
+`
+
 const actions = ['1 - Baby text', '2 - Easy', '3 - Medium', '4 - Hard', '5 - Hardcore']
 
 class Eval extends PureComponent {
+  handleDelete = () => alert('deleting')
+  handleEval = level => alert(`evaluating ${level}`)
+
   render() {
     return (
       <Box grow>
@@ -37,15 +46,22 @@ class Eval extends PureComponent {
           <Box grow>
             <EvalActions>
               <b>{'Evaluate:'}</b>
-              {actions.map(a => (
-                <Button key={a} smallPad noHeight>
+              <Button smallPad noHeight onClick={this.handleDelete}>
+                {'0 - Shit'}
+              </Button>
+              {actions.map((a, i) => (
+                <Button key={a} smallPad noHeight onClick={() => this.handleEval(i + 1)}>
                   {a}
                 </Button>
               ))}
             </EvalActions>
-            <Box relative>
+            <Box grow relative>
               <Box sticky scrollable>
-                <div>onetuhoenth</div>
+                <TextContent>
+                  {
+                    'this is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\nthis is the text content\n'
+                  }
+                </TextContent>
               </Box>
             </Box>
           </Box>
