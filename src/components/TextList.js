@@ -5,7 +5,7 @@ import Box from 'components/base/Box'
 import Ellipsis from 'components/base/Ellipsis'
 import DifficultyBadge from 'components/DifficultyBadge'
 
-const Container = styled.div`
+const Container = styled(Box)`
   border-right: 1px solid ${p => p.theme.lightgrey01};
 `
 
@@ -16,8 +16,11 @@ const Text = styled.div`
   &:hover {
     background: ${p => p.theme.lightgrey03};
   }
+  &:active {
+    background: ${p => p.theme.lightgrey02};
+  }
   &:focus {
-    outline: 1px dashed ${p => p.theme.blue};
+    outline: none;
   }
 `
 
@@ -25,21 +28,47 @@ class TextList extends PureComponent {
   render() {
     const { width } = this.props
     return (
-      <Container style={{ width }}>
-        <Text tabIndex={0}>
-          <Box horizontal flow={5} align="center">
-            <Ellipsis>
-              <b>first attempt</b>
-            </Ellipsis>
-            <DifficultyBadge level={3} />
-          </Box>
-        </Text>
-        <Text>
-          <Box horizontal flow={5} align="center">
-            <Ellipsis>very long title of the week thing thing</Ellipsis>
-            <DifficultyBadge level={2} />
-          </Box>
-        </Text>
+      <Container relative style={{ width }}>
+        <Box sticky scrollable>
+          <Text tabIndex={0}>
+            <Box horizontal flow={5} align="center">
+              <Ellipsis>
+                <b>first attempt</b>
+              </Ellipsis>
+              <DifficultyBadge level={3} />
+            </Box>
+          </Text>
+          <Text>
+            <Box horizontal flow={5} align="center">
+              <Ellipsis>very long title of the week thing thing</Ellipsis>
+              <DifficultyBadge level={2} />
+            </Box>
+          </Text>
+          <Text>
+            <Box horizontal flow={5} align="center">
+              <Ellipsis>very long title of the week thing thing</Ellipsis>
+              <DifficultyBadge level={2} />
+            </Box>
+          </Text>
+          <Text>
+            <Box horizontal flow={5} align="center">
+              <Ellipsis>very long title of the week thing thing</Ellipsis>
+              <DifficultyBadge level={2} />
+            </Box>
+          </Text>
+          <Text>
+            <Box horizontal flow={5} align="center">
+              <Ellipsis>very long title of the week thing thing</Ellipsis>
+              <DifficultyBadge level={2} />
+            </Box>
+          </Text>
+          <Text>
+            <Box horizontal flow={5} align="center">
+              <Ellipsis>very long title of the week thing thing</Ellipsis>
+              <DifficultyBadge level={2} />
+            </Box>
+          </Text>
+        </Box>
       </Container>
     )
   }
