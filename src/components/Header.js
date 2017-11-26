@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import Link from 'components/Link'
@@ -43,8 +44,11 @@ const Bold = styled.div`
 `
 
 @withRouter
+@connect(({ user }) => ({ user }))
 class Header extends PureComponent {
   render() {
+    const { user } = this.props
+
     return (
       <Container>
         <Link to="/">
@@ -52,7 +56,7 @@ class Header extends PureComponent {
         </Link>
         <HeaderRight>
           <Link to="/leaderboard">{'LeaderBoard'}</Link>
-          <Link to="/eval">{'Eval'}</Link>
+          {user && <Link to="/eval">{'Eval'}</Link>}
           <Link to="/pricing">{'Pricing'}</Link>
           <UserOrLogin />
         </HeaderRight>
