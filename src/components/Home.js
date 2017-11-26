@@ -11,6 +11,7 @@ import { loadTexts } from 'actions/text'
 import { getColor, getTextColor } from 'helpers/colors'
 
 import Box from 'components/base/Box'
+import Narrow from 'components/base/Narrow'
 import TextCard from 'components/TextCard'
 import Button from 'components/Button'
 import Link from 'components/Link'
@@ -129,7 +130,7 @@ class Home extends PureComponent {
           </div>
         </Hero>
 
-        <Box narrow flow={50}>
+        <Narrow flow={50}>
           <Section>
             <SectionTitle>
               {'Challenges by language'}
@@ -150,7 +151,7 @@ class Home extends PureComponent {
           <div>
             {texts.get('global').map(text => <TextCard text={text} key={text.get('id')} />)}
           </div>
-        </Box>
+        </Narrow>
       </Box>
     )
   }
