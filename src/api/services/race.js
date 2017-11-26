@@ -30,7 +30,7 @@ const getLeaderboard = language =>
         },
       },
       { $sort: { score: -1 } },
-      { $limit: 10 },
+      { $limit: 3 },
       {
         $lookup: {
           from: 'users',

@@ -137,11 +137,13 @@ async function updateOrgProfile(page, suffix) {
   })
 
   await (await page.$('#organization_profile_bio')).type(
-    isLang ? `${suffix} KeyCode leaders` : `Score > ${suffix}`,
+    isLang ? `Top 3 ${suffix} leaders` : `Score > ${suffix}`,
   )
 
   await (await page.$('#organization_profile_blog')).type(
-    isLang ? `https://keycode.sigsev.io/l/${suffix.toLowerCase()}` : 'https://keycode.sigsev.io',
+    isLang
+      ? `https://keycode.sigsev.io/browse?language=${suffix.toLowerCase()}`
+      : 'https://keycode.sigsev.io',
   )
 
   await (await page.$('button.btn.btn-primary')).click()
