@@ -35,8 +35,7 @@ const Dot = styled.div`
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: ${p =>
-    p.grade === -1 ? p.theme.red : p.grade > 2 ? p.theme.green : p.theme.yellow};
+  background-color: ${p => p.theme.grades[p.grade]};
 `
 
 const Item = ({ onClick, grades, isActive, label }) => (

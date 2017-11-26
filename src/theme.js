@@ -1,6 +1,8 @@
 const red = '#ce6161'
 const blue = '#1687ee'
 const green = '#8fdc83'
+const orange = '#f28930'
+const yellow = '#fee009'
 
 export default {
   darkGrey00: '#444',
@@ -14,15 +16,24 @@ export default {
   red,
   blue,
   green,
-  yellow: '#fee009',
+  yellow,
   accent: '#1687ee',
   link: '#1687ee',
-  orange: '#f28930',
+  orange,
   bg: 'white',
 
   toasts: {
     error: red,
     info: blue,
     success: green,
+  },
+
+  grades: {
+    '-1': red,
+    1: orange,
+    2: orange,
+    3: yellow,
+    4: green,
+    5: green,
   },
 }
