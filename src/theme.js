@@ -4,8 +4,10 @@ const green = '#8fdc83'
 const orange = '#f28930'
 const yellow = '#fee009'
 
+const darkGrey00 = '#444'
+
 export default {
-  darkGrey00: '#444',
+  darkGrey00,
   darkGrey01: '#4c4c4c',
   darkGrey02: '#535353',
   darkGrey03: '#636363',
@@ -29,9 +31,9 @@ export default {
   },
 
   grades: {
-    '-1': red,
-    1: orange,
-    2: orange,
+    '-1': darkGrey00,
+    1: green,
+    2: green,
     3: yellow,
     4: green,
     5: green,
