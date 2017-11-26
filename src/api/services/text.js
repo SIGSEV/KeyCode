@@ -74,13 +74,13 @@ const populateText = async text => {
 }
 
 export const getRandomText = async () => {
-  const count = await Text.count({ difficulty: { $ne: 0 } })
+  const count = await Text.count({ difficulty: { $gt: 0 } })
   if (!count) {
     throw new Error('No text found')
   }
 
   const random = Math.floor(Math.random() * count)
-  const text = await Text.findOne({ difficulty: { $ne: 0 } }).skip(random)
+  const text = await Text.findOne({ difficulty: { $gt: 0 } }).skip(random)
 
   return populateText(text)
 }
