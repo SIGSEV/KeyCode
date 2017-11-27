@@ -15,7 +15,7 @@ import {
   updateUserRank,
 } from 'api/services/github'
 
-const getLeaderboard = language =>
+const getLeaderboard = (language, limit = 10) =>
   Race.aggregate(
     [
       language && { $match: { language } },
@@ -30,7 +30,7 @@ const getLeaderboard = language =>
         },
       },
       { $sort: { score: -1 } },
-      { $limit: 3 },
+      { $limit: limit },
       {
         $lookup: {
           from: 'users',
@@ -69,7 +69,7 @@ export const getLeaderboards = async () => {
     return cached
   }
 
-  const res = (await Promise.all(lowerArr.concat([null]).map(getLeaderboard))).reduce(
+  const res = (await Promise.all(lowerArr.concat([null]).map(l => getLeaderboard(l)))).reduce(
     (acc, cur, i) => ((acc[lowerArr[i] || 'global'] = cur), acc),
     {},
   )
@@ -81,7 +81,7 @@ export const getLeaderboards = async () => {
 export const refreshLeaderOrgs = () => {
   languages.forEach(async language => {
     try {
-      const leaders = await getLeaderboard(language.toLowerCase())
+      const leaders = await getLeaderboard(language.toLowerCase(), 3)
       const leaderNames = leaders.map(l => l.user.name)
       const members = (await getTeamMembers(language)).filter(f => f.login !== 'KeyCode-Master')
       const memberNames = members.map(m => m.login)
