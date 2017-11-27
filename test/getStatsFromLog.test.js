@@ -39,7 +39,7 @@ test('should handle backspace', () => {
     typedWordsCount: 2,
     wrongWordsCount: 0,
     validKeys: { '97': 6, '32': 1 },
-    wrongKeys: { '98': 1 },
+    wrongKeys: { '97': 1 },
   })
 })
 
