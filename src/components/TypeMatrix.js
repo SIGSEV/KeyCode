@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import random from 'lodash/random'
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes, css } from 'styled-components'
 import { scaleLinear } from 'd3-scale'
 import isEqual from 'lodash/isEqual'
 
@@ -8,10 +8,21 @@ import * as LAYOUTS from 'assets/layouts'
 
 const keyWidth = 12
 
+const hoverKey = css`
+  &:hover {
+    .key:not(:hover) {
+      opacity: 0.6;
+    }
+  }
+`
+
 const Container = styled.div`
   border-radius: 4px;
   border: 2px solid ${p => p.theme.darkGrey00};
   padding: 2px;
+
+  ${p => (p.hasHover ? hoverKey : null)};
+
   > * + * {
     margin-top: 2px;
   }
@@ -54,6 +65,14 @@ const Key = styled.div`
   animation: ${p => (p.isActive ? `${keyAnim(p)} 250ms linear` : 'none')};
 `
 
+const KeyInfo = styled.div`
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.2rem;
+  text-align: center;
+`
+
 class Typematrix extends PureComponent {
   static defaultProps = {
     layout: 'programmerDvorak',
@@ -63,6 +82,7 @@ class Typematrix extends PureComponent {
 
   state = {
     activeKey: null,
+    hovered: null,
   }
 
   componentWillMount() {
@@ -151,31 +171,50 @@ class Typematrix extends PureComponent {
 
   render() {
     const { layout, staggered, wrongKeys } = this.props
-    const { activeKey } = this.state
+    const { activeKey, hovered } = this.state
 
     /* eslint-disable react/no-array-index-key */
     let index = 0
     return (
-      <Container>
-        {LAYOUTS[layout].map((row, i) => (
-          <Row isStaggered={staggered} layout={layout} index={i} key={i}>
-            {row.map((key, j) => {
-              const { color, count } = this.getKeyMeta(key)
-              const k = (
-                <Key
-                  key={j}
-                  {...(wrongKeys ? { 'data-balloon': `${key.join(' ')} (${count} typos)` } : {})}
-                  data-balloon-pos="up"
-                  keyColor={color}
-                  isActive={activeKey === index}
-                />
-              )
-              index++
-              return k
-            })}
-          </Row>
-        ))}
-      </Container>
+      <div>
+        <Container hasHover={wrongKeys}>
+          {LAYOUTS[layout].map((row, i) => (
+            <Row isStaggered={staggered} layout={layout} index={i} key={i}>
+              {row.map((key, j) => {
+                const { color, count } = this.getKeyMeta(key)
+                const k = (
+                  <Key
+                    key={j}
+                    className="key"
+                    onMouseOver={() => this.setState({ hovered: { key, count } })}
+                    onMouseOut={() => this.setState({ hovered: null })}
+                    keyColor={color}
+                    isActive={activeKey === index}
+                  />
+                )
+                index++
+                return k
+              })}
+            </Row>
+          ))}
+        </Container>
+
+        {wrongKeys && (
+          <KeyInfo>
+            {hovered && (
+              <div>
+                <span>
+                  <b>{hovered.key[0]}</b> <b>{hovered.key[1]}</b>
+                </span>
+                <div>
+                  {hovered.count}
+                  {' typos'}
+                </div>
+              </div>
+            )}
+          </KeyInfo>
+        )}
+      </div>
     )
     /* eslint-enable react/no-array-index-key */
   }
