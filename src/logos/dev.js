@@ -1,6 +1,5 @@
 import generateLogo from './generate-logo'
 import teamIds from '../api/team-ids'
-import { languages } from '../../src/helpers/text'
 
 const style = document.createElement('style')
 style.innerHTML = `
@@ -56,11 +55,9 @@ const addCanvas = suffix => {
 }
 
 const gen = () => {
-  const nums = Object.keys(teamIds)
+  const orgs = Object.keys(teamIds)
   root.innerHTML = null
-
-  nums.forEach(addCanvas)
-  languages.forEach(addCanvas)
+  orgs.forEach(addCanvas)
 }
 
 gen()
