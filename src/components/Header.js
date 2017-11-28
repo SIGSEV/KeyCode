@@ -55,9 +55,10 @@ class Header extends PureComponent {
           <Bold>{'KeyCode'}</Bold>
         </Link>
         <HeaderRight>
+          <Link to="/browse">{'Browse'}</Link>
+          {user && <Link to="/eval">{'Review'}</Link>}
           <Link to="/leaderboard">{'LeaderBoard'}</Link>
-          {user && <Link to="/eval">{'Eval'}</Link>}
-          <Link to="/pricing">{'Pricing'}</Link>
+          {!user && <Link to="/pricing">{'Pricing'}</Link>}
           <UserOrLogin />
         </HeaderRight>
       </Container>

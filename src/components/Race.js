@@ -105,7 +105,7 @@ class Race extends PureComponent {
         <RaceHeader>
           <div>
             <Button onClick={() => push('/')}>{'/'}</Button>
-            <Button onClick={() => push(`/l/${language}`)}>{language}</Button>
+            <Button onClick={() => push(`/browse?language=${language}`)}>{language}</Button>
           </div>
           <span className="title">{title}</span>
           <UserOrLogin fuckradius="definitely" />
