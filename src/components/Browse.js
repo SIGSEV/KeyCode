@@ -41,10 +41,12 @@ class Browse extends Component {
   }
 
   componentWillMount() {
-    const query = new URLSearchParams(location.search)
-    const language = query.get('language') || undefined
-    if (language) {
-      this.setState({ activeLanguage: language })
+    if (__BROWSER__) {
+      const query = new URLSearchParams(location.search)
+      const language = query.get('language') || undefined
+      if (language) {
+        this.setState({ activeLanguage: language })
+      }
     }
   }
 
