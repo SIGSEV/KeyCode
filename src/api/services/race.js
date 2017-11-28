@@ -8,6 +8,7 @@ import Race from 'api/models/race'
 import { languages, lowerArr } from 'helpers/text'
 import getScore from 'helpers/getScore'
 import { getText } from 'api/services/text'
+import { getUsersCount } from 'api/services/user'
 import {
   getTeamMembers,
   addUserToOrg,
@@ -78,7 +79,11 @@ export const getLeaderboards = async () => {
   return res
 }
 
-export const refreshLeaderOrgs = () => {
+export const refreshLeaderOrgs = async () => {
+  const count = await getUsersCount()
+  if (count < 100) {
+    return
+  }
   languages.forEach(async language => {
     try {
       const leaders = await getLeaderboard(language.toLowerCase(), 3)

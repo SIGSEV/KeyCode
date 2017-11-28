@@ -3,6 +3,7 @@ import Race from 'api/models/race'
 
 import { getOrgs } from 'api/services/github'
 
+export const getUsersCount = () => User.count()
 export const getAllUsers = () => User.findAll()
 export const getUserById = id => User.findById(id)
 export const getByGithub = githubId => User.findOne({ githubId })
