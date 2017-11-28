@@ -102,7 +102,7 @@ export const gradeText = async (id, grade, user) => {
   const text = await Text.findOne({ id })
   const alreadyGraded = text.grades.some(g => g.user.equals(user._id))
 
-  if (isNaN(grade) || grade > 5 || text.difficulty !== 0 || alreadyGraded) {
+  if (!user.admin && (isNaN(grade) || grade > 5 || text.difficulty !== 0 || alreadyGraded)) {
     throw new Error('👏👏👏👏 Fucking CUNT!')
   }
 
@@ -137,8 +137,8 @@ export const getTexts = async (params, user) => {
 
   const payload = {
     ...searchParams,
-    difficulty: evalMode ? 0 : { $gt: 0 },
-    ...(evalMode && user ? { 'grades.user': { $nin: [user._id] } } : {}),
+    difficulty: evalMode ? (user.admin ? { $gt: -2 } : 0) : { $gt: 0 },
+    ...(evalMode && user && !user.admin ? { 'grades.user': { $nin: [user._id] } } : {}),
   }
 
   const texts = await Text.find(payload)

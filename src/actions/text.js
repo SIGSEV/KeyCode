@@ -31,7 +31,7 @@ export function starText(id) {
   }
 }
 
-export function gradeText(id, grade) {
+export function gradeText(id, grade, admin) {
   return {
     type: 'API:GRADE_TEXT',
     payload: {
@@ -39,6 +39,7 @@ export function gradeText(id, grade) {
       method: 'PUT',
       body: {
         grade,
+        admin,
       },
     },
   }

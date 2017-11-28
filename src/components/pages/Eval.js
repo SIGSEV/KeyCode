@@ -57,7 +57,7 @@ class Eval extends PureComponent {
   }
 
   handleEval = grade => {
-    const { gradeText } = this.props
+    const { gradeText, user } = this.props
     const { focusedText } = this.state
 
     if (!focusedText) {
@@ -65,7 +65,7 @@ class Eval extends PureComponent {
     }
 
     const id = focusedText.get('id')
-    gradeText(id, grade)
+    gradeText(id, grade, user.admin)
     this.setState({ focusedText: null })
   }
 

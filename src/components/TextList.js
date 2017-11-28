@@ -41,7 +41,7 @@ const Dot = styled.div`
 const Item = ({ onClick, grades, isActive, label }) => (
   <Text onClick={onClick} tabIndex={0}>
     <Box horizontal flow={5} align="center">
-      <Dots>{grades.map(grade => <Dot key={grade.get('user')} grade={grade.get('value')} />)}</Dots>
+      <Dots>{grades.map(grade => <Dot key={grade.get('_id')} grade={grade.get('value')} />)}</Dots>
       <Ellipsis>{isActive ? <b>{label}</b> : label}</Ellipsis>
     </Box>
   </Text>

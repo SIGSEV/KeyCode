@@ -35,7 +35,7 @@ export default {
     1: green,
     2: green,
     3: yellow,
-    4: green,
-    5: green,
+    4: red,
+    5: red,
   },
 }
