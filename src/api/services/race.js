@@ -6,7 +6,7 @@ import Text from 'api/models/text'
 import Race from 'api/models/race'
 
 import { languages, lowerArr } from 'helpers/text'
-import { getStats } from 'helpers/race'
+import getScore from 'helpers/getScore'
 import { getText } from 'api/services/text'
 import {
   getTeamMembers,
@@ -118,7 +118,8 @@ export const saveRace = async (payload, user) => {
     wrongWordsCount,
   } = payload
 
-  const { wpm, score } = getStats(Map({ time, corrections, typedWordsCount, wrongWordsCount }))
+  // @TODO pass premium bonus to `getScore`
+  const { wpm, score } = getScore({ time, wrongWordsCount, validKeys, wrongKeys })
 
   if (!score) {
     throw new Error('Prevented saving noob score.')

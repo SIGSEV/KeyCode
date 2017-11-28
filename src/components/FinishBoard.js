@@ -9,7 +9,7 @@ import Button from 'components/Button'
 import Score from 'components/Score'
 
 import { getPlayer } from 'reducers/race'
-import { getStats } from 'helpers/race'
+import getScore from 'helpers/getScore'
 
 const Wrapper = styled.div`
   display: flex;
@@ -99,29 +99,24 @@ class FinishBoard extends PureComponent {
     const { onRestart, player } = this.props
     const { showScore } = this.state
 
-    const stats = getStats(player)
+    const score = getScore(player.toJS())
 
     return (
       <Modal name="finishBoard" onClose={onRestart}>
         <Wrapper>
           <ScoreContainer style={{ height: 70 }}>
-            {showScore && <Score score={stats.score} />}
+            {showScore && <Score score={score.score} />}
           </ScoreContainer>
 
           <StatsContainer>
             <Stat delay={0.6}>
-              <StatValue>{stats.wpm}</StatValue>
+              <StatValue>{score.wpm}</StatValue>
               <StatLabel>{'WPM'}</StatLabel>
             </Stat>
 
             <Stat delay={0.7}>
-              <StatValue>{stats.wrongWords}</StatValue>
+              <StatValue>{score.wrongWordsCount}</StatValue>
               <StatLabel>{'Wrong words'}</StatLabel>
-            </Stat>
-
-            <Stat delay={0.8}>
-              <StatValue>{stats.corrections}</StatValue>
-              <StatLabel>{'Corrections'}</StatLabel>
             </Stat>
           </StatsContainer>
 

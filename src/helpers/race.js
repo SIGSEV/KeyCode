@@ -49,21 +49,3 @@ export const getPayload = race => {
     wrongWordsCount,
   }
 }
-
-export function getStats(base) {
-  const time = base.get('time')
-  const minuteRatio = time / 60
-  const corrections = base.get('corrections')
-  const typedWords = base.get('typedWordsCount')
-  const wrongWords = base.get('wrongWordsCount')
-  const goodWords = typedWords - wrongWords
-  const accuracy = typedWords ? goodWords / typedWords : 0
-  const wpm = minuteRatio <= 0 ? 0 : Math.round(goodWords * accuracy / minuteRatio) - corrections
-
-  return {
-    wrongWords,
-    corrections,
-    wpm: Math.max(0, wpm),
-    score: Math.max(0, wpm - corrections / 4),
-  }
-}
