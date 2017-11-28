@@ -6,7 +6,8 @@ import reducer from 'reducers'
 import api from 'middlewares/api'
 
 export default (history, initialState) => {
-  const devTools = __BROWSER__ && __DEV__ && window.devToolsExtension ? window.devToolsExtension() : f => f
+  const devTools =
+    __BROWSER__ && __DEV__ && window.devToolsExtension ? window.devToolsExtension() : f => f
 
   const middlewares = [routerMiddleware(history), thunk, api]
 

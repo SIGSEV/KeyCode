@@ -1,4 +1,3 @@
-import { Map } from 'immutable'
 import cache from 'memory-cache'
 
 import User from 'api/models/user'
