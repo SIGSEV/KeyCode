@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { getColor, getTextRGB } from 'helpers/colors'
 
-export default styled(p => <Link to={`/l/${p.type.toLowerCase()}`} {...p} />)`
+export default styled(p => <Link to={`/browse?language=${p.type.toLowerCase()}`} {...p} />)`
   display: inline-block;
   width: ${p => p.size || '0.5rem'};
   height: ${p => p.size || '0.5rem'};

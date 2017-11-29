@@ -53,14 +53,13 @@ const Title = styled.div`
   display: flex;
   align-items: center;
   font-size: 20px;
-  margin-bottom: 0.7rem;
 
   > span:first-child {
     font-weight: bold;
   }
 
   * + * {
-    margin-left: 0.5rem;
+    margin-left: 0.7rem;
   }
 `
 
@@ -166,21 +165,9 @@ class TextCard extends Component {
 
         <Main>
           <Title>
-            <span>{text.get('title')}</span>
             {!hideLang && <LanguageDot type={language} />}
-            {!hideLang && <span>{language}</span>}
+            <span>{text.get('title')}</span>
           </Title>
-
-          <Link
-            onClick={this.prevent}
-            to={`/u/${text.getIn(['author', 'name'])}`}
-            className="author"
-          >
-            <div>
-              <img src={text.getIn(['author', 'avatar'])} />
-            </div>
-            <span>{text.getIn(['author', 'name'])}</span>
-          </Link>
         </Main>
 
         <Leaders>
