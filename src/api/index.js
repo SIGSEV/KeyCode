@@ -10,6 +10,7 @@ import writeLogo from 'logos/write-logo'
 import { getUser, updateUser } from 'api/services/user'
 import { setUser, setToken, isAuthenticated } from 'api/services/auth'
 import { saveRace, getLeaderboards } from 'api/services/race'
+import populateUser from 'api/populateUser'
 import {
   deleteText,
   getText,
@@ -69,7 +70,7 @@ api.put('/users/me', isAuthenticated(), async (req, res) => {
  * Races
  */
 
-api.post('/races', isAuthenticated(), async (req, res) => {
+api.post('/races', isAuthenticated(), populateUser, async (req, res) => {
   try {
     res.send(await saveRace(req.body, req.user))
   } catch ({ message }) {

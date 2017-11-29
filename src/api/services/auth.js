@@ -28,7 +28,7 @@ const checkJwt = expressJwt({
   getToken,
 })
 
-const banMsg = 'You are banned, get the fuck out.'
+const banMsg = 'You are banned, get out.'
 
 export const setUser = () =>
   compose()

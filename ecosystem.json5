@@ -14,7 +14,7 @@
       "ref"        : "origin/master",
       "repo"       : "git@github.com:SIGSEV/KeyCode.git",
       "path"       : "/var/www/keycode",
-      "post-deploy": "yarn && yarn build && pm2 startOrRestart ecosystem.json5 --env production --log-date-format 'DD-MM HH:mm:ss.SSS'",
+      "post-deploy": "yarn && yarn build && cp ../populateUser.js src/api && pm2 startOrRestart ecosystem.json5 --env production --log-date-format 'DD-MM HH:mm:ss.SSS'",
     }
   }
 }

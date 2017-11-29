@@ -47,6 +47,7 @@ export default store => next => async action => {
       type: `${prefix}_SUCCESS`,
       payload: { ...payload, body: action.payload.body, query, data },
     })
+
     return data
   } catch (err) {
     if (err.message) {

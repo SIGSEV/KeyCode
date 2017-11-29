@@ -3,6 +3,7 @@ import { push } from 'react-router-redux'
 import { initRace, setFinished, resetRace, setGhost, typeChar } from 'reducers/race'
 
 import { getPayload } from 'helpers/race'
+import getScore from 'helpers/getScore'
 
 export function loadRace(id) {
   return async dispatch => {
@@ -38,12 +39,15 @@ export function saveRace() {
       return
     }
 
+    const payload = getPayload(race)
+    const { score, wpm } = getScore(payload)
+
     return dispatch({
       type: 'API:SAVE_RACE',
       payload: {
         url: '/races',
         method: 'POST',
-        body: getPayload(race),
+        body: { ...payload, wpm, score },
       },
     })
   }

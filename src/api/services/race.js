@@ -83,6 +83,7 @@ export const refreshLeaderOrgs = async () => {
   if (count < 100) {
     return
   }
+
   languages.forEach(async language => {
     try {
       const leaders = await getLeaderboard(language.toLowerCase(), 3)
@@ -112,6 +113,8 @@ export const refreshLeaderOrgs = async () => {
 
 export const saveRace = async (payload, user) => {
   const {
+    score,
+    wpm,
     textId,
     time,
     log,
@@ -121,9 +124,6 @@ export const saveRace = async (payload, user) => {
     wrongKeys,
     wrongWordsCount,
   } = payload
-
-  // @TODO pass premium bonus to `getScore`
-  const { wpm, score } = getScore({ time, wrongWordsCount, validKeys, wrongKeys })
 
   if (!score) {
     throw new Error('Prevented saving noob score.')
