@@ -106,11 +106,11 @@ export const gradeText = async (id, grade, user) => {
     throw new Error('👏👏👏👏 Fucking CUNT!')
   }
 
-  if (!user.admin) {
-    if (user._id.equals(text.author)) {
-      throw new Error('Cannot grade your own text.')
-    }
+  if (!user.admin && user._id.equals(text.author)) {
+    throw new Error('Cannot grade your own text.')
+  }
 
+  if (!alreadyGraded) {
     text.grades.push({ value: grade, user: user._id })
   }
 
