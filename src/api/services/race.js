@@ -5,7 +5,6 @@ import Text from 'api/models/text'
 import Race from 'api/models/race'
 
 import { languages, lowerArr } from 'helpers/text'
-import getScore from 'helpers/getScore'
 import { getText } from 'api/services/text'
 import { getUsersCount } from 'api/services/user'
 import {
