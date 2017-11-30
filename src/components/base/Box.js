@@ -4,7 +4,8 @@ export default styled.div`
   flex-grow: ${p => (p.grow ? 1 : 0)};
   display: flex;
   flex-direction: ${p => (p.horizontal ? 'row' : 'column')};
-  align-items: ${p => (p.align === 'center' ? 'center' : null)};
+  align-items: ${p => p.align};
+  justify-content: ${p => p.justify};
   overflow: ${p => (p.scrollable ? 'auto' : 'unset')};
   position: ${p => (p.relative ? 'relative' : p.sticky ? 'absolute' : 'static')};
   ${p =>

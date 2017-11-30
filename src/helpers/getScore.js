@@ -57,8 +57,8 @@ export default function getScore(stats, premiumBonus = 0) {
   const charsScore = Math.max(0, correctCharsScore - wrongCharsScore)
 
   const cpm = Math.round(charsScore / minuteRatio)
-  const wpm = Math.round(cpm / 5) - wrongWordsCount
-  const score = wpm + premiumBonus
+  const wpm = Math.round(cpm / 5)
+  const score = Math.max(0, wpm - wrongWordsCount + premiumBonus)
 
   return {
     correctCharsStats,
@@ -67,6 +67,7 @@ export default function getScore(stats, premiumBonus = 0) {
     wrongCharsScore,
     wrongWordsCount,
     premiumBonus,
+    time,
     cpm,
     wpm,
     score,

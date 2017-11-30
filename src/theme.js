@@ -7,6 +7,7 @@ const yellow = '#fee009'
 const darkGrey00 = '#444'
 
 export default {
+  darkerGrey03: '#3f3f3f',
   darkGrey00,
   darkGrey01: '#4c4c4c',
   darkGrey02: '#535353',

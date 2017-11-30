@@ -17,6 +17,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: flex-start;
   padding-top: 100px;
+  padding-bottom: 20px;
+  overflow-y: auto;
 `
 
 const Overlay = styled.div`

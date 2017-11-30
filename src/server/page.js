@@ -49,6 +49,10 @@ export default ({ styles, state, html, main }) => `<!doctype html>
         background: transparent;
       }
 
+      b {
+        font-weight: bolder;
+      }
+
       img {
         display: block;
       }
