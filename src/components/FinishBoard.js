@@ -108,8 +108,6 @@ class FinishBoard extends PureComponent {
 
     const score = getScore(player.toJS())
 
-    console.log(score)
-
     return (
       <Modal name="finishBoard" onClose={onRestart}>
         <Box flow={20}>
