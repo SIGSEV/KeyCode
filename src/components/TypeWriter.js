@@ -5,10 +5,10 @@ import { connect } from 'react-redux'
 import { getPlayer, getText, typeChar, setMaxDisplayedLines } from 'reducers/race'
 
 import StatusBar from 'components/StatusBar'
+import Box from 'components/base/Box'
 
 const Container = styled.div`
   position: relative;
-  font-family: monospace;
   background: white;
   padding: 10px;
   font-size: 16px;
@@ -46,6 +46,7 @@ const blink = p => keyframes`
 `
 
 const Cursor = styled.span`
+  font-family: monospace;
   background: ${p =>
     p.isWrong ? p.theme.red : p.isDisabled ? p.theme.lightgrey00 : p.theme.darkGrey01};
   color: white;
@@ -70,11 +71,32 @@ const HiddenInput = styled.input`
 `
 
 const Text = styled.span`
+  font-family: monospace;
   opacity: ${p => (p.isDisabled ? 0.5 : 1)};
   pointer-events: none;
   white-space: pre;
   background-color: ${p => (p.isHardWrong ? p.theme.red : '')};
   color: ${p => (p.isWrong ? p.theme.red : p.isHardWrong ? 'white' : '')};
+`
+
+const ResetOverlay = styled(Box)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  z-index: 20;
+  padding: 20px;
+`
+
+const Kbd = styled.div`
+  padding: 20px;
+  border: 2px solid white;
+  border-radius: 5px;
 `
 
 @connect(
@@ -119,16 +141,40 @@ class TypeWriter extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { isFinished } = this.props
-    const { isFinished: wasFinished } = prevProps
+    const { isFinished, showReset } = this.props
+    const { isFinished: wasFinished, showReset: wasShowingReset } = prevProps
     if (wasFinished && !isFinished) {
       this.handleClick()
       this.measureContainer()
+    }
+
+    if (!wasShowingReset && showReset) {
+      this.addResetListener()
+    }
+
+    if (wasShowingReset && !showReset) {
+      this.removeResetListener()
     }
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.measureContainer)
+    this.removeResetListener()
+  }
+
+  addResetListener = () => {
+    window.addEventListener('keydown', this.onEnter)
+  }
+
+  removeResetListener = () => {
+    window.removeEventListener('keydown', this.onEnter)
+  }
+
+  onEnter = e => {
+    if (e.which === 13) {
+      this.props.onRestart()
+      this.handleClick()
+    }
   }
 
   measureContainer = () => {
@@ -214,7 +260,7 @@ class TypeWriter extends PureComponent {
 
   render() {
     const { isFocused } = this.state
-    const { player, text, isGhosting, isStarted, chronos, innerRef } = this.props
+    const { player, text, isGhosting, isStarted, chronos, innerRef, showReset } = this.props
 
     innerRef(this)
 
@@ -322,6 +368,13 @@ class TypeWriter extends PureComponent {
         />
 
         <StatusBar>{isGhosting ? null : chronos}</StatusBar>
+        {showReset && (
+          <ResetOverlay horizontal align="center" justify="center" flow={20}>
+            <span>{'Press'}</span>
+            <Kbd>{'Enter'}</Kbd>
+            <span>{'to restart'}</span>
+          </ResetOverlay>
+        )}
       </Container>
     )
   }

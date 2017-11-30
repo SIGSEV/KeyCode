@@ -47,6 +47,12 @@ const RaceContent = styled.div`
   display: flex;
 `
 
+const ResetBtn = styled.button`
+  opacity: 0;
+  width: 0;
+  height: 0;
+`
+
 @connect(
   state => ({
     player: getPlayer(state),
@@ -65,7 +71,15 @@ const RaceContent = styled.div`
   },
 )
 class Race extends PureComponent {
+  state = {
+    showReset: false,
+  }
+
+  handleShowReset = () => this.setState({ showReset: true })
+  handleHideReset = () => this.setState({ showReset: false })
+
   handleReset = () => {
+    this.setState({ showReset: false })
     this._chronos.reset()
     this.props.resetRace()
   }
@@ -90,11 +104,13 @@ class Race extends PureComponent {
 
   render() {
     const { isStarted, isFinished, startRace, language, title, push } = this.props
+    const { showReset } = this.state
+    const isRunning = isStarted && !isFinished
 
     const chronos = (
       <Chronos
         seconds={60}
-        isRunning={isStarted && !isFinished}
+        isRunning={isRunning}
         onFinish={this.handleStop}
         ref={n => (this._chronos = n)}
       />
@@ -117,7 +133,10 @@ class Race extends PureComponent {
             onStart={startRace}
             onFinish={this.handleStop}
             chronos={chronos}
+            onRestart={this.handleReset}
+            showReset={showReset}
           />
+          {isRunning && <ResetBtn onFocus={this.handleShowReset} onBlur={this.handleHideReset} />}
           <RaceInfos />
         </RaceContent>
         <FinishBoard onRestart={this.handleReset} />
