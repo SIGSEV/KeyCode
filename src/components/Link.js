@@ -17,11 +17,12 @@ const Link = ({ className, to, children, ...props }) =>
 const StyledLink = styled(Link)`
   color: ${p => p.theme.link};
   text-decoration: none;
-  border-bottom: 2px solid transparent;
 
-  &:hover,
-  &:focus {
-    border-color: currentColor;
+  &:hover {
+    color: ${p =>
+      color(p.theme.link)
+        .lighten(0.2)
+        .string()};
   }
 
   &:active {

@@ -7,20 +7,23 @@ import Link from 'components/Link'
 const Container = styled.div`
   background: ${p => p.theme.lightgrey02};
   color: ${p => p.theme.darkGrey03};
-  padding: 100px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px inset;
+  padding: 15px;
   text-align: center;
   font-size: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
+  white-space: pre;
 `
 
 class Footer extends PureComponent {
   render() {
     return (
       <Container>
-        {'Built with vim by SIGSEV. -'}
-        <IconGithub style={{ marginRight: 5, marginLeft: 5 }} />
+        {'Built with vim by '}
+        <Link href="https://github.com/SIGSEV">{'SIGSEV'}</Link>
+        <IconGithub style={{ marginRight: 5, marginLeft: 20 }} />
         <Link href="https://github.com/SIGSEV/KeyCode">{'Source code'}</Link>
       </Container>
     )
