@@ -38,10 +38,20 @@ const Dot = styled.div`
   background-color: ${p => p.theme.grades[p.grade]};
 `
 
-const Item = ({ onClick, grades, isActive, label }) => (
+const Reviewed = styled.div`
+  font-size: 11px;
+  white-space: nowrap;
+  border-radius: 2px;
+  color: white;
+  background-color: ${p => p.theme.green};
+  padding: 1px 3px;
+`
+
+const Item = ({ onClick, grades, isActive, isReviewed, label }) => (
   <Text onClick={onClick} tabIndex={0}>
     <Box horizontal flow={5} align="center">
       <Dots>{grades.map(grade => <Dot key={grade.get('_id')} grade={grade.get('value')} />)}</Dots>
+      {isReviewed && <Reviewed>{'reviewed'}</Reviewed>}
       <Ellipsis>{isActive ? <b>{label}</b> : label}</Ellipsis>
     </Box>
   </Text>
@@ -56,6 +66,7 @@ class TextList extends PureComponent {
         <Box sticky scrollable>
           {texts.map(text => (
             <Item
+              isReviewed={text.get('difficulty') !== 0}
               grades={text.get('grades')}
               onClick={() => onClick(text)}
               isActive={text.get('id') === focusedText}
