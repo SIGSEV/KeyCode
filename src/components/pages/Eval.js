@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 
+import Link from 'components/Link'
 import Box from 'components/base/Box'
 import TextList from 'components/TextList'
 import Button from 'components/Button'
@@ -21,11 +22,31 @@ const EvalActions = styled.div`
   font-size: 13px;
   align-items: center;
   overflow: auto;
-  background: ${p => p.theme.lightgrey02};
+  background-color: ${p => p.theme.lightgrey02};
   border-bottom: 1px solid ${p => p.theme.lightgrey01};
 
   > * + * {
     margin-left: 10px;
+  }
+`
+
+const Evaluers = styled.div`
+  min-height: 50px;
+  background-color: ${p => p.theme.lightgrey02};
+  border-top: 1px solid ${p => p.theme.lightgrey01};
+  display: flex;
+
+  > a {
+    margin-right: 2rem;
+  }
+
+  > div {
+    margin-left: 1rem;
+    > * + * {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
   }
 `
 
@@ -98,11 +119,30 @@ class Eval extends PureComponent {
                 ))}
               </EvalActions>
             )}
+
             <Box grow relative>
               <Box sticky scrollable>
                 <TextContent>{focusedText && focusedText.get('raw')}</TextContent>
               </Box>
             </Box>
+
+            {focusedText && (
+              <Box>
+                <Evaluers>
+                  <Link to={`/u/${focusedText.getIn(['author', 'name'])}`}>
+                    <img src={focusedText.getIn(['author', 'avatar'])} width={30} />
+                  </Link>
+                  {focusedText.get('grades').map(grade => (
+                    <div key={grade.get('_id')}>
+                      <Link to={`/u/${grade.getIn(['user', 'name'])}`}>
+                        <img src={grade.getIn(['user', 'avatar'])} width={30} />
+                      </Link>
+                      <span>{grade.get('value')}</span>
+                    </div>
+                  ))}
+                </Evaluers>
+              </Box>
+            )}
           </Box>
         </EvalBox>
       </Box>

@@ -1,7 +1,7 @@
 import User from 'api/models/user'
 import Race from 'api/models/race'
 
-import { getOrgs } from 'api/services/github'
+import { removeUserFromOrg, getOrgs } from 'api/services/github'
 
 export const getUsersCount = () => User.count()
 export const getAllUsers = () => User.findAll()
@@ -34,6 +34,23 @@ export const updateUser = (user, body) => {
     user.staggered = true
   }
 
+  return user.save()
+}
+
+export const banUser = async name => {
+  const user = await getByName(name)
+
+  if (user.admin) {
+    throw new Error('Cannot ban an admin.')
+  }
+
+  if (__PROD__ && user.currentOrg) {
+    await removeUserFromOrg(name, user.currentOrg)
+  }
+
+  await Race.update({ user: user._id }, { hidden: true }, { multi: true })
+
+  user.banned = true
   return user.save()
 }
 

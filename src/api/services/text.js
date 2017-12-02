@@ -53,13 +53,17 @@ export const createText = async payload => {
   })
 }
 
-const populateText = async text => {
+const populateText = async (text, evalMode) => {
   const leaders = await Race.find({ text: text._id }, 'score log user')
     .sort('-score')
     .populate('user', 'name avatar')
     .exec()
 
   await text.populate({ path: 'author', select: 'name avatar' }).execPopulate()
+
+  if (evalMode) {
+    await text.populate({ path: 'grades.user', select: 'name avatar' }).execPopulate()
+  }
 
   const out = text.toObject()
 
@@ -154,5 +158,5 @@ export const getTexts = async (params, user) => {
     .limit(Number(limit))
     .exec()
 
-  return Promise.all(texts.map(populateText))
+  return Promise.all(texts.map(t => populateText(t, evalMode)))
 }

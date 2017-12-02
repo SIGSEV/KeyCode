@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser'
 import 'api/init'
 
 import writeLogo from 'logos/write-logo'
-import { getUser, updateUser } from 'api/services/user'
+import { getUser, updateUser, banUser } from 'api/services/user'
 import { setUser, setToken, isAuthenticated } from 'api/services/auth'
 import { saveRace, getLeaderboards } from 'api/services/race'
 import populateUser from 'api/populateUser'
@@ -49,6 +49,18 @@ api.post('/graphql', async (req, res) => {
 /**
  * Users
  */
+
+api.delete('/users/:name', isAuthenticated(), async (req, res) => {
+  try {
+    if (!req.user.admin) {
+      throw new Error('You want a ban too?')
+    }
+
+    res.send(await banUser(req.params.name))
+  } catch ({ message }) {
+    res.status(500).send({ message })
+  }
+})
 
 api.get('/users/:name', async (req, res) => {
   try {

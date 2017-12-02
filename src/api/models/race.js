@@ -28,6 +28,7 @@ export default mongoose.model(
       wrongKeys: ridiculusType,
 
       language: String,
+      hidden: { type: Boolean, default: false },
     },
     { minimize: false, timestamps: true },
   ),

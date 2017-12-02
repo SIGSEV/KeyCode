@@ -23,6 +23,16 @@ export function updateUser(body) {
   }
 }
 
+export function banUser(name) {
+  return {
+    type: 'API:BAN_USER',
+    payload: {
+      url: `/users/${name}`,
+      method: 'DELETE',
+    },
+  }
+}
+
 export function logout() {
   return dispatch => {
     dispatch(rawLogout())

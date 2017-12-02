@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { format } from 'date-fns'
 import get from 'lodash/get'
 import OffIcon from 'react-icons/lib/fa/power-off'
+import BanHammer from 'react-icons/lib/fa/gavel'
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer'
 import {
   LineChart,
@@ -17,7 +18,7 @@ import {
   Tooltip,
 } from 'recharts'
 
-import { logout, updateUser, loadUser } from 'actions/user'
+import { logout, banUser, updateUser, loadUser } from 'actions/user'
 import { lowerMap, languages } from 'helpers/text'
 import { getColor } from 'helpers/colors'
 import theme from 'theme'
@@ -43,6 +44,7 @@ const Profile = styled.div`
     margin-top: 0.5rem;
     margin-bottom: 1rem;
     font-size: 1.5rem;
+    height: 3rem;
 
     > span:first-child {
       margin-right: 0.5rem;
@@ -177,6 +179,7 @@ const renderTooltip = v => {
   }),
   {
     logout,
+    banUser,
     loadUser,
     updateUser,
   },
@@ -238,6 +241,18 @@ class User extends PureComponent {
               ))}
             </Orgs>
           )}
+
+          {users[name] &&
+            !user.admin &&
+            loggedUser.admin &&
+            !user.banned && (
+              <div style={{ marginTop: '1rem' }}>
+                <Button action={() => this.props.banUser(user.name)} smallPad>
+                  <BanHammer style={{ marginRight: '0.5rem' }} />
+                  {'Ban'}
+                </Button>
+              </div>
+            )}
 
           {isMe && (
             <Settings>

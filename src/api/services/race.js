@@ -17,7 +17,7 @@ import {
 const getLeaderboard = (language, limit = 10) =>
   Race.aggregate(
     [
-      language && { $match: { language } },
+      { $match: { hidden: false, ...(language ? { language } : {}) } },
       { $sort: { score: -1 } },
       {
         $group: {

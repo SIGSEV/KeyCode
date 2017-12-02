@@ -6,6 +6,13 @@ export default handleActions(
       ...state,
       [data.name]: data,
     }),
+    BAN_USER_SUCCESS: (state, { payload: { data } }) => ({
+      ...state,
+      [data.name]: {
+        ...state[data.name],
+        banned: true,
+      },
+    }),
   },
   {},
 )
