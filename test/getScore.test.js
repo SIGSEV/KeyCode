@@ -7,6 +7,7 @@ test('should correctly calculate cpm with the dumbest stats', () => {
     validKeys: { '97': 60 },
     wrongKeys: {},
   }
+
   const expected = {
     wrongCharsScore: 0,
     wrongCharsStats: {},
@@ -19,7 +20,9 @@ test('should correctly calculate cpm with the dumbest stats', () => {
     cpm: 60,
     wpm: 12,
     score: 12,
+    time: 60,
   }
+
   expect(getScore(stats)).toEqual(expected)
 })
 
@@ -30,6 +33,7 @@ test('should give a better score for uppercase letters', () => {
     validKeys: { '97': 40, '65': 20 },
     wrongKeys: {},
   }
+
   const expected = {
     wrongCharsScore: 0,
     wrongCharsStats: {},
@@ -43,7 +47,9 @@ test('should give a better score for uppercase letters', () => {
     cpm: 76,
     wpm: 15,
     score: 15,
+    time: 60,
   }
+
   expect(getScore(stats)).toEqual(expected)
 })
 
@@ -54,6 +60,7 @@ test('should add a bonus for premium', () => {
     validKeys: { '97': 40, '65': 20 },
     wrongKeys: {},
   }
+
   expect(getScore(stats).score).toEqual(15)
   expect(getScore(stats, 20).score).toEqual(35)
 })
