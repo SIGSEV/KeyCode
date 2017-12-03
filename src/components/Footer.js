@@ -22,7 +22,7 @@ class Footer extends PureComponent {
     return (
       <Container>
         {'Built with vim by '}
-        <Link href="https://github.com/SIGSEV">{'SIGSEV'}</Link>
+        <Link href="https://sigsev.io">{'SIGSEV'}</Link>
         <IconGithub style={{ marginRight: 5, marginLeft: 20 }} />
         <Link href="https://github.com/SIGSEV/KeyCode">{'Source code'}</Link>
       </Container>
