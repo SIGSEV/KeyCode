@@ -25,11 +25,17 @@ if (__PROD__) {
   ReactGA.initialize('UA-110576183-1')
 }
 
-history.listen(() => {
+const track = () => {
   if (__PROD__) {
     ReactGA.pageview(`${window.location.pathname}${window.location.search}`)
   }
+}
 
+track()
+ReactGA.pageview()
+
+history.listen(() => {
+  track()
   ghostBuster()
   store.dispatch(resetRace())
 })
