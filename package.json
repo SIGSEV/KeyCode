@@ -44,6 +44,7 @@
     "query-string": "^5.0.1",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
+    "react-ga": "^2.3.5",
     "react-icons": "^2.2.7",
     "react-mortal": "^3.0.1",
     "react-redux": "^5.0.6",

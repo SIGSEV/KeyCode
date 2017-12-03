@@ -4,6 +4,7 @@ import { hydrate, render } from 'react-dom'
 import { ConnectedRouter } from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory'
 import { AppContainer } from 'react-hot-loader'
+import ReactGA from 'react-ga'
 
 import createStore from 'store'
 import immutablifyState from 'immutablify-state'
@@ -20,7 +21,15 @@ let socket = io.connect(__URL__)
 const state = immutablifyState(window.__INITIAL_STATE__)
 const store = createStore(history, state)
 
+if (__PROD__) {
+  ReactGA.initialize('UA-110576183-1')
+}
+
 history.listen(() => {
+  if (__PROD__) {
+    ReactGA.pageview(`${window.location.pathname}${window.location.search}`)
+  }
+
   ghostBuster()
   store.dispatch(resetRace())
 })
