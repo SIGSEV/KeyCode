@@ -26,8 +26,6 @@ mongoose.connect('mongodb://localhost:27017/keycode', { useMongoClient: true })
     console.log(`>> err:`, err)
     process.exit(1)
   }
-
-  console.log(`NTHNTHN`)
 })()
 
 async function treatUser(user) {
