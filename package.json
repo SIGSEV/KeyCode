@@ -8,6 +8,7 @@
     "lint": "eslint src webpack bin",
     "prettier": "prettier --write \"{src,webpack}/**/*.?(js|?(s)css|json)\"",
     "test": "jest",
+    "recompute-scores": "babel-node bin/recompute-scores",
     "build": "rm -rf dist && NODE_ENV=production webpack --progress --hide-modules --config webpack/build.babel.js",
     "prod": "NODE_ENV=production yarn serve",
     "preview": "PREVIEW=1 yarn build && NODE_ENV=production PREVIEW=1 yarn serve",
