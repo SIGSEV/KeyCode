@@ -51,7 +51,8 @@ const handlers = {
       .set('text', computeText(state.getIn(['text', 'raw'])))
       .set('players', List([initPlayer()]))
       .setIn(['players', 0, 'maxDisplayedLines'], state.getIn(['players', 0, 'maxDisplayedLines'])),
-  RACE_TYPE_CHAR: (state, { payload: charCode }) => typeCharFn(state, charCode),
+  RACE_TYPE_CHAR: (state, { payload: { charCode, playerIndex } }) =>
+    typeCharFn(state, charCode, playerIndex),
   RACE_SET_MAX_DISPLAYED_LINES: (state, { payload: maxDisplayedLines }) =>
     state.setIn(['players', 0, 'maxDisplayedLines'], maxDisplayedLines),
   SAVE_RACE_SUCCESS: (state, { payload: { data: { leaders } } }) =>
@@ -73,7 +74,10 @@ export default handleActions(handlers, initialState)
 export const setFinished = createAction('RACE_SET_FINISHED')
 export const setGhost = createAction('RACE_GHOST')
 export const initRace = createAction('RACE_INIT')
-export const typeChar = createAction('RACE_TYPE_CHAR')
+export const typeChar = createAction('RACE_TYPE_CHAR', (charCode, playerIndex) => ({
+  charCode,
+  playerIndex,
+}))
 export const startRace = createAction('RACE_START')
 export const stopRace = createAction('RACE_STOP')
 export const resetRace = createAction('RACE_RESET')
