@@ -85,6 +85,16 @@ export function getPlayer(state) {
   return state.race.getIn(['players', 0], null)
 }
 
+export function getPlayers(state) {
+  return state.race.get('players')
+}
+
 export function getText(state) {
   return state.race.get('text', null)
+}
+
+// WTF why do I need to add this here?
+// ....hmmm. Don't care. It works.
+if (module.hot) {
+  module.hot.accept()
 }

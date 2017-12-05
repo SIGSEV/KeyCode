@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 
-import { getPlayer, getText, typeChar, setMaxDisplayedLines } from 'reducers/race'
+import { getPlayer, getPlayers, getText, typeChar, setMaxDisplayedLines } from 'reducers/race'
 
 import StatusBar from 'components/StatusBar'
 import ResetOverlay from 'components/ResetOverlay'
@@ -82,6 +82,7 @@ const Text = styled.span`
 @connect(
   state => ({
     player: getPlayer(state),
+    players: getPlayers(state),
     text: getText(state),
     isStarted: state.race.get('isStarted'),
     isFinished: state.race.get('isFinished'),
