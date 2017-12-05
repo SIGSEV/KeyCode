@@ -13,20 +13,20 @@ function adjustScrollX(p, chunks) {
   return p
 }
 
-export default function typeChar(state, charCode) {
+export default function typeChar(state, charCode, playerIndex = 0) {
   switch (charCode) {
     case 0:
-      return typeEnter(state)
+      return typeEnter(state, playerIndex)
     case -1:
-      return typeBackspace(state)
+      return typeBackspace(state, playerIndex)
     default:
-      return typeRegular(state, String.fromCharCode(charCode))
+      return typeRegular(state, String.fromCharCode(charCode), playerIndex)
   }
 }
 
-function nextWord(state, { isCorrectTrigger = true } = {}) {
+function nextWord(state, { isCorrectTrigger = true } = {}, playerIndex) {
   let chunks = state.getIn(['text', 'chunks'])
-  let p = state.getIn(['players', 0])
+  let p = state.getIn(['players', playerIndex])
 
   const maxDisplayedLines = p.get('maxDisplayedLines')
   const wordIndex = p.get('wordIndex')
@@ -69,11 +69,11 @@ function nextWord(state, { isCorrectTrigger = true } = {}) {
   }
   p = adjustScrollX(p, state.getIn(['text', 'chunks']))
 
-  return state.setIn(['players', 0], p).setIn(['text', 'chunks'], chunks)
+  return state.setIn(['players', playerIndex], p).setIn(['text', 'chunks'], chunks)
 }
 
-function typeRegular(state, char) {
-  let p = state.getIn(['players', 0])
+function typeRegular(state, char, playerIndex) {
+  let p = state.getIn(['players', playerIndex])
   let text = state.get('text')
 
   const raw = text.get('raw')
@@ -100,36 +100,36 @@ function typeRegular(state, char) {
     text = text.setIn(['chunks', wordIndex, 'isWrong'], true)
   }
 
-  state = state.setIn(['players', 0], p)
+  state = state.setIn(['players', playerIndex], p)
   state = state.setIn('text', text)
 
   // end of text
   if (cursor === raw.length - 1) {
-    state = nextWord(state)
+    state = nextWord(state, undefined, playerIndex)
   } else if (!charToType || !charToType.trim()) {
     // end of word
     const hasTypedSpace = char === ' '
-    state = nextWord(state, { isCorrectTrigger: hasTypedSpace })
+    state = nextWord(state, { isCorrectTrigger: hasTypedSpace }, playerIndex)
   }
 
   return state
 }
 
-function typeEnter(state) {
-  const p = state.getIn(['players', 0])
+function typeEnter(state, playerIndex) {
+  const p = state.getIn(['players', playerIndex])
   const text = state.get('text')
   const raw = text.get('raw')
   const cursor = p.get('cursor')
   const charToType = raw[cursor]
   if (!charToType || !charToType.trim()) {
-    return nextWord(state)
+    return nextWord(state, undefined, playerIndex)
   }
   return state
 }
 
-function typeBackspace(state) {
+function typeBackspace(state, playerIndex) {
   let chunks = state.getIn(['text', 'chunks'])
-  let p = state.getIn(['players', 0])
+  let p = state.getIn(['players', playerIndex])
   const cursor = p.get('cursor')
   const wordIndex = p.get('wordIndex')
   const word = chunks.get(wordIndex)
@@ -150,5 +150,5 @@ function typeBackspace(state) {
   if (word.get('content').startsWith(newTypedWord)) {
     chunks = chunks.setIn([wordIndex, 'isWrong'], false)
   }
-  return state.setIn(['players', 0], p).setIn(['text', 'chunks'], chunks)
+  return state.setIn(['players', playerIndex], p).setIn(['text', 'chunks'], chunks)
 }
