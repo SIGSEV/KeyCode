@@ -1,6 +1,6 @@
 export default (req, res, next) => {
-  if (!req.body.score || !req.body.wpm || !req.body.log) {
-    return next(new Error('Prevented saving noob score.'))
+  if (req.user && req.user.populated) {
+    return next(new Error('Do not populate twice.'))
   }
 
   req.user.populated = true
