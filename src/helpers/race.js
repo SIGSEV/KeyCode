@@ -1,9 +1,7 @@
 import { fromJS } from 'immutable'
-import shortid from 'shortid'
 
 export function initPlayer() {
   return fromJS({
-    id: shortid.generate(),
     maxDisplayedLines: 0,
     line: 0,
     cursor: 0,
