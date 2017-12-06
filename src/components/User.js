@@ -27,6 +27,7 @@ import Select from 'components/base/Select'
 import TypeMatrix from 'components/TypeMatrix'
 import LanguageDot from 'components/LanguageDot'
 import Button from 'components/Button'
+import RacesGraph from 'components/RacesGraph'
 
 const Container = styled.div`
   display: flex;
@@ -316,6 +317,8 @@ class User extends PureComponent {
               <SubTitle>{'Typos heatmap'}</SubTitle>
             </Z>
           </div>
+
+          <RacesGraph races={user.races} />
 
           <AutoSizer disableHeight>
             {({ width }) => (
