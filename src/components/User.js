@@ -318,32 +318,8 @@ class User extends PureComponent {
             </Z>
           </div>
 
-          <RacesGraph races={user.races} />
-
           <AutoSizer disableHeight>
-            {({ width }) => (
-              <LineChart
-                width={width}
-                height={300}
-                data={user.races}
-                margin={{ top: 5, right: 5, left: 20, bottom: 5 }}
-              >
-                <YAxis axisLine={false} tickSize={20} tickLine={false} />
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <Tooltip content={renderTooltip} />
-                <Line
-                  dot={({ payload, dataKey, ...rest }) => (
-                    <circle key={dataKey} {...rest} stroke={getColor(lowerMap[payload.language])} />
-                  )}
-                  activeDot={({ payload, dataKey, ...rest }) => (
-                    <circle key={dataKey} {...rest} fill={getColor(lowerMap[payload.language])} />
-                  )}
-                  dataKey={v => v.score}
-                  isAnimationActive={false}
-                  stroke={'transparent'}
-                />
-              </LineChart>
-            )}
+            {({ width }) => <RacesGraph height={300} width={1000} races={user.races} />}
           </AutoSizer>
         </Main>
       </Container>

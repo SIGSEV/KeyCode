@@ -1,17 +1,27 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
 import * as d3 from 'd3'
 
 import { lowerMap } from 'helpers/text'
 import { getColor } from 'helpers/colors'
 
+const Container = styled.div`
+  .axis {
+    font-family: monospace;
+    path {
+      stroke-dasharray: 5, 5;
+    }
+  }
+`
+
 const SECTIONS = 5
-const HEIGHT = 500
-const WIDTH = 900
-const MARGINS = { top: 50, bottom: 50 }
+const MARGINS = { top: 10, bottom: 10 }
 
 class RacesGraph extends Component {
   componentDidMount() {
-    const { races } = this.props
+    const { races, width, height } = this.props
+
+    console.log(width, height)
 
     const first = new Date(races[0].createdAt)
     const last = new Date(races[races.length - 1].createdAt)
@@ -41,8 +51,8 @@ class RacesGraph extends Component {
 
     const svg = d3
       .select(this.svg)
-      .attr('width', WIDTH)
-      .attr('height', HEIGHT)
+      .attr('width', width)
+      .attr('height', height)
       .append('g')
       .attr('transform', `translate(0, ${MARGINS.top})`)
 
@@ -50,7 +60,7 @@ class RacesGraph extends Component {
     const yScale = d3
       .scaleLinear()
       .domain(scoreExtent)
-      .rangeRound([HEIGHT - MARGINS.top - MARGINS.bottom, 0])
+      .rangeRound([height - MARGINS.top - MARGINS.bottom, 0])
 
     const yAxis = d3
       .axisRight()
@@ -66,7 +76,7 @@ class RacesGraph extends Component {
       const simulation = d3
         .forceSimulation(group)
         .force('x', d3.forceY(d => yScale(d.score)).strength(1))
-        .force('y', d3.forceX(HEIGHT / 2))
+        .force('y', d3.forceX(height / 2))
         .force('collide', d3.forceCollide(10))
         .stop()
 
@@ -93,9 +103,9 @@ class RacesGraph extends Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <svg ref={c => (this.svg = c)} />
-      </div>
+      </Container>
     )
   }
 }
