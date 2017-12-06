@@ -33,10 +33,6 @@ const track = () => {
 
 track()
 
-if (__PROD__) {
-  ReactGA.pageview()
-}
-
 history.listen(() => {
   track()
   ghostBuster()
