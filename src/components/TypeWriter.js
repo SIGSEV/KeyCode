@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { Map, List } from 'immutable'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 
@@ -78,6 +79,20 @@ const Text = styled.span`
   background-color: ${p => (p.isHardWrong ? p.theme.red : '')};
   color: ${p => (p.isWrong ? p.theme.red : p.isHardWrong ? 'white' : '')};
 `
+
+function getCursorMap(players) {
+  return players.reduce((map, player, i) => {
+    // current player has its own different render
+    if (i === 0) {
+      return map
+    }
+    const cursor = player.get('cursor')
+    if (map.get(cursor)) {
+      return map.update(cursor, list => list.push(player))
+    }
+    return map.set(cursor, List([player]))
+  }, Map())
+}
 
 @connect(
   state => ({
@@ -326,6 +341,9 @@ class TypeWriter extends PureComponent {
     const chunks = text.get('chunks')
 
     let curLine = 1
+
+    const cursorsMap = getCursorMap(players)
+    void cursorsMap
 
     return (
       <Container
