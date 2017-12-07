@@ -48,15 +48,17 @@ function nextWord(state, { isCorrectTrigger = true } = {}, playerIndex) {
     }
   }
 
-  if (!isCorrectTrigger || !typedWord || typedWord.trim() !== word.get('content').trim()) {
-    chunks = chunks.setIn([wordIndex, 'isWrong'], true)
-  }
+  if (playerIndex === 0) {
+    if (!isCorrectTrigger || !typedWord || typedWord.trim() !== word.get('content').trim()) {
+      chunks = chunks.setIn([wordIndex, 'isWrong'], true)
+    }
 
-  if (chunks.getIn([wordIndex, 'isWrong'])) {
-    p = p.set('wrongWordsCount', p.get('wrongWordsCount', 0) + 1)
-  }
+    if (chunks.getIn([wordIndex, 'isWrong'])) {
+      p = p.set('wrongWordsCount', p.get('wrongWordsCount', 0) + 1)
+    }
 
-  p = p.set('typedWordsCount', p.get('typedWordsCount') + 1)
+    p = p.set('typedWordsCount', p.get('typedWordsCount') + 1)
+  }
 
   if (nextWordIndex === -1) {
     p = p.set('cursor', word.get('end') + 1)
@@ -96,8 +98,10 @@ function typeRegular(state, char, playerIndex) {
 
   const word = text.getIn(['chunks', wordIndex])
 
-  if (!word.get('content').startsWith(newTypedWord)) {
-    text = text.setIn(['chunks', wordIndex, 'isWrong'], true)
+  if (playerIndex === 0) {
+    if (!word.get('content').startsWith(newTypedWord)) {
+      text = text.setIn(['chunks', wordIndex, 'isWrong'], true)
+    }
   }
 
   state = state.setIn(['players', playerIndex], p)
@@ -147,8 +151,10 @@ function typeBackspace(state, playerIndex) {
 
   p = adjustScrollX(p, state.getIn(['text', 'chunks']))
 
-  if (word.get('content').startsWith(newTypedWord)) {
-    chunks = chunks.setIn([wordIndex, 'isWrong'], false)
+  if (playerIndex === 0) {
+    if (word.get('content').startsWith(newTypedWord)) {
+      chunks = chunks.setIn([wordIndex, 'isWrong'], false)
+    }
   }
   return state.setIn(['players', playerIndex], p).setIn(['text', 'chunks'], chunks)
 }

@@ -248,12 +248,10 @@ class TypeWriter extends PureComponent {
   renderText() {
     const { text, players, isStarted, isGhosting } = this.props
     const { isFocused } = this.state
-
     const splits = getTypeSplits(text.get('chunks'), players)
-
     return splits.map(({ text, type, players }, i) => {
       const key = `${i}-${type}-${players.length}`
-      const r =
+      let r =
         type === 'cursor' ? (
           <Cursor
             key={key}
@@ -272,6 +270,9 @@ class TypeWriter extends PureComponent {
             {text}
           </Text>
         )
+      if (players.length) {
+        r = <span style={{ position: 'relative', outline: '2px solid #1687ee' }}>{r}</span>
+      }
       return r
     })
   }
