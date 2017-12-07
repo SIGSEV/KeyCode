@@ -7,9 +7,8 @@ import { initPlayer } from 'helpers/race'
 test('getCursorMap should extract current player and others', () => {
   const players = List([initPlayer(), initPlayer()])
   const map = getCursorMap(players)
-  expect(map[0].length).toBe(2)
-  expect(map[0][0].isCurrent).toBe(true)
-  expect(map[0][1].isCurrent).toBe(false)
+  expect(map[0].length).toBe(1)
+  expect(map[0][0].name).toBe('player')
 })
 
 test('should split correctly test with one player, at start', () => {
@@ -18,25 +17,31 @@ test('should split correctly test with one player, at start', () => {
   const chunks = computeText('hello world').get('chunks')
   const splits = getTypeSplits(chunks, players)
   expect(splits).toEqual([
-    { text: 'h', type: 'cursor', players: [{ isCurrent: true }] },
+    { text: 'h', type: 'cursor', players: [] },
     { text: 'ello world', type: 'untouched', players: [] },
   ])
 })
 
 test('should split correctly test with one player on another word', () => {
-  const player = initPlayer().set('cursor', 7)
+  const player = initPlayer()
+    .set('cursor', 7)
+    .set('wordIndex', 1)
+    .set('typedWord', 'w')
   const players = List([player])
   const chunks = computeText('hello world').get('chunks')
   const splits = getTypeSplits(chunks, players)
   expect(splits).toEqual([
     { text: 'hello w', type: 'typed', players: [] },
-    { text: 'o', type: 'cursor', players: [{ isCurrent: true }] },
+    { text: 'o', type: 'cursor', players: [] },
     { text: 'rld', type: 'untouched', players: [] },
   ])
 })
 
 test('should split with wrong word', () => {
-  const player = initPlayer().set('cursor', 7)
+  const player = initPlayer()
+    .set('cursor', 7)
+    .set('wordIndex', 1)
+    .set('typedWord', 'w')
   const players = List([player])
   const chunks = computeText('hello world')
     .get('chunks')
@@ -45,7 +50,7 @@ test('should split with wrong word', () => {
   expect(splits).toEqual([
     { text: 'hello ', type: 'wrong', players: [] },
     { text: 'w', type: 'typed', players: [] },
-    { text: 'o', type: 'cursor', players: [{ isCurrent: true }] },
+    { text: 'o', type: 'cursor', players: [] },
     { text: 'rld', type: 'untouched', players: [] },
   ])
 })
@@ -60,35 +65,48 @@ test('should split with wrong current typed word', () => {
   expect(splits).toEqual([
     { text: 'h', type: 'typed', players: [] },
     { text: 'e', type: 'hardWrong', players: [] },
-    { text: 'l', type: 'cursor', players: [{ isCurrent: true }] },
+    { text: 'l', type: 'cursor', players: [] },
     { text: 'lo world', type: 'untouched', players: [] },
   ])
 })
 
 test('should handle two players on different positions', () => {
-  const player1 = initPlayer().set('cursor', 7)
-  const player2 = initPlayer().set('cursor', 3)
+  const player1 = initPlayer()
+    .set('cursor', 7)
+    .set('wordIndex', 1)
+    .set('typedWord', 'w')
+  const player2 = initPlayer()
+    .set('cursor', 3)
+    .set('typedWord', 'hel')
   const players = List([player1, player2])
   const chunks = computeText('hello world').get('chunks')
   const splits = getTypeSplits(chunks, players)
   expect(splits).toEqual([
     { text: 'hel', type: 'typed', players: [] },
-    { text: 'l', type: 'typed', players: [{ isCurrent: false }] },
+    { text: 'l', type: 'typed', players: [{ name: 'player' }] },
     { text: 'o w', type: 'typed', players: [] },
-    { text: 'o', type: 'cursor', players: [{ isCurrent: true }] },
+    { text: 'o', type: 'cursor', players: [] },
     { text: 'rld', type: 'untouched', players: [] },
   ])
 })
 
 test('should handle two players on same position', () => {
-  const player1 = initPlayer().set('cursor', 7)
-  const player2 = initPlayer().set('cursor', 7)
+  const player1 = initPlayer()
+    .set('cursor', 7)
+    .set('cursor', 7)
+    .set('wordIndex', 1)
+    .set('typedWord', 'w')
+  const player2 = initPlayer()
+    .set('cursor', 7)
+    .set('cursor', 7)
+    .set('wordIndex', 1)
+    .set('typedWord', 'w')
   const players = List([player1, player2])
   const chunks = computeText('hello world').get('chunks')
   const splits = getTypeSplits(chunks, players)
   expect(splits).toEqual([
     { text: 'hello w', type: 'typed', players: [] },
-    { text: 'o', type: 'cursor', players: [{ isCurrent: true }, { isCurrent: false }] },
+    { text: 'o', type: 'cursor', players: [{ name: 'player' }] },
     { text: 'rld', type: 'untouched', players: [] },
   ])
 })

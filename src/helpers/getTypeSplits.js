@@ -63,9 +63,9 @@ export function getCursorMap(players) {
     if (!map[cursor]) {
       map[cursor] = []
     }
-    map[cursor].push({
-      isCurrent: i === 0,
-    })
+    if (i !== 0) {
+      map[cursor].push({ name: 'player' })
+    }
     return map
   }, {})
 }
