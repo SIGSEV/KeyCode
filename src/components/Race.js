@@ -81,6 +81,7 @@ class Race extends PureComponent {
   handleReset = () => {
     this.setState({ showReset: false })
     this._chronos.reset()
+    this._typeWriter.resetLog()
     this.props.resetRace()
   }
 

@@ -252,6 +252,10 @@ class TypeWriter extends PureComponent {
     return this._log.map(e => e.join('|')).join(' ')
   }
 
+  resetLog() {
+    this._log = []
+  }
+
   getCharToType = () => {
     const { text, player } = this.props
     const rawText = text.get('raw')
