@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 
+import getTypeSplits from 'helpers/getTypeSplits'
+
 import { getPlayer, getPlayers, getText, typeChar, setMaxDisplayedLines } from 'reducers/race'
 
 import StatusBar from 'components/StatusBar'
@@ -243,89 +245,43 @@ class TypeWriter extends PureComponent {
     return rawText[player.get('cursor')] || ''
   }
 
-  renderInactiveWord(params) {
-    const { isGhosting } = this.props
+  renderText() {
+    const { text, players, isStarted, isGhosting } = this.props
     const { isFocused } = this.state
-    const { word, wordContent, scrollHide, indexInLine, playerWordIndex, wordIndex } = params
-    // render other words
-    const hasReturn = wordContent.endsWith('\n')
-    let toDisplay = scrollHide ? wordContent.substr(scrollX - indexInLine) : wordContent
-    if (hasReturn && !toDisplay.endsWith('\n')) {
-      toDisplay = `${toDisplay}\n`
-    }
-    return (
-      <Text
-        key={word.get('id')}
-        isDisabled={(!isFocused && !isGhosting) || wordIndex > playerWordIndex}
-        isWrong={word.get('isWrong')}
-      >
-        {toDisplay}
-      </Text>
-    )
-  }
 
-  renderActiveWord(params) {
-    const { isFocused } = this.state
-    const { isStarted, isGhosting } = this.props
-    const { cursor, word, wordContent, indexInLine, scrollHide, typedWord } = params
-    const relativeCursor = cursor - word.get('start')
+    const splits = getTypeSplits(text.get('chunks'), players)
 
-    const wordChunks = wordContent.split('').reduce((acc, char, i) => {
-      if (scrollHide && i < scrollX - indexInLine) {
-        return acc
-      }
-      const isCursor = i === relativeCursor
-      const isWrong = !isCursor && wordContent[i] !== typedWord[i] && i < typedWord.length
-      const last = acc[acc.length - 1]
-      if (isCursor || !last || last.isWrong !== isWrong || last.isCursor) {
-        acc.push({ isWrong, isCursor, content: char })
-      } else {
-        last.content += char
-      }
-      return acc
-    }, [])
-
-    const cursorIndexInWord = wordChunks.findIndex(c => c.isCursor)
-
-    /* eslint-disable react/no-array-index-key */
-    return wordChunks.map(
-      (chunk, i) =>
-        chunk.isCursor ? (
+    return splits.map(({ text, type, players }, i) => {
+      const key = `${i}-${type}-${players.length}`
+      const r =
+        type === 'cursor' ? (
           <Cursor
-            key={i}
+            key={key}
             isBlinking={!isStarted && isFocused && !isGhosting}
             isDisabled={!isFocused && !isGhosting}
           >
-            {chunk.content}
+            {text}
           </Cursor>
         ) : (
           <Text
-            key={i}
-            isHardWrong={chunk.isWrong}
-            isDisabled={(!isFocused && !isGhosting) || i > cursorIndexInWord}
+            key={key}
+            isDisabled={(!isFocused && !isGhosting) || type === 'untouched'}
+            isWrong={type === 'wrong'}
           >
-            {chunk.content}
+            {text}
           </Text>
-        ),
-    )
-    /* eslint-enable react/no-array-index-key */
+        )
+      return r
+    })
   }
 
   render() {
     const { isFocused } = this.state
-    const { player, players, text, isGhosting, chronos, innerRef, showReset } = this.props
+    const { player, isGhosting, chronos, innerRef, showReset } = this.props
 
     innerRef(this)
 
-    const cursor = player.get('cursor')
-    const scrollY = player.get('scrollY')
-    const scrollX = player.get('scrollX')
-    const playerWordIndex = player.get('wordIndex')
-    const typedWord = player.get('typedWord')
     const maxDisplayedLines = player.get('maxDisplayedLines')
-    const chunks = text.get('chunks')
-
-    let curLine = 1
 
     return (
       <Container
@@ -333,39 +289,7 @@ class TypeWriter extends PureComponent {
         isFocused={isFocused || isGhosting}
         innerRef={n => (this._container = n)}
       >
-        {maxDisplayedLines
-          ? chunks.map((word, wordIndex) => {
-              const isCurrent = playerWordIndex === wordIndex
-              let res = null
-              const wordContent = word.get('content')
-              const indexInLine = word.get('indexInLine')
-              const scrollHide = scrollX > indexInLine
-
-              const wordRenderParams = {
-                word,
-                cursor,
-                typedWord,
-                wordIndex,
-                scrollHide,
-                wordContent,
-                indexInLine,
-                playerWordIndex,
-              }
-
-              // render current word
-              if (isCurrent) {
-                res = this.renderActiveWord(wordRenderParams)
-              } else if (curLine > scrollY && curLine <= scrollY + maxDisplayedLines) {
-                res = this.renderInactiveWord(wordRenderParams)
-              }
-
-              if (wordContent.includes('\n')) {
-                curLine++
-              }
-
-              return res
-            })
-          : null}
+        {maxDisplayedLines ? this.renderText() : null}
 
         <HiddenInput
           onFocus={this.handleFocus}
