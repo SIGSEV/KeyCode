@@ -50,6 +50,21 @@ test('should split with wrong word', () => {
   ])
 })
 
+test('should split with wrong current typed word', () => {
+  const player = initPlayer()
+    .set('cursor', 2)
+    .set('typedWord', 'hA')
+  const players = List([player])
+  const chunks = computeText('hello world').get('chunks')
+  const splits = getTypeSplits(chunks, players)
+  expect(splits).toEqual([
+    { text: 'h', type: 'typed', players: [] },
+    { text: 'e', type: 'hardWrong', players: [] },
+    { text: 'l', type: 'cursor', players: [{ isCurrent: true }] },
+    { text: 'lo world', type: 'untouched', players: [] },
+  ])
+})
+
 test('should handle two players on different positions', () => {
   const player1 = initPlayer().set('cursor', 7)
   const player2 = initPlayer().set('cursor', 3)

@@ -11,10 +11,17 @@
  * }
  */
 export default function getTypeSplits(chunks, players) {
-  const currentCursor = players.getIn([0, 'cursor'])
+  const player = players.get(0)
+
+  const cursor = player.get('cursor')
+  const typedWord = player.get('typedWord')
+  const wordIndex = player.get('wordIndex')
+
   const cursorsMap = getCursorMap(players)
+
   return chunks
-    .reduce((acc, chunk) => {
+    .reduce((acc, chunk, i) => {
+      const isCurrentWord = wordIndex === i
       const chars = chunk.get('content').split('')
       const start = chunk.get('start')
       const isWrong = chunk.get('isWrong')
@@ -22,9 +29,11 @@ export default function getTypeSplits(chunks, players) {
       const rest = chars.reduce((acc, char, i) => {
         const index = start + i
         const type =
-          index === currentCursor
+          index === cursor
             ? 'cursor'
-            : index > currentCursor ? 'untouched' : isWrong ? 'wrong' : 'typed'
+            : index > cursor
+              ? 'untouched'
+              : isCurrentWord && typedWord[i] !== char ? 'hardWrong' : isWrong ? 'wrong' : 'typed'
         const players = cursorsMap[index] || []
         const prev = acc[acc.length - 1]
         if (prev && prev.type === type && prev.players.length === players.length) {

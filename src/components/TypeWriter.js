@@ -267,6 +267,7 @@ class TypeWriter extends PureComponent {
             key={key}
             isDisabled={(!isFocused && !isGhosting) || type === 'untouched'}
             isWrong={type === 'wrong'}
+            isHardWrong={type === 'hardWrong'}
           >
             {text}
           </Text>
