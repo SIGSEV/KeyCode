@@ -152,7 +152,7 @@ class Race extends PureComponent {
             onRestart={this.handleReset}
             showReset={showReset}
           />
-          {isRunning && <ResetBtn onFocus={this.handleShowReset} onBlur={this.handleHideReset} />}
+          <ResetBtn onFocus={this.handleShowReset} onBlur={this.handleHideReset} />
         </RaceContent>
         <FinishBoard onRestart={this.handleReset} />
       </Container>

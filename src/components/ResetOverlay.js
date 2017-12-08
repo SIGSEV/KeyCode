@@ -9,7 +9,7 @@ const ResetOverlay = styled(Box)`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.1);
   color: white;
   font-size: 30px;
   font-weight: bold;
@@ -23,10 +23,18 @@ const Kbd = styled.div`
   border-radius: 5px;
 `
 
+const Center = styled(Box)`
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px 30px;
+  border-radius: 10px;
+`
+
 export default () => (
   <ResetOverlay horizontal align="center" justify="center" flow={20}>
-    <span>{'Press'}</span>
-    <Kbd>{'Enter'}</Kbd>
-    <span>{'to restart'}</span>
+    <Center horizontal align="center" flow={10}>
+      <span>{'Press'}</span>
+      <Kbd>{'Enter'}</Kbd>
+      <span>{'to restart'}</span>
+    </Center>
   </ResetOverlay>
 )

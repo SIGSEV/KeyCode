@@ -50,7 +50,8 @@ const handlers = {
       .set('isGhosting', false)
       .set('text', computeText(state.getIn(['text', 'raw'])))
       .set('players', List([initPlayer()]))
-      .setIn(['players', 0, 'maxDisplayedLines'], state.getIn(['players', 0, 'maxDisplayedLines'])),
+      .setIn(['players', 0, 'maxDisplayedLines'], state.getIn(['players', 0, 'maxDisplayedLines']))
+      .setIn(['players', 0, 'maxDisplayedCols'], state.getIn(['players', 0, 'maxDisplayedCols'])),
   RACE_TYPE_CHAR: (state, { payload: { charCode, playerIndex } }) =>
     typeCharFn(state, charCode, playerIndex),
   RACE_SET_DIMENSIONS: (state, { payload: { maxDisplayedLines, maxDisplayedCols } }) =>
