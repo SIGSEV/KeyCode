@@ -28,17 +28,16 @@ export default function getTypeSplits(chunks, players) {
       if (line < scrollY || (maxDisplayedLines && line >= maxDisplayedLines)) {
         return acc
       }
+
       const isCurrentWord = wordIndex === i
-      const content = chunk.get('content')
-      const chars = content.split('')
+      const chars = chunk.get('content').split('')
       const start = chunk.get('start')
       const isWrong = chunk.get('isWrong')
       const indexInLine = chunk.get('indexInLine')
-      const isBlank = !content.trim()
 
       const rest = chars.reduce((acc, char, i) => {
         const charIndexInLine = indexInLine + i
-        if (!isBlank && charIndexInLine < scrollX) {
+        if (char !== '\n' && charIndexInLine < scrollX) {
           return acc
         }
         const index = start + i
