@@ -6,8 +6,10 @@ import { push } from 'react-router-redux'
 import { getPlayer, getText, startRace, stopRace, resetRace } from 'reducers/race'
 import { saveRace } from 'actions/race'
 
+import Box from 'components/base/Box'
+import Link from 'components/Link'
 import UserOrLogin from 'components/UserOrLogin'
-import Button from 'components/Button'
+import RaceFunnel from 'components/RaceFunnel'
 import TypeWriter from 'components/TypeWriter'
 import Chronos from 'components/Chronos'
 import FinishBoard from 'components/FinishBoard'
@@ -23,22 +25,10 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   color: ${p => p.theme.darkGrey00};
-  background: ${p => p.theme.lightgrey02};
-  padding: 20px;
+  padding: 40px;
 
   > * + * {
-    margin-top: 20px;
-  }
-`
-
-const RaceTitle = styled.h1`
-  font-size: 18px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-
-  > * + * {
-    margin-left: 10px;
+    margin-top: 40px;
   }
 `
 
@@ -118,7 +108,7 @@ class Race extends PureComponent {
   }
 
   render() {
-    const { isStarted, isFinished, startRace, language, title, push } = this.props
+    const { isStarted, isFinished, startRace } = this.props
     const { showReset } = this.state
     const isRunning = isStarted && !isFinished
 
@@ -134,12 +124,11 @@ class Race extends PureComponent {
     return (
       <Container>
         <RaceHeader>
-          <div>
-            <Button onClick={() => push('/browse')}>{'/'}</Button>
-            <Button onClick={() => push(`/browse?language=${language}`)}>{language}</Button>
-          </div>
-          <RaceTitle>{title}</RaceTitle>
-          <UserOrLogin />
+          <RaceFunnel />
+          <Box horizontal align="center" flow={40}>
+            <Link to="/leaderboard">{'LeaderBoard'}</Link>
+            <UserOrLogin />
+          </Box>
         </RaceHeader>
 
         <RaceContent>

@@ -297,7 +297,9 @@ class TypeWriter extends PureComponent {
         isFocused={isFocused || isGhosting}
         innerRef={n => (this._container = n)}
       >
-        {maxDisplayedLines ? this.renderText() : null}
+        <StatusBar>{isGhosting ? null : chronos}</StatusBar>
+
+        {maxDisplayedLines > 0 && <div>{this.renderText()}</div>}
 
         <HiddenInput
           onFocus={this.handleFocus}
@@ -308,7 +310,6 @@ class TypeWriter extends PureComponent {
           value={''}
         />
 
-        <StatusBar>{isGhosting ? null : chronos}</StatusBar>
         {showReset && <ResetOverlay />}
       </Container>
     )

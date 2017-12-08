@@ -35,16 +35,13 @@ const statuses = {
 }
 
 const Container = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   height: 24px;
   font-size: 12px;
   background: ${p => p.theme.darkGrey03};
   display: flex;
   color: white;
   text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
+  margin-bottom: 10px;
 `
 
 const Right = styled.div`

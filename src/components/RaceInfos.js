@@ -11,7 +11,6 @@ import Link from 'components/Link'
 import Button from 'components/Button'
 
 const Container = styled.div`
-  background: ${p => p.theme.lightgrey02};
   width: 300px;
 
   > * + * {
