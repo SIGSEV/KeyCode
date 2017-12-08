@@ -53,17 +53,13 @@ export const createText = async payload => {
   })
 }
 
-const populateText = async (text, evalMode) => {
+const populateText = async text => {
   const leaders = await Race.find({ text: text._id }, 'score log user')
     .sort('-score')
     .populate('user', 'name avatar')
     .exec()
 
   await text.populate({ path: 'author', select: 'name avatar' }).execPopulate()
-
-  if (evalMode) {
-    await text.populate({ path: 'grades.user', select: 'name avatar' }).execPopulate()
-  }
 
   const out = text.toObject()
 
@@ -78,13 +74,13 @@ const populateText = async (text, evalMode) => {
 }
 
 export const getRandomText = async () => {
-  const count = await Text.count({ difficulty: { $gt: 0 } })
+  const count = await Text.count({})
   if (!count) {
     throw new Error('No text found')
   }
 
   const random = Math.floor(Math.random() * count)
-  const text = await Text.findOne({ difficulty: { $gt: 0 } }).skip(random)
+  const text = await Text.findOne({}).skip(random)
 
   return populateText(text)
 }
@@ -102,37 +98,6 @@ export const starText = async (id, userId) => {
   return getText(id)
 }
 
-export const gradeText = async (id, grade, user) => {
-  const text = await Text.findOne({ id })
-  const alreadyGraded = text.grades.some(g => g.user.equals(user._id))
-
-  if (!user.admin && (isNaN(grade) || grade > 5 || text.difficulty !== 0 || alreadyGraded)) {
-    throw new Error('👏👏👏👏 Fucking CUNT!')
-  }
-
-  if (!user.admin && user._id.equals(text.author)) {
-    throw new Error('Cannot grade your own text.')
-  }
-
-  if (!alreadyGraded) {
-    text.grades.push({ value: grade, user: user._id })
-  }
-
-  if (user.admin) {
-    text.difficulty = grade
-  } else if (text.grades.length >= 3) {
-    text.difficulty =
-      text.grades.filter(g => g.value === -1).length > 1
-        ? -1
-        : Math.max(
-            Math.floor(text.grades.reduce((acc, cur) => acc + cur.value, 0) / text.grades.length),
-            1,
-          )
-  }
-
-  return text.save()
-}
-
 export const deleteText = async (id, user) => {
   const text = await Text.findOne({ id })
   if (!user.admin) {
@@ -144,13 +109,11 @@ export const deleteText = async (id, user) => {
   await text.remove()
 }
 
-export const getTexts = async (params, user) => {
-  const { limit = 10, sort = 'stars', evalMode = false, ...searchParams } = params
+export const getTexts = async params => {
+  const { limit = 10, sort = 'stars', ...searchParams } = params
 
   const payload = {
     ...searchParams,
-    difficulty: evalMode ? (user.admin ? { $gt: -2 } : 0) : { $gt: 0 },
-    ...(evalMode && user && !user.admin ? { 'grades.user': { $nin: [user._id] } } : {}),
   }
 
   const texts = await Text.find(payload)
@@ -158,5 +121,5 @@ export const getTexts = async (params, user) => {
     .limit(Number(limit))
     .exec()
 
-  return Promise.all(texts.map(t => populateText(t, evalMode)))
+  return Promise.all(texts.map(populateText))
 }

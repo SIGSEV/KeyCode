@@ -140,6 +140,11 @@ class CreateText extends PureComponent {
                     placeholder={`${textConds.min}-${textConds.max} chars`}
                   />
                 </FormGroup>
+                <div>
+                  {
+                    'Proceed with caution. If you create a dumb text and get in the leaderboard this way you will be permanently banned.'
+                  }
+                </div>
                 <Button isLoading={props.isSubmitting} isDisabled={!props.isValid}>
                   {'Create'}
                 </Button>

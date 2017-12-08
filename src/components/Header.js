@@ -56,7 +56,6 @@ class Header extends PureComponent {
         </Link>
         <HeaderRight>
           <Link to="/browse">{'Browse'}</Link>
-          {user && <Link to="/eval">{'Review'}</Link>}
           <Link to="/leaderboard">{'LeaderBoard'}</Link>
           {!user && <Link to="/pricing">{'Pricing'}</Link>}
           <UserOrLogin />
