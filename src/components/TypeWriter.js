@@ -16,8 +16,9 @@ const Container = styled.div`
   font-size: 16px;
   line-height: 24px;
   user-select: none;
-  width: 800px;
   overflow: hidden;
+  flex-grow: 1;
+  border: 1px solid ${p => p.theme.lightgrey01};
 
   &:hover {
     cursor: ${p => (p.isFocused ? 'default' : 'text')};

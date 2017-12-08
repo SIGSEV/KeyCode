@@ -9,27 +9,13 @@ import { ghostRace } from 'actions/race'
 
 import Link from 'components/Link'
 import Button from 'components/Button'
-import LanguageDot from 'components/LanguageDot'
 
 const Container = styled.div`
-  flex-grow: 1;
-  padding: 20px;
   background: ${p => p.theme.lightgrey02};
+  width: 300px;
 
   > * + * {
-    margin-top: 40px;
-  }
-`
-
-const RaceTitle = styled.h1`
-  font-size: 24px;
-  line-height: 36px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-
-  > * + * {
-    margin-left: 10px;
+    margin-top: 20px;
   }
 `
 
@@ -78,10 +64,17 @@ const Meta = styled.div`
 
 const RaceLeaderboard = styled.div``
 
+const SectionTitle = styled.h2`
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+`
+
 @connect(
   state => ({
     userId: state.user && state.user._id,
-    isAdmin: state.user && state.user.admin,
     race: state.race,
   }),
   {
@@ -100,54 +93,39 @@ class RaceInfos extends PureComponent {
     }
   }
   render() {
-    const { userId, isAdmin, starText, race, ghostRace } = this.props
+    const { userId, starText, race, ghostRace } = this.props
 
     const rates = race.get('rates')
-    const language = race.get('language')
     const stars = race.get('stars')
     const hasStarred = userId && rates.get(userId)
-    const text = race.get('text')
     const leaders = race.get('leaders')
 
     return (
       <Container>
-        <div>
-          <RaceTitle>
-            <span>{race.get('title')}</span>
-            <LanguageDot type={language} size="15px" style={{ marginTop: 3 }} />
-          </RaceTitle>
-
-          <RaceMetas>
-            <Meta
-              interactive
-              tabIndex={0}
-              onClick={() => (userId ? starText(race.get('id')) : void 0)}
-            >
-              <IconStar style={{ color: hasStarred ? '#ffb401' : void 0 }} />
-              <span>{stars}</span>
-            </Meta>
-            <Meta>
-              <b>{text.get('wordsCount')}</b>
-              &nbsp;{'words'}
-            </Meta>
-            {isAdmin && (
-              <Meta interactive tabIndex={0} danger onClick={this.handleDelete}>
-                {'Delete'}
-              </Meta>
-            )}
-          </RaceMetas>
-        </div>
+        <RaceMetas>
+          <Meta
+            interactive
+            tabIndex={0}
+            onClick={() => (userId ? starText(race.get('id')) : void 0)}
+          >
+            <IconStar style={{ color: hasStarred ? '#ffb401' : void 0 }} />
+            <span>{stars}</span>
+          </Meta>
+        </RaceMetas>
         {leaders.size ? (
-          <RaceLeaderboard>
-            {leaders.map((leader, i) => (
-              <LeaderEntry
-                key={leader.get('_id')}
-                num={i + 1}
-                leader={leader}
-                ghostRace={ghostRace}
-              />
-            ))}
-          </RaceLeaderboard>
+          [
+            <SectionTitle key="1">{'Top scores on that race'}</SectionTitle>,
+            <RaceLeaderboard key="2">
+              {leaders.map((leader, i) => (
+                <LeaderEntry
+                  key={leader.get('_id')}
+                  num={i + 1}
+                  leader={leader}
+                  ghostRace={ghostRace}
+                />
+              ))}
+            </RaceLeaderboard>,
+          ]
         ) : (
           <div>{'No score available yet.'}</div>
         )}

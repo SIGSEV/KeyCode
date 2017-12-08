@@ -19,22 +19,35 @@ const Container = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  color: ${p => p.theme.darkGrey00};
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  color: ${p => p.theme.darkGrey00};
+  background: ${p => p.theme.lightgrey02};
+  padding: 20px;
+
+  > * + * {
+    margin-top: 20px;
+  }
+`
+
+const RaceTitle = styled.h1`
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+
+  > * + * {
+    margin-left: 10px;
+  }
 `
 
 const RaceHeader = styled.div`
   flex-shrink: 0;
   user-select: none;
-  background: ${p => p.theme.darkGrey00};
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: white;
-  text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
 
   .title {
     text-transform: uppercase;
@@ -57,6 +70,7 @@ const ResetBtn = styled.button`
   state => ({
     player: getPlayer(state),
     text: getText(state),
+    race: state.race,
     language: state.race.get('language').toLowerCase(),
     title: state.race.get('title'),
     isStarted: state.race.get('isStarted'),
@@ -124,11 +138,12 @@ class Race extends PureComponent {
             <Button onClick={() => push('/browse')}>{'/'}</Button>
             <Button onClick={() => push(`/browse?language=${language}`)}>{language}</Button>
           </div>
-          <span className="title">{title}</span>
-          <UserOrLogin fuckradius="definitely" />
+          <RaceTitle>{title}</RaceTitle>
+          <UserOrLogin />
         </RaceHeader>
 
         <RaceContent>
+          <RaceInfos />
           <TypeWriter
             innerRef={n => (this._typeWriter = n)}
             onStart={startRace}
@@ -138,7 +153,6 @@ class Race extends PureComponent {
             showReset={showReset}
           />
           {isRunning && <ResetBtn onFocus={this.handleShowReset} onBlur={this.handleHideReset} />}
-          <RaceInfos />
         </RaceContent>
         <FinishBoard onRestart={this.handleReset} />
       </Container>

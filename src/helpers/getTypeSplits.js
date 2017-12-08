@@ -26,7 +26,7 @@ export default function getTypeSplits(chunks, players) {
   return chunks
     .reduce((acc, chunk, i) => {
       const line = chunk.get('line')
-      if (line < scrollY || (maxDisplayedLines && line >= maxDisplayedLines)) {
+      if (line < scrollY || (maxDisplayedLines && line >= maxDisplayedLines + scrollY)) {
         return acc
       }
 
