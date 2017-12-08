@@ -16,11 +16,15 @@ export default function getTypeSplits(chunks, players) {
   const cursor = player.get('cursor')
   const typedWord = player.get('typedWord')
   const wordIndex = player.get('wordIndex')
+  const scrollY = player.get('scrollY')
 
   const cursorsMap = getCursorMap(players)
 
   return chunks
     .reduce((acc, chunk, i) => {
+      if (chunk.get('line') < scrollY) {
+        return acc
+      }
       const isCurrentWord = wordIndex === i
       const chars = chunk.get('content').split('')
       const start = chunk.get('start')

@@ -110,3 +110,14 @@ test('should handle two players on same position', () => {
     { text: 'rld', type: 'untouched', players: [] },
   ])
 })
+
+test('should handle scrollY', () => {
+  const player = initPlayer().set('scrollY', 1)
+  const players = List([player])
+  const text = `first line
+second line
+third line`
+  const chunks = computeText(text).get('chunks')
+  const splits = getTypeSplits(chunks, players)
+  expect(splits).toEqual([{ text: 'second line\nthird line', type: 'untouched', players: [] }])
+})

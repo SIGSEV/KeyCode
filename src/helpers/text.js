@@ -47,6 +47,7 @@ export function computeText(text) {
   }
 
   let trickyPrevIndexInLine = 0
+  let line = 0
   text = text.replace(/\t/g, '  ')
   const chunks = text
     .split('')
@@ -59,10 +60,14 @@ export function computeText(text) {
         acc = acc.push(word)
       }
       word = word.set('end', i)
+      word = word.set('line', line)
       word = word.set(
         'content',
         text.substring(word.get('start'), word.get('end') + (i === text.length - 1 ? 2 : 1)),
       )
+      if (char === '\n') {
+        line += 1
+      }
       if (!char.trim() && (char === '\n' || nextChar.trim() || prevChar.trim())) {
         word = word.set('done', true)
       } else {
