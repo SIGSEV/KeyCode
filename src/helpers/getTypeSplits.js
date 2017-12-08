@@ -17,6 +17,7 @@ export default function getTypeSplits(chunks, players) {
   const typedWord = player.get('typedWord')
   const wordIndex = player.get('wordIndex')
   const scrollY = player.get('scrollY')
+  const scrollX = player.get('scrollX')
   const maxDisplayedLines = player.get('maxDisplayedLines')
 
   const cursorsMap = getCursorMap(players)
@@ -31,8 +32,13 @@ export default function getTypeSplits(chunks, players) {
       const chars = chunk.get('content').split('')
       const start = chunk.get('start')
       const isWrong = chunk.get('isWrong')
+      const indexInLine = chunk.get('indexInLine')
 
       const rest = chars.reduce((acc, char, i) => {
+        const charIndexInLine = indexInLine + i
+        if (charIndexInLine < scrollX) {
+          return acc
+        }
         const index = start + i
         const type =
           index === cursor

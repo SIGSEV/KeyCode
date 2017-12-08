@@ -122,6 +122,17 @@ third line`
   expect(splits).toEqual([{ text: 'second line\nthird line', type: 'untouched', players: [] }])
 })
 
+test('should handle scrollX', () => {
+  const player = initPlayer().set('scrollX', 3)
+  const players = List([player])
+  const text = `first line
+second line
+third line`
+  const chunks = computeText(text).get('chunks')
+  const splits = getTypeSplits(chunks, players)
+  expect(splits).toEqual([{ text: 'st line\nond line\nrd line', type: 'untouched', players: [] }])
+})
+
 test('should handle max lines', () => {
   const player = initPlayer().set('maxDisplayedLines', 1)
   const players = List([player])
