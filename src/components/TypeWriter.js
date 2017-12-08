@@ -164,7 +164,7 @@ class TypeWriter extends PureComponent {
   measureContainer = () => {
     const rect = this._container.getBoundingClientRect()
     const { height, width } = rect
-    const maxDisplayedLines = Math.max(Math.floor(height / 24) - 1, 0)
+    const maxDisplayedLines = Math.max(Math.floor(height / 24) - 2, 0)
     const maxDisplayedCols = Math.max(Math.floor(width / 10) - 1, 0)
     const dimensions = {
       maxDisplayedLines,

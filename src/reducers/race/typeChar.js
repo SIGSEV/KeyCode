@@ -4,8 +4,8 @@ function adjustScrollX(p, chunks) {
   const word = chunks.get(p.get('wordIndex'))
   const maxDisplayedCols = p.get('maxDisplayedCols')
   const cursorIndexInLine = p.get('cursor') - word.get('start') + word.get('indexInLine')
-  if (cursorIndexInLine > maxDisplayedCols / 2) {
-    p = p.set('scrollX', Math.floor(cursorIndexInLine - maxDisplayedCols / 2))
+  if (cursorIndexInLine > maxDisplayedCols / 1.2) {
+    p = p.set('scrollX', Math.floor(cursorIndexInLine - maxDisplayedCols / 1.2))
   } else {
     p = p.set('scrollX', 0)
   }
