@@ -29,14 +29,16 @@ export default function getTypeSplits(chunks, players) {
         return acc
       }
       const isCurrentWord = wordIndex === i
-      const chars = chunk.get('content').split('')
+      const content = chunk.get('content')
+      const chars = content.split('')
       const start = chunk.get('start')
       const isWrong = chunk.get('isWrong')
       const indexInLine = chunk.get('indexInLine')
+      const isBlank = !content.trim()
 
       const rest = chars.reduce((acc, char, i) => {
         const charIndexInLine = indexInLine + i
-        if (charIndexInLine < scrollX) {
+        if (!isBlank && charIndexInLine < scrollX) {
           return acc
         }
         const index = start + i
