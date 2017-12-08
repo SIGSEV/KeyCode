@@ -53,8 +53,10 @@ const handlers = {
       .setIn(['players', 0, 'maxDisplayedLines'], state.getIn(['players', 0, 'maxDisplayedLines'])),
   RACE_TYPE_CHAR: (state, { payload: { charCode, playerIndex } }) =>
     typeCharFn(state, charCode, playerIndex),
-  RACE_SET_MAX_DISPLAYED_LINES: (state, { payload: maxDisplayedLines }) =>
-    state.setIn(['players', 0, 'maxDisplayedLines'], maxDisplayedLines),
+  RACE_SET_DIMENSIONS: (state, { payload: { maxDisplayedLines, maxDisplayedCols } }) =>
+    state
+      .setIn(['players', 0, 'maxDisplayedLines'], maxDisplayedLines)
+      .setIn(['players', 0, 'maxDisplayedCols'], maxDisplayedCols),
   SAVE_RACE_SUCCESS: (state, { payload: { data: { leaders } } }) =>
     state.set('leaders', fromJS(leaders)),
   STAR_TEXT_SUCCESS: (state, { payload: { data } }) => {
@@ -81,7 +83,7 @@ export const typeChar = createAction('RACE_TYPE_CHAR', (charCode, playerIndex) =
 export const startRace = createAction('RACE_START')
 export const stopRace = createAction('RACE_STOP')
 export const resetRace = createAction('RACE_RESET')
-export const setMaxDisplayedLines = createAction('RACE_SET_MAX_DISPLAYED_LINES')
+export const setDimensions = createAction('RACE_SET_DIMENSIONS')
 
 // Selectors
 

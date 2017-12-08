@@ -1,12 +1,11 @@
 import { countLinesOffset } from 'helpers/text'
 
-const DISPLAYED_COLS = 120
-
 function adjustScrollX(p, chunks) {
   const word = chunks.get(p.get('wordIndex'))
+  const maxDisplayedCols = p.get('maxDisplayedCols')
   const cursorIndexInLine = p.get('cursor') - word.get('start') + word.get('indexInLine')
-  if (cursorIndexInLine > DISPLAYED_COLS / 2) {
-    p = p.set('scrollX', cursorIndexInLine - DISPLAYED_COLS / 2)
+  if (cursorIndexInLine > maxDisplayedCols / 2) {
+    p = p.set('scrollX', Math.floor(cursorIndexInLine - maxDisplayedCols / 2))
   } else {
     p = p.set('scrollX', 0)
   }

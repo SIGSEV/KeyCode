@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import getTypeSplits from 'helpers/getTypeSplits'
 
-import { getPlayer, getPlayers, getText, typeChar, setMaxDisplayedLines } from 'reducers/race'
+import { getPlayer, getPlayers, getText, typeChar, setDimensions } from 'reducers/race'
 
 import StatusBar from 'components/StatusBar'
 import ResetOverlay from 'components/ResetOverlay'
@@ -92,7 +92,7 @@ const Text = styled.span`
   }),
   {
     typeChar,
-    setMaxDisplayedLines,
+    setDimensions,
   },
 )
 class TypeWriter extends PureComponent {
@@ -162,9 +162,14 @@ class TypeWriter extends PureComponent {
 
   measureContainer = () => {
     const rect = this._container.getBoundingClientRect()
-    const { height } = rect
-    const maxDisplayedLines = Math.floor(height / 24) - 1
-    this.props.setMaxDisplayedLines(Math.max(maxDisplayedLines, 0))
+    const { height, width } = rect
+    const maxDisplayedLines = Math.max(Math.floor(height / 24) - 1, 0)
+    const maxDisplayedCols = Math.max(Math.floor(width / 10) - 1, 0)
+    const dimensions = {
+      maxDisplayedLines,
+      maxDisplayedCols,
+    }
+    this.props.setDimensions(dimensions)
   }
 
   handleFocus = () => this.setState({ isFocused: true })

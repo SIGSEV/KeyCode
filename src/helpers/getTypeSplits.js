@@ -19,6 +19,7 @@ export default function getTypeSplits(chunks, players) {
   const scrollY = player.get('scrollY')
   const scrollX = player.get('scrollX')
   const maxDisplayedLines = player.get('maxDisplayedLines')
+  const maxDisplayedCols = player.get('maxDisplayedCols')
 
   const cursorsMap = getCursorMap(players)
 
@@ -37,7 +38,10 @@ export default function getTypeSplits(chunks, players) {
 
       const rest = chars.reduce((acc, char, i) => {
         const charIndexInLine = indexInLine + i
-        if (char !== '\n' && charIndexInLine < scrollX) {
+        if (
+          char !== '\n' &&
+          (charIndexInLine < scrollX || charIndexInLine - scrollX > maxDisplayedCols)
+        ) {
           return acc
         }
         const index = start + i
