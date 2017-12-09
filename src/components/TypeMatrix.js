@@ -73,6 +73,19 @@ const KeyInfo = styled.div`
   text-align: center;
 `
 
+const PerBadge = styled.span`
+  background-color: ${p => p.theme.darkGrey00};
+  color: white;
+  border-radius: 2px;
+  padding: 0.1rem 0.4rem;
+  margin-left: 0.5rem;
+`
+
+const TypoStats = styled.div`
+  margin-top: 0.5rem;
+  font-size: 11px;
+`
+
 class Typematrix extends PureComponent {
   static defaultProps = {
     layout: 'programmerDvorak',
@@ -86,11 +99,11 @@ class Typematrix extends PureComponent {
   }
 
   componentWillMount() {
-    const { wrongKeys, layout } = this.props
+    const { wrongKeys, validKeys, layout } = this.props
 
     this.initMap(layout)
     if (wrongKeys) {
-      this.setKeyCtx(wrongKeys)
+      this.setKeyCtx(wrongKeys, validKeys)
     }
   }
 
@@ -134,19 +147,28 @@ class Typematrix extends PureComponent {
     })
   }
 
-  setKeyCtx = wrongKeys => {
+  setKeyCtx = (wrongKeys, validKeys) => {
     const { layout } = this.props
     const keys = LAYOUTS[layout]
 
-    // Group pair of keys together to get max
-    this._maxWrong = keys.reduce((acc, row) => {
-      const out = row.reduce((acc, cell) => {
-        const total = cell.reduce((total, k) => total + wrongKeys[k.charCodeAt(0)] || 0, 0)
-        return total > acc ? total : acc
-      }, 0)
+    this._wrongMap = {}
 
-      return out > acc ? out : acc
-    }, 0)
+    keys.forEach(row => {
+      row.forEach(cell => {
+        const wrongs = wrongKeys[cell[0].charCodeAt(0)] + wrongKeys[cell[1].charCodeAt(0)]
+        const rights = validKeys[cell[0].charCodeAt(0)] + validKeys[cell[1].charCodeAt(0)]
+        const per = Math.round(wrongs / rights * 100)
+        if (!this._maxWrong || per > this._maxWrong) {
+          this._maxWrong = per
+        }
+
+        this._wrongMap[cell[0]] = {
+          wrongs,
+          rights,
+          per,
+        }
+      })
+    })
 
     this._colorScale = scaleLinear()
       .domain([0, this._maxWrong])
@@ -156,17 +178,13 @@ class Typematrix extends PureComponent {
   getKeyMeta = key => {
     const { wrongKeys } = this.props
     if (!wrongKeys) {
-      return { color: null, count: 0 }
+      return { color: null, meta: [] }
     }
 
-    const wrongCount = key.map(k => wrongKeys[k.charCodeAt(0)] || 0).reduce((acc, c) => acc + c, 0)
+    const meta = this._wrongMap[key[0]] || {}
+    const color = meta.per ? this._colorScale(meta.per) : '#a3e26e'
 
-    const color = wrongCount && this._colorScale(wrongCount)
-
-    return {
-      color,
-      count: wrongCount,
-    }
+    return { color, meta }
   }
 
   render() {
@@ -181,12 +199,12 @@ class Typematrix extends PureComponent {
           {LAYOUTS[layout].map((row, i) => (
             <Row isStaggered={staggered} layout={layout} index={i} key={i}>
               {row.map((key, j) => {
-                const { color, count } = this.getKeyMeta(key)
+                const { color, meta } = this.getKeyMeta(key)
                 const k = (
                   <Key
                     key={j}
                     className="key"
-                    onMouseOver={() => this.setState({ hovered: { key, count } })}
+                    onMouseOver={() => this.setState({ hovered: { key, meta } })}
                     onMouseOut={() => this.setState({ hovered: null })}
                     keyColor={color}
                     isActive={activeKey === index}
@@ -205,11 +223,18 @@ class Typematrix extends PureComponent {
               <div>
                 <span>
                   <b>{hovered.key[0]}</b> <b>{hovered.key[1]}</b>
+                  {hovered.meta && (
+                    <PerBadge>
+                      {hovered.meta.per || 0}
+                      {'%'}
+                    </PerBadge>
+                  )}
                 </span>
-                <div>
-                  {hovered.count}
-                  {' typos'}
-                </div>
+                {hovered.meta && (
+                  <TypoStats>
+                    {`${hovered.meta.wrongs || 0} typos / ${hovered.meta.rights || 0}`}
+                  </TypoStats>
+                )}
               </div>
             )}
           </KeyInfo>

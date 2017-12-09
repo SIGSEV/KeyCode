@@ -309,6 +309,7 @@ class User extends PureComponent {
               <Z style={{ height: radarHeight }}>
                 <TypeMatrix
                   wrongKeys={user.wrongKeys}
+                  validKeys={user.validKeys}
                   layout={isMe ? loggedUser.layout : user.layout}
                   staggered={isMe ? loggedUser.staggered : user.staggered}
                 />
