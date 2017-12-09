@@ -14,7 +14,7 @@ class RaceFunnel extends PureComponent {
     const language = race.get('language')
     return (
       <Box horizontal align="center" flow={5}>
-        <Link to="/">{'Browse'}</Link>
+        <Link to="/browse">{'Browse'}</Link>
         <IconCaret />
         <Link to={`/browse?language=${language.toLowerCase()}`}>{language}</Link>
         <IconCaret />
