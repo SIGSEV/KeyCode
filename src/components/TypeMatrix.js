@@ -102,7 +102,7 @@ class Typematrix extends PureComponent {
     const { wrongKeys, validKeys, layout } = this.props
 
     this.initMap(layout)
-    if (wrongKeys) {
+    if (wrongKeys && validKeys) {
       this.setKeyCtx(wrongKeys, validKeys)
     }
   }
@@ -113,7 +113,7 @@ class Typematrix extends PureComponent {
     }
 
     if (nextProps.wrongKeys && !isEqual(nextProps.wrongKeys, this.props.wrongKeys)) {
-      this.setKeyCtx(nextProps.wrongKeys)
+      this.setKeyCtx(nextProps.wrongKeys, nextProps.validKeys)
     }
 
     if (nextProps.layout !== this.props.layout) {
