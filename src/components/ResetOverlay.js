@@ -24,7 +24,7 @@ const Kbd = styled.div`
 `
 
 const Center = styled(Box)`
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   padding: 20px 30px;
   border-radius: 10px;
 `
