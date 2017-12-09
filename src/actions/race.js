@@ -106,6 +106,37 @@ export function ghostRace(log) {
   }
 }
 
+export function startRace() {
+  return (dispatch, getState) => {
+    dispatch({ type: 'RACE_START' })
+    let i = 0
+    let startAt = null
+    const type = async () => {
+      const { race } = getState()
+      if (!startAt) {
+        startAt = race.get('startAt')
+      } else if (startAt !== race.get('startAt')) {
+        return
+      }
+      const ghost = race.get('ghost')
+      if (!ghost) {
+        return
+      }
+      const log = ghost.get('richLog')
+      const step = log[i++]
+      if (!step) {
+        return
+      }
+      const beforeDispatch = Date.now()
+      dispatch(typeChar(step.keyCode, 1))
+      const delta = Date.now() - beforeDispatch
+      await wait(step.time - delta)
+      type()
+    }
+    type()
+  }
+}
+
 if (module.hot) {
   module.hot.accept()
 }

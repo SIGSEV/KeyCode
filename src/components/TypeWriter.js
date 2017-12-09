@@ -294,7 +294,11 @@ class TypeWriter extends PureComponent {
           </Text>
         )
       if (players.length) {
-        r = <span style={{ position: 'relative', outline: '2px solid #1687ee' }}>{r}</span>
+        r = (
+          <span key={key} style={{ position: 'relative', outline: '2px solid #1687ee' }}>
+            {r}
+          </span>
+        )
       }
       return r
     })

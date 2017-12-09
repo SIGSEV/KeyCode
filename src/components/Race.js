@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import { getPlayer, getText, startRace, stopRace, resetRace } from 'reducers/race'
-import { saveRace } from 'actions/race'
+import { getPlayer, getText, stopRace, resetRace } from 'reducers/race'
+import { startRace, saveRace } from 'actions/race'
 
 import Box from 'components/base/Box'
 import Link from 'components/Link'
