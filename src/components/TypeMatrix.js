@@ -103,7 +103,7 @@ class Typematrix extends PureComponent {
 
     this.initMap(layout)
     if (wrongKeys && validKeys) {
-      this.setKeyCtx(wrongKeys, validKeys)
+      this.setKeyCtx(wrongKeys, validKeys, layout)
     }
   }
 
@@ -117,13 +117,8 @@ class Typematrix extends PureComponent {
       !isEqual(nextProps.validKeys, this.props.validKeys) ||
       nextProps.layout !== this.props.layout
     ) {
-      this._maxWrong = 0
-      this._wrongMap = {}
-      this.setKeyCtx(nextProps.wrongKeys, nextProps.validKeys)
-    }
-
-    if (nextProps.layout !== this.props.layout) {
       this.initMap(nextProps.layout)
+      this.setKeyCtx(nextProps.wrongKeys, nextProps.validKeys, nextProps.layout)
     }
   }
 
@@ -153,11 +148,15 @@ class Typematrix extends PureComponent {
     })
   }
 
-  setKeyCtx = (wrongKeys, validKeys) => {
-    const { layout } = this.props
+  setKeyCtx = (wrongKeys, validKeys, layout) => {
+    if (!wrongKeys || !validKeys) {
+      return
+    }
+
     const keys = LAYOUTS[layout]
 
     this._wrongMap = {}
+    this._maxWrong = 0
 
     keys.forEach(row => {
       row.forEach(cell => {
@@ -169,6 +168,12 @@ class Typematrix extends PureComponent {
         }
 
         this._wrongMap[cell[0]] = {
+          wrongs,
+          rights,
+          per,
+        }
+
+        this._wrongMap[cell[1]] = {
           wrongs,
           rights,
           per,
