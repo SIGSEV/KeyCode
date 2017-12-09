@@ -77,7 +77,7 @@ const handlers = {
     return state.set('rates', fromJS(rates)).set('stars', stars)
   },
   RACE_LOAD_GHOST: (state, { payload: ghost }) =>
-    state.set('ghost', ghost).update('players', players => players.push(initPlayer())),
+    state.set('ghost', ghost).update('players', players => players.set(1, initPlayer())),
   RACE_REMOVE_GHOST: state =>
     state.set('ghost', null).update('players', players => players.slice(0, 1)),
 }
