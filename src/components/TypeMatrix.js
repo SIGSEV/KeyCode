@@ -112,7 +112,11 @@ class Typematrix extends PureComponent {
       this.setState({ activeKey: this.getActiveKey(nextProps.activeChar) })
     }
 
-    if (nextProps.wrongKeys && !isEqual(nextProps.wrongKeys, this.props.wrongKeys)) {
+    if (
+      !isEqual(nextProps.wrongKeys, this.props.wrongKeys) ||
+      !isEqual(nextProps.validKeys, this.props.validKeys) ||
+      nextProps.layout !== this.props.layout
+    ) {
       this.setKeyCtx(nextProps.wrongKeys, nextProps.validKeys)
     }
 
