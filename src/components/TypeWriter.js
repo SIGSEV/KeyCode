@@ -82,6 +82,12 @@ const Text = styled.span`
   color: ${p => (p.isWrong ? p.theme.red : p.isHardWrong ? 'white' : '')};
 `
 
+const ResetBtn = styled.button`
+  opacity: 0;
+  width: 0;
+  height: 0;
+`
+
 @connect(
   state => ({
     player: getPlayer(state),
@@ -99,6 +105,7 @@ const Text = styled.span`
 class TypeWriter extends PureComponent {
   state = {
     isFocused: false,
+    showReset: false,
   }
 
   componentDidMount() {
@@ -124,9 +131,12 @@ class TypeWriter extends PureComponent {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const { isFinished, showReset } = this.props
-    const { isFinished: wasFinished, showReset: wasShowingReset } = prevProps
+  componentDidUpdate(prevProps, prevState) {
+    const { isFinished } = this.props
+    const { isFinished: wasFinished } = prevProps
+    const { showReset } = this.state
+    const { showReset: wasShowingReset } = prevState
+
     if (wasFinished && !isFinished) {
       this.handleClick()
       this.measureContainer()
@@ -146,15 +156,13 @@ class TypeWriter extends PureComponent {
     this.removeResetListener()
   }
 
-  addResetListener = () => {
-    window.addEventListener('keydown', this.onEnter)
-  }
+  handleShowReset = () => this.setState({ showReset: true })
+  handleHideReset = () => this.setState({ showReset: false })
 
-  removeResetListener = () => {
-    window.removeEventListener('keydown', this.onEnter)
-  }
+  addResetListener = () => window.addEventListener('keydown', this.onListenReset)
+  removeResetListener = () => window.removeEventListener('keydown', this.onListenReset)
 
-  onEnter = e => {
+  onListenReset = e => {
     if (e.which === 13) {
       this.props.onRestart()
       this.handleClick()
@@ -284,8 +292,8 @@ class TypeWriter extends PureComponent {
   }
 
   render() {
-    const { isFocused } = this.state
-    const { player, isGhosting, chronos, innerRef, showReset } = this.props
+    const { isFocused, showReset } = this.state
+    const { player, isGhosting, chronos, innerRef } = this.props
 
     innerRef(this)
 
@@ -311,6 +319,7 @@ class TypeWriter extends PureComponent {
         />
 
         {showReset && <ResetOverlay />}
+        <ResetBtn onFocus={this.handleShowReset} onBlur={this.handleHideReset} />
       </Container>
     )
   }
