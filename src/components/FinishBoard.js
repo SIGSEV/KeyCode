@@ -10,6 +10,7 @@ import Box from 'components/base/Box'
 import Modal from 'components/Modal'
 import Button from 'components/Button'
 import Score from 'components/Score'
+import UserOrLogin from 'components/UserOrLogin'
 
 import { getPlayer } from 'reducers/race'
 import getScore from 'helpers/getScore'
@@ -48,6 +49,16 @@ const Small = styled.div`
 
 const ModuloContainer = styled.td`
   color: ${p => (p.isPositive ? p.theme.green : p.isNegative ? p.theme.red : null)};
+`
+
+const LoginReminder = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  > * + * {
+    margin-top: 1rem;
+  }
 `
 
 function getCharSpan(stats) {
@@ -99,7 +110,7 @@ class FinishBoard extends PureComponent {
   }
 
   render() {
-    const { onRestart, player, isFinished } = this.props
+    const { onRestart, player, isLogged, isFinished } = this.props
 
     // prevent unnecessary render
     if (!isFinished) {
@@ -182,6 +193,12 @@ class FinishBoard extends PureComponent {
               </tr>
             </tbody>
           </Detail>
+          {!isLogged && (
+            <LoginReminder>
+              <span>{'Forgot to login? Do it now to save your score!'}</span>
+              <UserOrLogin />
+            </LoginReminder>
+          )}
         </Box>
       </Modal>
     )

@@ -57,6 +57,7 @@ const RaceContent = styled.div`
     race: state.race,
     language: state.race.get('language').toLowerCase(),
     title: state.race.get('title'),
+    isLogged: !!state.user,
     isStarted: state.race.get('isStarted'),
     isFinished: state.race.get('isFinished'),
   }),
@@ -94,7 +95,7 @@ class Race extends PureComponent {
   }
 
   render() {
-    const { isStarted, isFinished, startRace } = this.props
+    const { isStarted, isFinished, isLogged, startRace } = this.props
     const isRunning = isStarted && !isFinished
 
     const chronos = (
@@ -126,7 +127,7 @@ class Race extends PureComponent {
             onRestart={this.handleReset}
           />
         </RaceContent>
-        <FinishBoard onRestart={this.handleReset} />
+        <FinishBoard isLogged={isLogged} onRestart={this.handleReset} />
       </Container>
     )
   }
