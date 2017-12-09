@@ -15,6 +15,7 @@ const initialState = fromJS({
   startAt: null,
   players: [],
   lastRace: null,
+  ghost: null,
 
   // TODO tbh we should use a single "status" string, no?
   isStarted: false,
@@ -68,6 +69,8 @@ const handlers = {
 
     return state.set('rates', fromJS(rates)).set('stars', stars)
   },
+  RACE_LOAD_GHOST: (state, { payload: ghost }) => state.set('ghost', ghost),
+  RACE_REMOVE_GHOST: state => state.set('ghost', null),
 }
 
 export default handleActions(handlers, initialState)
@@ -85,6 +88,7 @@ export const startRace = createAction('RACE_START')
 export const stopRace = createAction('RACE_STOP')
 export const resetRace = createAction('RACE_RESET')
 export const setDimensions = createAction('RACE_SET_DIMENSIONS')
+export const removeGhost = createAction('RACE_REMOVE_GHOST')
 
 // Selectors
 

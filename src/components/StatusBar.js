@@ -41,7 +41,8 @@ const Container = styled.div`
   display: flex;
   color: white;
   text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
-  margin-bottom: 10px;
+  border-radius: 3px;
+  overflow: hidden;
 `
 
 const Right = styled.div`

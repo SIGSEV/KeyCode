@@ -5,7 +5,7 @@ import IconStar from 'react-icons/lib/md/star'
 import IconReplay from 'react-icons/lib/md/replay'
 
 import { starText, deleteText } from 'actions/text'
-import { ghostRace } from 'actions/race'
+import { loadGhost } from 'actions/race'
 
 import Link from 'components/Link'
 import Button from 'components/Button'
@@ -79,7 +79,7 @@ const SectionTitle = styled.h2`
   {
     starText,
     deleteText,
-    ghostRace,
+    loadGhost,
   },
 )
 class RaceInfos extends PureComponent {
@@ -92,7 +92,7 @@ class RaceInfos extends PureComponent {
     }
   }
   render() {
-    const { userId, starText, race, ghostRace } = this.props
+    const { userId, starText, race, loadGhost } = this.props
 
     const rates = race.get('rates')
     const stars = race.get('stars')
@@ -120,7 +120,7 @@ class RaceInfos extends PureComponent {
                   key={leader.get('_id')}
                   num={i + 1}
                   leader={leader}
-                  ghostRace={ghostRace}
+                  loadGhost={loadGhost}
                 />
               ))}
             </RaceLeaderboard>,
@@ -156,7 +156,7 @@ const NumContainer = Z.extend`
   font-weight: bolder;
 `
 
-function LeaderEntry({ ghostRace, leader, num }) {
+function LeaderEntry({ loadGhost, leader, num }) {
   return (
     <LeaderEntryContainer>
       <NumContainer>{num}</NumContainer>
@@ -164,7 +164,7 @@ function LeaderEntry({ ghostRace, leader, num }) {
         <img src={leader.getIn(['user', 'avatar'])} width={30} />
       </Link>
       {leader.get('log') && (
-        <Button action={() => ghostRace(leader.get('log'))} smallPad noHeight hasloader={0}>
+        <Button action={() => loadGhost(leader)} smallPad noHeight hasloader={0}>
           <IconReplay />
         </Button>
       )}

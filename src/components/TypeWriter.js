@@ -7,17 +7,17 @@ import getTypeSplits from 'helpers/getTypeSplits'
 import { getPlayer, getPlayers, getText, typeChar, setDimensions } from 'reducers/race'
 
 import StatusBar from 'components/StatusBar'
+import GhostInfos from 'components/GhostInfos'
 import ResetOverlay from 'components/ResetOverlay'
+import Box from 'components/base/Box'
 
-const Container = styled.div`
-  position: relative;
+const Container = styled(Box)`
   background: white;
   padding: 10px;
   font-size: 16px;
   line-height: 24px;
   user-select: none;
   overflow: hidden;
-  flex-grow: 1;
   border: 1px solid ${p => p.theme.lightgrey01};
 
   &:hover {
@@ -93,6 +93,7 @@ const ResetBtn = styled.button`
     player: getPlayer(state),
     players: getPlayers(state),
     text: getText(state),
+    ghost: state.race.get('ghost'),
     isStarted: state.race.get('isStarted'),
     isFinished: state.race.get('isFinished'),
     isGhosting: state.race.get('isGhosting'),
@@ -132,14 +133,22 @@ class TypeWriter extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { isFinished } = this.props
-    const { isFinished: wasFinished } = prevProps
+    const { isFinished, ghost } = this.props
+    const { isFinished: wasFinished, ghost: prevGhost } = prevProps
     const { showReset } = this.state
     const { showReset: wasShowingReset } = prevState
 
     if (wasFinished && !isFinished) {
       this.handleClick()
       this.measureContainer()
+    }
+
+    if (ghost !== prevGhost) {
+      this.measureContainer()
+    }
+
+    if (!prevGhost && ghost) {
+      this.handleClick()
     }
 
     if (!wasShowingReset && showReset) {
@@ -172,7 +181,7 @@ class TypeWriter extends PureComponent {
   measureContainer = () => {
     const rect = this._container.getBoundingClientRect()
     const { height, width } = rect
-    const maxDisplayedLines = Math.max(Math.floor(height / 24) - 2, 0)
+    const maxDisplayedLines = Math.max(Math.floor(height / 24), 0)
     const maxDisplayedCols = Math.max(Math.floor(width / 10) - 1, 0)
     const dimensions = {
       maxDisplayedLines,
@@ -293,21 +302,21 @@ class TypeWriter extends PureComponent {
 
   render() {
     const { isFocused, showReset } = this.state
-    const { player, isGhosting, chronos, innerRef } = this.props
+    const { player, ghost, isGhosting, chronos, innerRef } = this.props
 
     innerRef(this)
 
     const maxDisplayedLines = player.get('maxDisplayedLines')
 
     return (
-      <Container
-        onClick={this.handleClick}
-        isFocused={isFocused || isGhosting}
-        innerRef={n => (this._container = n)}
-      >
-        <StatusBar>{isGhosting ? null : chronos}</StatusBar>
-
-        {maxDisplayedLines > 0 && <div>{this.renderText()}</div>}
+      <Container relative grow onClick={this.handleClick} isFocused={isFocused || isGhosting}>
+        <Box grow flow={10}>
+          <StatusBar>{isGhosting ? null : chronos}</StatusBar>
+          {!!ghost && <GhostInfos ghost={ghost} />}
+          <Box grow innerRef={n => (this._container = n)}>
+            {maxDisplayedLines > 0 && <div>{this.renderText()}</div>}
+          </Box>
+        </Box>
 
         <HiddenInput
           onFocus={this.handleFocus}
@@ -318,8 +327,9 @@ class TypeWriter extends PureComponent {
           value={''}
         />
 
-        {showReset && <ResetOverlay />}
         <ResetBtn onFocus={this.handleShowReset} onBlur={this.handleHideReset} />
+
+        {showReset && <ResetOverlay />}
       </Container>
     )
   }

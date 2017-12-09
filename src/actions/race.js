@@ -4,6 +4,7 @@ import { initRace, setFinished, resetRace, setGhost, typeChar } from 'reducers/r
 
 import { getPayload } from 'helpers/race'
 import getScore from 'helpers/getScore'
+import { deserializeLog } from 'helpers/log'
 
 export function loadRace(id) {
   return async dispatch => {
@@ -59,6 +60,16 @@ let ghostBustered = false
 
 export const ghostBuster = () => (ghostBustered = true)
 
+export function loadGhost(rawGhost) {
+  const richLog = deserializeLog(rawGhost.get('log'))
+  const ghost = rawGhost.set('richLog', richLog)
+  return dispatch =>
+    dispatch({
+      type: 'RACE_LOAD_GHOST',
+      payload: ghost,
+    })
+}
+
 export function ghostRace(log) {
   return async (dispatch, getState) => {
     const { race } = getState()
@@ -93,4 +104,8 @@ export function ghostRace(log) {
     await wait(3e3)
     dispatch(resetRace())
   }
+}
+
+if (module.hot) {
+  module.hot.accept()
 }

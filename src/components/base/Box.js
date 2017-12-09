@@ -8,6 +8,8 @@ export default styled.div`
   justify-content: ${p => p.justify};
   overflow: ${p => (p.scrollable ? 'auto' : 'unset')};
   position: ${p => (p.relative ? 'relative' : p.sticky ? 'absolute' : 'static')};
+  padding: ${p => `${p.padding}px`};
+  margin-left: ${p => (p.mla ? 'auto' : '')};
   ${p =>
     p.sticky &&
     `
