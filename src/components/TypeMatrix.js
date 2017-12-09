@@ -117,6 +117,8 @@ class Typematrix extends PureComponent {
       !isEqual(nextProps.validKeys, this.props.validKeys) ||
       nextProps.layout !== this.props.layout
     ) {
+      this._maxWrong = 0
+      this._wrongMap = {}
       this.setKeyCtx(nextProps.wrongKeys, nextProps.validKeys)
     }
 
