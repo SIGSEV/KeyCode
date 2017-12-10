@@ -11,6 +11,7 @@ export const languages = [
   'Cpp',
   'Clojure',
   'CSS',
+  'Elixir',
   'Elm',
   'Erlang',
   'Haskell',
