@@ -46,7 +46,7 @@ const meta = {
     desc: 'Score streak of 70+ without typos',
   },
   god: {
-    title: 'God',
+    title: 'Goldfingers',
     desc: 'Score streak of 70+ without typos & restart',
   },
   galvanizer: {
@@ -54,6 +54,8 @@ const meta = {
     desc: 'First of a text with 100+ runs && 10+ users',
   },
 }
+
+const order = ['racer', 'perfect', 'god', 'galvanizer']
 
 class Achievements extends Component {
   render() {
@@ -65,7 +67,7 @@ class Achievements extends Component {
 
     return (
       <Container>
-        {Object.keys(data).map(k => (
+        {order.map(k => (
           <div
             className="hint--left hint--no-animate"
             aria-label={`${meta[k].title} - ${meta[k].desc}`}
