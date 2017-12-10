@@ -74,9 +74,10 @@ class Achievements extends Component {
             <Stats>
               <progress
                 max={data[k].value + (3 - data[k].value % 3)}
-                value={data[k].cur || data[k].value}
+                value={data[k].cur !== undefined ? data[k].cur : data[k].value}
               />
-              {`${data[k].cur || data[k].value}/${data[k].value + (3 - data[k].value % 3)}`}
+              {`${data[k].cur !== undefined ? data[k].cur : data[k].value}/${data[k].value +
+                (3 - data[k].value % 3)}`}
             </Stats>
             <div className="rank">
               {meta[k].title} {romanize(data[k].value / 3) || '-'}
