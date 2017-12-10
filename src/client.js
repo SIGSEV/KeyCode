@@ -3,6 +3,7 @@ import { hydrate, render } from 'react-dom'
 import { ConnectedRouter } from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory'
 import { AppContainer } from 'react-hot-loader'
+import get from 'lodash/get'
 import ReactGA from 'react-ga'
 
 import createStore from 'store'
@@ -19,7 +20,7 @@ const history = createHistory()
 const state = immutablifyState(window.__INITIAL_STATE__)
 const store = createStore(history, state)
 
-initSocket(store, state.user.jwt)
+initSocket(store, get(state, 'user.jwt'))
 
 if (__PROD__) {
   ReactGA.initialize('UA-110576183-1')
