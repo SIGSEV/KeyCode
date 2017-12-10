@@ -8,14 +8,13 @@ import IconGhost from 'react-icons/lib/md/airplay'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 
-import { getTextColor } from 'helpers/colors'
 import { getPlayer } from 'reducers/race'
 
 const statuses = {
   waiting: {
     icon: <IconWaiting />,
     text: 'Waiting',
-    color: 'lightgrey00',
+    color: 'lightgrey01',
   },
   recording: {
     icon: <IconRecord />,
@@ -35,13 +34,13 @@ const statuses = {
 }
 
 const Container = styled.div`
+  border-radius: 3px;
   height: 24px;
   font-size: 12px;
   background: ${p => p.theme.darkGrey03};
   display: flex;
   color: white;
   text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
-  border-radius: 3px;
   overflow: hidden;
 `
 
@@ -64,7 +63,6 @@ const Info = styled.div`
 
 const Status = Info.extend`
   background-color: ${p => p.theme[statuses[p.status].color]};
-  color: ${p => getTextColor(p.theme[statuses[p.status].color])};
   text-transform: uppercase;
   font-weight: bold;
 `

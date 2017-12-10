@@ -89,9 +89,7 @@ const ChoiceFooter = styled.div`
 class Pricing extends PureComponent {
   upgrade = plan => () => {
     this.props.addToast(
-      `The ${
-        plan
-      } plan is out of stock. You can still send 1 BTC to our address in order to get priority.`,
+      `The ${plan} plan is out of stock. You can still send 1 BTC to our address in order to get priority.`,
       'info',
     )
   }

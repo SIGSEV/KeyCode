@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import IconStar from 'react-icons/lib/md/star'
 import IconReplay from 'react-icons/lib/md/replay'
 
 import { starText, deleteText } from 'actions/text'
@@ -12,52 +11,12 @@ import Button from 'components/Button'
 
 const Container = styled.div`
   width: 300px;
+  background: ${p => p.theme.lightgrey02};
+  border-radius: 3px;
+  padding: 20px;
 
   > * + * {
     margin-top: 20px;
-  }
-`
-
-const RaceMetas = styled.div`
-  font-size: 12px;
-  display: flex;
-  margin-left: -5px;
-
-  > *:first-child,
-  > *:last-child {
-    cursor: pointer;
-  }
-
-  > * + * {
-    margin-left: 5px;
-  }
-`
-
-const Meta = styled.div`
-  height: 20px;
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-  cursor: default;
-  user-select: none;
-  border: 1px dashed transparent;
-  color: ${p => (p.danger ? p.theme.red : '')};
-
-  > * + * {
-    margin-left: 3px;
-  }
-
-  &:hover {
-    background-color: ${p => (p.interactive ? 'rgba(0, 0, 0, 0.05)' : '')};
-  }
-
-  &:active {
-    background-color: ${p => (p.interactive ? 'rgba(0, 0, 0, 0.1)' : '')};
-  }
-
-  &:focus {
-    outline: none;
-    border-color: rgba(0, 0, 0, 0.1);
   }
 `
 
@@ -92,25 +51,12 @@ class RaceInfos extends PureComponent {
     }
   }
   render() {
-    const { userId, starText, race, loadGhost } = this.props
+    const { race, loadGhost } = this.props
 
-    const rates = race.get('rates')
-    const stars = race.get('stars')
-    const hasStarred = userId && rates.get(userId)
     const leaders = race.get('leaders')
 
     return (
       <Container>
-        <RaceMetas>
-          <Meta
-            interactive
-            tabIndex={0}
-            onClick={() => (userId ? starText(race.get('id')) : void 0)}
-          >
-            <IconStar style={{ color: hasStarred ? '#ffb401' : void 0 }} />
-            <span>{stars}</span>
-          </Meta>
-        </RaceMetas>
         {leaders.size ? (
           [
             <SectionTitle key="1">{'Top scores on that race'}</SectionTitle>,

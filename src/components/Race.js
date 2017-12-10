@@ -40,11 +40,6 @@ const RaceHeader = styled.div`
   align-items: center;
 `
 
-const RaceContent = styled.div`
-  flex-grow: 1;
-  display: flex;
-`
-
 @connect(
   state => ({
     player: getPlayer(state),
@@ -115,7 +110,7 @@ class Race extends PureComponent {
           </Box>
         </RaceHeader>
 
-        <RaceContent>
+        <Box grow horizontal flow={10}>
           <RaceInfos />
           <TypeWriter
             innerRef={n => (this._typeWriter = n)}
@@ -124,7 +119,7 @@ class Race extends PureComponent {
             chronos={chronos}
             onRestart={this.handleReset}
           />
-        </RaceContent>
+        </Box>
         <FinishBoard isLogged={isLogged} onRestart={this.handleReset} />
       </Container>
     )

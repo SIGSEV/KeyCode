@@ -83,6 +83,11 @@ function typeRegular(state, char, playerIndex) {
   const typedWord = p.get('typedWord')
   const newTypedWord = `${typedWord}${char}`
   const charToType = raw[cursor]
+
+  if (!charToType) {
+    return state
+  }
+
   const charCode = charToType.charCodeAt()
 
   p = p

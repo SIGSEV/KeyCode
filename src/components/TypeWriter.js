@@ -13,12 +13,9 @@ import Box from 'components/base/Box'
 
 const Container = styled(Box)`
   background: white;
-  padding: 10px;
   font-size: 16px;
   line-height: 24px;
   user-select: none;
-  overflow: hidden;
-  border: 1px solid ${p => p.theme.lightgrey01};
 
   &:hover {
     cursor: ${p => (p.isFocused ? 'default' : 'text')};
