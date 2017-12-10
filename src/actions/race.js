@@ -2,6 +2,7 @@ import { push } from 'react-router-redux'
 
 import { initRace, setFinished, resetRace, setGhost, typeChar } from 'reducers/race'
 
+import { notifyStart } from 'socket'
 import { getPayload } from 'helpers/race'
 import getScore from 'helpers/getScore'
 import { deserializeLog } from 'helpers/log'
@@ -108,7 +109,9 @@ export function ghostRace(log) {
 
 export function startRace() {
   return (dispatch, getState) => {
+    notifyStart()
     dispatch({ type: 'RACE_START' })
+
     let i = 0
     let startAt = null
     const type = async () => {

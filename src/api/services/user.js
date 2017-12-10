@@ -61,10 +61,17 @@ export const getUser = async name => {
 
   const races = await Race.find(
     { user: user._id },
-    '-_id createdAt score language corrections wrongWordsCount typedWordsCount',
+    '-_id createdAt score language corrections wrongWordsCount typedWordsCount achievements',
   )
 
   const orgs = await getOrgs(user.name)
 
   return { ...user, races, orgs, fetchedAt: Date.now() }
+}
+
+export const setRetryCtx = async (id, val) => {
+  const user = await getUserById(id)
+  user.retryCtx = val === 'inc' ? user.retryCtx + 1 : val
+
+  await user.save()
 }

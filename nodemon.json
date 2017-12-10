@@ -1,3 +1,3 @@
 {
-  "watch": ["src/api/", "src/logos/write-logo.js"]
+  "watch": ["src/api/", "src/logos/write-logo.js", "src/server/socket.js"]
 }

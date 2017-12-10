@@ -11,7 +11,7 @@ export default ({ styles, state, html, main }) => `<!doctype html>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.5.0/balloon.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/hint.css@2.5.0/hint.min.css">
 
     <style>
       @font-face {
@@ -55,11 +55,6 @@ export default ({ styles, state, html, main }) => `<!doctype html>
 
       img {
         display: block;
-      }
-
-      [data-balloon]:after, [data-balloon]:before {
-        pointer-events: none !important;
-        transition: none !important;
       }
 
     </style>

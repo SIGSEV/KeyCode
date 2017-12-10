@@ -7,6 +7,7 @@ import path from 'path'
 import cookieParser from 'cookie-parser'
 import { scheduleJob } from 'node-schedule'
 import notifier from 'node-notifier'
+import socketioJwt from 'socketio-jwt'
 
 import 'api/init'
 
@@ -32,6 +33,35 @@ const DIST_FOLDER = path.join(__dirname, '../../dist')
 const app = express()
 const server = http.Server(app)
 const io = socketIO(server)
+
+io.use(
+  socketioJwt.authorize({
+    secret: process.env.SEED,
+    handshake: true,
+  }),
+)
+
+// io.use(
+//   jwtAuth.authenticate(
+//     {
+//       secret: ,
+//       algorithm: 'HS256',
+//     },
+//     async (payload, done) => {
+//       console.log('here', payload)
+//       if (!payload || !payload.sub) {
+//         return done()
+//       }
+
+//       try {
+//         const user = await User.findById(payload.sub)
+//         done(null, user)
+//       } catch (err) {
+//         done(err)
+//       }
+//     },
+//   ),
+// )
 
 const port = process.env.PORT || 3000
 

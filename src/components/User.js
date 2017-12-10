@@ -26,6 +26,7 @@ import theme from 'theme'
 import Select from 'components/base/Select'
 import TypeMatrix from 'components/TypeMatrix'
 import LanguageDot from 'components/LanguageDot'
+import Achievements from 'components/Achievements'
 import Button from 'components/Button'
 
 const Container = styled.div`
@@ -216,12 +217,12 @@ class User extends PureComponent {
           <div className="name">
             <span title={user.name}>{user.name}</span>
             {user.admin && (
-              <span data-balloon="Almighty admin." data-balloon-pos="up">
+              <span aria-label="Almighty admin." className="hint--top">
                 {'🌟'}
               </span>
             )}
             {user.banned && (
-              <span data-balloon="Banned." data-balloon-pos="up">
+              <span aria-label="Banned." className="hint--top">
                 {'☠'}
               </span>
             )}
@@ -232,8 +233,8 @@ class User extends PureComponent {
               {user.orgs.map(org => (
                 <a
                   href={`https://github.com/${org.login}`}
-                  data-balloon={org.placeholder}
-                  data-balloon-pos="up"
+                  aria-label={org.placeholder}
+                  className="hint--top"
                   key={org.login}
                 >
                   <img src={org.avatar} height={40} />
@@ -315,6 +316,11 @@ class User extends PureComponent {
                 />
               </Z>
               <SubTitle>{'Typos heatmap'}</SubTitle>
+            </Z>
+
+            <Z>
+              <Achievements data={user.achievements} />
+              <SubTitle>{'Achievements'}</SubTitle>
             </Z>
           </div>
 

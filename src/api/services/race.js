@@ -7,6 +7,7 @@ import Race from 'api/models/race'
 import { languages, lowerArr } from 'helpers/text'
 import { getText } from 'api/services/text'
 import { getUsersCount } from 'api/services/user'
+import { raceTrigger } from 'api/services/achievements'
 import {
   getTeamMembers,
   addUserToOrg,
@@ -142,6 +143,7 @@ export const saveRace = async (payload, user) => {
   user.wrongKeys = newWrong
 
   const text = await Text.findOne({ id: textId })
+  await raceTrigger(payload, user, text)
 
   await Race.create({
     text: text._id,
