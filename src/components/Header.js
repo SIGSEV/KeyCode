@@ -4,7 +4,9 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import Link from 'components/Link'
+import Box from 'components/base/Box'
 import UserOrLogin from 'components/UserOrLogin'
+import PageLogo from 'components/PageLogo'
 
 const Container = styled.div`
   display: flex;
@@ -36,13 +38,6 @@ const HeaderRight = styled.div`
   }
 `
 
-const Bold = styled.div`
-  font-family: InterBolder;
-  font-size: 20px;
-  color: ${p => p.theme.darkGrey00};
-  user-select: none;
-`
-
 @withRouter
 @connect(({ user }) => ({ user }))
 class Header extends PureComponent {
@@ -51,11 +46,11 @@ class Header extends PureComponent {
 
     return (
       <Container>
-        <Link to="/">
-          <Bold>{'KeyCode'}</Bold>
-        </Link>
-        <HeaderRight>
+        <Box horizontal flow={40} align="center">
+          <PageLogo />
           <Link to="/browse">{'Browse'}</Link>
+        </Box>
+        <HeaderRight>
           <Link to="/leaderboard">{'LeaderBoard'}</Link>
           {!user && <Link to="/pricing">{'Pricing'}</Link>}
           <UserOrLogin />

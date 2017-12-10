@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export default styled.div`
   flex-grow: ${p => (p.grow ? 1 : 0)};
+  flex-shrink: 0;
   display: flex;
   flex-direction: ${p => (p.horizontal ? 'row' : 'column')};
   align-items: ${p => p.align};

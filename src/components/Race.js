@@ -14,6 +14,7 @@ import TypeWriter from 'components/TypeWriter'
 import Chronos from 'components/Chronos'
 import FinishBoard from 'components/FinishBoard'
 import RaceInfos from 'components/RaceInfos'
+import PageLogo from 'components/PageLogo'
 
 const Container = styled.div`
   position: fixed;
@@ -37,12 +38,6 @@ const RaceHeader = styled.div`
   user-select: none;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-
-  .title {
-    text-transform: uppercase;
-    font-size: 10px;
-  }
 `
 
 const RaceContent = styled.div`
@@ -110,8 +105,11 @@ class Race extends PureComponent {
     return (
       <Container>
         <RaceHeader>
-          <RaceFunnel />
-          <Box horizontal align="center" flow={40}>
+          <Box horizontal flow={40}>
+            <PageLogo />
+            <RaceFunnel />
+          </Box>
+          <Box horizontal align="center" flow={40} mla>
             <Link to="/leaderboard">{'LeaderBoard'}</Link>
             <UserOrLogin />
           </Box>
