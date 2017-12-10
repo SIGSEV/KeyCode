@@ -100,7 +100,7 @@ class Race extends PureComponent {
 
     const chronos = (
       <Chronos
-        seconds={5}
+        seconds={60}
         isRunning={isRunning}
         onFinish={this.handleStop}
         ref={n => (this._chronos = n)}
