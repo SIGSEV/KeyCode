@@ -317,8 +317,12 @@ class TypeWriter extends PureComponent {
         <Box grow flow={10}>
           <StatusBar>{isGhosting ? null : chronos}</StatusBar>
           {!!ghost && <GhostInfos ghost={ghost} />}
-          <Box grow innerRef={n => (this._container = n)}>
-            {maxDisplayedLines > 0 && <div>{this.renderText()}</div>}
+          <Box grow innerRef={n => (this._container = n)} relative>
+            {maxDisplayedLines > 0 && (
+              <Box sticky>
+                <div>{this.renderText()}</div>
+              </Box>
+            )}
           </Box>
         </Box>
 
