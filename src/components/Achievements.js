@@ -59,6 +59,10 @@ class Achievements extends Component {
   render() {
     const { data } = this.props
 
+    if (!data) {
+      return null
+    }
+
     return (
       <Container>
         {Object.keys(data).map(k => (
