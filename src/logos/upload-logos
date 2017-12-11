@@ -56,8 +56,6 @@ const nums = [
 
 const languages = [
   'JavaScript',
-  'Ada',
-  'Brainfuck',
   'C',
   'Cpp',
   'Clojure',
@@ -75,6 +73,9 @@ const languages = [
   'VimScript',
   'Java',
   'PHP',
+  'Elixir',
+  'Scala',
+  'Haskell',
 ]
 
 const orgs = languages.concat(nums)

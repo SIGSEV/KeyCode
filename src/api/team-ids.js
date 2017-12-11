@@ -59,4 +59,7 @@ export default {
   Rust: 2552447,
   HTML: 2552444,
   Shell: 2552448,
+  Haskell: 2583295,
+  Scala: 2583293,
+  Elixir: 2583292,
 }
