@@ -39,19 +39,19 @@ const Stats = styled.div`
 const meta = {
   racer: {
     title: 'Racer',
-    desc: 'Score streak of 80+',
+    desc: 'Score streak of 70+',
   },
   perfect: {
     title: 'Mr. Perfect',
-    desc: 'Score streak of 70+ without typos',
+    desc: 'Score streak of 60+ without typos',
   },
   god: {
     title: 'Goldfingers',
-    desc: 'Score streak of 70+ without typos & restart',
+    desc: 'Score streak of 50+ without typos & restarts',
   },
   galvanizer: {
     title: 'Galvanizer',
-    desc: 'First of a text with 100+ runs && 10+ users',
+    desc: 'First of a text with 100+ runs & 10+ users',
   },
 }
 

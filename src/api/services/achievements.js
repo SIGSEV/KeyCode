@@ -17,12 +17,12 @@ export const raceTrigger = async (payload, user, text) => {
   const raceCount = await Race.count({ text: text._id })
   const textUserCount = (await Race.find({ text: text._id }).distinct('user')).length
 
-  streakableTrigger(user, 'racer', score > 80)
-  streakableTrigger(user, 'perfect', score > 70 && Object.keys(wrongKeys).length === 0)
+  streakableTrigger(user, 'racer', score > 70)
+  streakableTrigger(user, 'perfect', score > 60 && Object.keys(wrongKeys).length === 0)
   streakableTrigger(
     user,
     'god',
-    score > 70 && Object.keys(wrongKeys).length === 0 && user.retryCtx === 1,
+    score > 50 && Object.keys(wrongKeys).length === 0 && user.retryCtx === 1,
   )
 
   user.retryCtx = 0
