@@ -127,16 +127,15 @@ export const hasStarredShit = async token => {
 /**
  * Utility function to print team ids for each of our orgs
  */
-export const getTeams = () => {
-  const orgs = [...Array(40)].map((_, i) => i * 5 + 5)
+export const getTeams = async () => {
+  const orgs = [...Array(20)].map((_, i) => 900 + i * 5 + 5)
+  const ids = await Promise.all(
+    orgs.map(suffix =>
+      q
+        .nfcall(github.orgs.getTeams, { org: `KeyCode-${suffix}` })
+        .then(res => `${suffix}: ${res.data[0].id},`),
+    ),
+  )
 
-  languages.concat(orgs).forEach(suffix => {
-    github.orgs.getTeams({ org: `KeyCode-${suffix}` }, (err, res) => {
-      if (err) {
-        return console.log(err) // eslint-disable-line
-      }
-
-      console.log(`${suffix}: ${res.data[0].id},`) // eslint-disable-line
-    })
-  })
+  return ids
 }
