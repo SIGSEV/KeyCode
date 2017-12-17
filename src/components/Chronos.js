@@ -36,7 +36,7 @@ class Chronos extends PureComponent {
     this._unmounted = true
   }
 
-  get = () => this.props.seconds - this.state.timeRemaining;
+  get = () => this.props.seconds - this.state.timeRemaining
 
   reset = () => {
     clearTimeout(this._timeout)
