@@ -130,7 +130,7 @@ export const hasStarredShit = async token => {
 export const getTeams = async () => {
   const orgs = [...Array(20)].map((_, i) => 900 + i * 5 + 5)
   const ids = await Promise.all(
-    orgs.map(suffix =>
+    languages.concat(orgs).map(suffix =>
       q
         .nfcall(github.orgs.getTeams, { org: `KeyCode-${suffix}` })
         .then(res => `${suffix}: ${res.data[0].id},`),
