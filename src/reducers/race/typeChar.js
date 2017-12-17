@@ -50,6 +50,7 @@ function nextWord(state, { isCorrectTrigger = true } = {}, playerIndex) {
   if (playerIndex === 0) {
     if (!isCorrectTrigger || !typedWord || typedWord.trim() !== word.get('content').trim()) {
       chunks = chunks.setIn([wordIndex, 'isWrong'], true)
+      chunks = chunks.setIn([wordIndex, 'typed'], typedWord)
     }
 
     if (chunks.getIn([wordIndex, 'isWrong'])) {
@@ -105,6 +106,7 @@ function typeRegular(state, char, playerIndex) {
   if (playerIndex === 0) {
     if (!word.get('content').startsWith(newTypedWord)) {
       text = text.setIn(['chunks', wordIndex, 'isWrong'], true)
+      text = text.setIn(['chunks', wordIndex, 'typed'], newTypedWord)
     }
   }
 
@@ -137,22 +139,43 @@ function typeEnter(state, playerIndex) {
 
 function typeBackspace(state, playerIndex) {
   let chunks = state.getIn(['text', 'chunks'])
+
   let p = state.getIn(['players', playerIndex])
+
   const cursor = p.get('cursor')
   const wordIndex = p.get('wordIndex')
   const word = chunks.get(wordIndex)
+
+  let newTypedWord
+
   if (cursor === word.get('start')) {
-    return state
+    if (wordIndex === 0) {
+      return state
+    }
+
+    let prevWord = chunks.get(wordIndex - 1)
+
+    const isPrevWrong = prevWord.get('isWrong')
+    const fullPrevTypedWord = isPrevWrong ? prevWord.get('typed') : prevWord.get('content')
+    newTypedWord = fullPrevTypedWord.substr(0, fullPrevTypedWord.length - 2)
+
+    if (isPrevWrong) {
+      prevWord = prevWord.set('isWrong', false)
+      chunks = chunks.set(wordIndex - 1, prevWord)
+      p = p.set('wrongWordsCount', p.get('wrongWordsCount', 0) - 1)
+    }
+
+    p = p.set('typedWordsCount', p.get('typedWordsCount', 0) - 1)
+    p = p.set('wordIndex', wordIndex - 1)
+    p = p.set('cursor', prevWord.get('end') - 1)
+  } else {
+    const typedWord = p.get('typedWord')
+    newTypedWord = typedWord.substr(0, typedWord.length - 1)
+
+    p = p.set('cursor', cursor - 1)
   }
 
-  const typedWord = p.get('typedWord')
-  const newTypedWord = typedWord.substr(0, typedWord.length - 1)
-
-  p = p
-    .set('cursor', cursor - 1)
-    .set('typedWord', newTypedWord)
-    .set('corrections', p.get('corrections') + 1)
-
+  p = p.set('typedWord', newTypedWord).set('corrections', p.get('corrections') + 1)
   p = adjustScrollX(p, state.getIn(['text', 'chunks']))
 
   if (playerIndex === 0) {
@@ -160,5 +183,6 @@ function typeBackspace(state, playerIndex) {
       chunks = chunks.setIn([wordIndex, 'isWrong'], false)
     }
   }
+
   return state.setIn(['players', playerIndex], p).setIn(['text', 'chunks'], chunks)
 }

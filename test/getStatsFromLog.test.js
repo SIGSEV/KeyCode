@@ -59,6 +59,15 @@ test('should validate word when typing enter at the end', () => {
   })
 })
 
+test('should allow correcting an already validated word', () => {
+  expectStats('aaaa aaaa aaaa', 'bbbb bb◀◀◀◀◀◀◀aaaa aaaa aaaa', {
+    typedWordsCount: 3,
+    wrongWordsCount: 0,
+    validKeys: { '97': 12, '32': 3 },
+    wrongKeys: { '97': 6 },
+  })
+})
+
 test('should work using real world example', () => {
   const text =
     "import texts from 'reducers/texts'\nimport leaders from 'reducers/leaders'\nimport toasts from 'reducers/toasts'\n\nexport default combineReducers({\n  router,\n  modals,\n  race,\n  user,\n  texts,\n  leaders,\n  toasts,\n})"
